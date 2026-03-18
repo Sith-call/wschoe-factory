@@ -1,0 +1,6 @@
+{
+  "name": "agent-maker",
+  "version": "1.0.0",
+  "description": "Meta-team that designs, builds, and validates new agents and skills. Analyzes capability gaps in existing teams, brainstorms solutions, creates agent definitions, and validates quality — agents that make agents.",
+  "author": "wschoe"
+}
