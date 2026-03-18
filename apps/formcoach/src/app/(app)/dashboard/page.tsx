@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Card from "@/components/ui/Card";
@@ -18,6 +18,36 @@ interface Summary {
   completionRate: number;
   totalMinutes: number;
   thisMonthMinutes: number;
+}
+
+function useCountUp(target: number, duration = 800, enabled = true) {
+  const [value, setValue] = useState(0);
+  const rafRef = useRef<number>();
+
+  useEffect(() => {
+    if (!enabled || target === 0) {
+      setValue(target);
+      return;
+    }
+    setValue(0);
+    const start = performance.now();
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(eased * target));
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    }
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [target, duration, enabled]);
+
+  return value;
 }
 
 export default function DashboardPage() {
@@ -55,6 +85,11 @@ export default function DashboardPage() {
     load();
   }, []);
 
+  const s = summary;
+  const animStreak = useCountUp(s?.currentStreak ?? 0, 1000, !loading);
+  const animTotal = useCountUp(s?.totalWorkouts ?? 0, 1000, !loading);
+  const animMinutes = useCountUp(s?.thisMonthMinutes ?? 0, 1000, !loading);
+
   if (loading) {
     return (
       <>
@@ -79,7 +114,6 @@ export default function DashboardPage() {
     );
   }
 
-  const s = summary!;
   const days = ["월", "화", "수", "목", "금", "토", "일"];
 
   return (
@@ -97,14 +131,14 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-brand-100">연속 출석</p>
-              <p className="text-3xl font-extrabold">{s.currentStreak}일</p>
+              <p className="text-3xl font-extrabold">{animStreak}일</p>
             </div>
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20 text-2xl">
-              {s.currentStreak >= 7 ? "🔥" : s.currentStreak >= 3 ? "💪" : "🌱"}
+              {s!.currentStreak >= 7 ? "🔥" : s!.currentStreak >= 3 ? "💪" : "🌱"}
             </div>
           </div>
           <p className="mt-2 text-xs text-brand-100">
-            최장 기록: {s.longestStreak}일
+            최장 기록: {s!.longestStreak}일
           </p>
         </Card>
 
@@ -113,12 +147,12 @@ export default function DashboardPage() {
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-bold">이번 주 운동</h3>
             <Badge variant="success">
-              {s.thisWeekWorkouts}/{s.thisWeekGoal}회
+              {s!.thisWeekWorkouts}/{s!.thisWeekGoal}회
             </Badge>
           </div>
           <ProgressBar
-            value={s.thisWeekWorkouts}
-            max={s.thisWeekGoal}
+            value={s!.thisWeekWorkouts}
+            max={s!.thisWeekGoal}
             showPercent
           />
           <div className="mt-3 flex justify-between">
@@ -126,12 +160,18 @@ export default function DashboardPage() {
               <div
                 key={d}
                 className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-medium ${
-                  i < s.thisWeekWorkouts
+                  i < s!.thisWeekWorkouts
                     ? "bg-brand-500 text-white"
                     : "bg-gray-100 text-gray-400"
                 }`}
               >
-                {d}
+                {i < s!.thisWeekWorkouts ? (
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  d
+                )}
               </div>
             ))}
           </div>
@@ -166,14 +206,14 @@ export default function DashboardPage() {
           <Card>
             <p className="text-xs text-gray-500">총 운동 횟수</p>
             <p className="text-2xl font-bold text-brand-700">
-              {s.totalWorkouts}
+              {animTotal}
               <span className="text-sm font-normal text-gray-400">회</span>
             </p>
           </Card>
           <Card>
             <p className="text-xs text-gray-500">이번 달 운동 시간</p>
             <p className="text-2xl font-bold text-brand-700">
-              {s.thisMonthMinutes}
+              {animMinutes}
               <span className="text-sm font-normal text-gray-400">분</span>
             </p>
           </Card>
@@ -184,10 +224,10 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <h3 className="font-bold">달성률</h3>
             <span className="text-2xl font-bold text-brand-600">
-              {Math.round(s.completionRate * 100)}%
+              {Math.round(s!.completionRate * 100)}%
             </span>
           </div>
-          <ProgressBar value={s.completionRate * 100} className="mt-2" />
+          <ProgressBar value={s!.completionRate * 100} className="mt-2" />
         </Card>
       </div>
     </>

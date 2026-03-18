@@ -16,9 +16,11 @@ export default function ProgressPage() {
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [period, setPeriod] = useState<"weekly" | "monthly">("weekly");
   const [loading, setLoading] = useState(true);
+  const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
     async function load() {
+      setAnimated(false);
       try {
         const [summaryRes, chartRes] = await Promise.all([
           api.getProgressSummary().catch(() => ({ summary: null })),
@@ -43,12 +45,16 @@ export default function ProgressPage() {
         // ignore
       } finally {
         setLoading(false);
+        // Trigger bar animation after render
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setAnimated(true));
+        });
       }
     }
     load();
   }, [period]);
 
-  if (loading) {
+  if (loading && !summary) {
     return (
       <>
         <Header title="진행 현황" />
@@ -62,6 +68,7 @@ export default function ProgressPage() {
   const s = summary || {};
   const chart = chartData || { labels: [], data: [] };
   const maxVal = Math.max(...chart.data, 1);
+  const completionPercent = Math.round(s.completionRate * 100);
 
   return (
     <>
@@ -119,23 +126,27 @@ export default function ProgressPage() {
             </div>
           </div>
 
-          {/* Simple bar chart */}
+          {/* Simple bar chart with animation */}
           <div className="flex items-end gap-1" style={{ height: 120 }}>
-            {chart.labels.map((label, i) => (
-              <div key={label} className="flex flex-1 flex-col items-center gap-1">
-                <span className="text-xs font-medium text-gray-600">
-                  {chart.data[i]}
-                </span>
-                <div
-                  className="w-full rounded-t-md bg-brand-400 transition-all"
-                  style={{
-                    height: `${(chart.data[i] / maxVal) * 100}%`,
-                    minHeight: chart.data[i] > 0 ? 4 : 0,
-                  }}
-                />
-                <span className="text-[10px] text-gray-400">{label}</span>
-              </div>
-            ))}
+            {chart.labels.map((label, i) => {
+              const targetHeight = (chart.data[i] / maxVal) * 100;
+              return (
+                <div key={label} className="flex flex-1 flex-col items-center gap-1">
+                  <span className="text-xs font-medium text-gray-600">
+                    {chart.data[i]}
+                  </span>
+                  <div
+                    className="w-full rounded-t-md bg-brand-400"
+                    style={{
+                      height: animated ? `${targetHeight}%` : "0%",
+                      minHeight: animated && chart.data[i] > 0 ? 4 : 0,
+                      transition: `height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 80}ms`,
+                    }}
+                  />
+                  <span className="text-[10px] text-gray-400">{label}</span>
+                </div>
+              );
+            })}
           </div>
 
           {chart.labels.length === 0 && (
@@ -145,20 +156,29 @@ export default function ProgressPage() {
           )}
         </Card>
 
-        {/* Achievement hint */}
+        {/* Achievement with animated progress bar */}
         <Card>
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50 text-2xl">
               🏆
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="font-bold">달성률</h3>
               <p className="text-sm text-gray-500">
                 목표 달성률{" "}
                 <Badge variant="success">
-                  {Math.round(s.completionRate * 100)}%
+                  {completionPercent}%
                 </Badge>
               </p>
+              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-gray-100">
+                <div
+                  className="h-full rounded-full bg-brand-500"
+                  style={{
+                    width: animated ? `${completionPercent}%` : "0%",
+                    transition: "width 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s",
+                  }}
+                />
+              </div>
             </div>
           </div>
         </Card>

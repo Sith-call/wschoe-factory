@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
 import api, { ApiError } from "@/lib/api";
+import { DEMO_PLAN } from "@/lib/demo-data";
 
 const goals = [
   { value: "WEIGHT_LOSS", label: "체중 감량", emoji: "🏃" },
@@ -28,6 +30,33 @@ const timeOptions = [
   { value: 90, label: "90분" },
 ];
 
+const dayOfWeekLabels: Record<number, string> = {
+  1: "월요일",
+  2: "화요일",
+  3: "수요일",
+  4: "목요일",
+  5: "금요일",
+  6: "토요일",
+  0: "일요일",
+};
+
+const dayColors: Record<number, string> = {
+  1: "border-l-blue-500 bg-blue-50/50",
+  3: "border-l-emerald-500 bg-emerald-50/50",
+  5: "border-l-violet-500 bg-violet-50/50",
+  6: "border-l-amber-500 bg-amber-50/50",
+};
+
+const categoryEmojis: Record<string, string> = {
+  CHEST: "🫁",
+  TRICEPS: "💪",
+  LEGS: "🦵",
+  BACK: "🔙",
+  BICEPS: "💪",
+  SHOULDERS: "🏋️",
+  CORE: "🧘",
+};
+
 export default function NewWorkoutPlanPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -43,16 +72,21 @@ export default function NewWorkoutPlanPage() {
     setError("");
     setGenerating(true);
 
+    if (api.isDemo()) {
+      // Demo mode: simulate AI generation with delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setGenerating(false);
+      setStep(3);
+      return;
+    }
+
     try {
-      // First update profile
       await api.updateProfile({
         goal,
         fitnessLevel: level,
         availableDaysPerWeek: daysPerWeek,
         minutesPerSession,
       });
-
-      // Then generate plan
       const { plan } = await api.generatePlan();
       router.push(`/workouts/${plan.id}`);
     } catch (err) {
@@ -64,6 +98,101 @@ export default function NewWorkoutPlanPage() {
       setGenerating(false);
     }
   }
+
+  const totalExercises = DEMO_PLAN.planDays.reduce(
+    (sum, day) => sum + day.exercises.length,
+    0
+  );
+
+  // Step 3: AI-generated result view
+  const resultView = (
+    <div className="space-y-4">
+      <div className="text-center">
+        <div className="mb-2 text-4xl">🎉</div>
+        <h2 className="text-xl font-bold text-gray-900">
+          맞춤 운동 계획이 완성됐어요!
+        </h2>
+        <p className="mt-1 text-sm text-gray-500">
+          주 {DEMO_PLAN.planDays.length}일 · {totalExercises}개 운동 · 세션당 약{" "}
+          {minutesPerSession}분
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {DEMO_PLAN.planDays.map((day) => (
+          <div
+            key={day.id}
+            className={`rounded-xl border-l-4 border border-gray-100 p-4 ${dayColors[day.dayOfWeek] || "border-l-gray-400 bg-gray-50/50"}`}
+          >
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Badge variant="info">
+                  {dayOfWeekLabels[day.dayOfWeek]}
+                </Badge>
+                <span className="text-sm font-bold text-gray-800">
+                  {day.theme}
+                </span>
+              </div>
+              <span className="text-xs text-gray-400">
+                {day.exercises.length}종목
+              </span>
+            </div>
+            <div className="space-y-1">
+              {day.exercises.map((ex) => (
+                <div
+                  key={ex.id}
+                  className="flex items-center justify-between text-sm"
+                >
+                  <span className="flex items-center gap-1.5 text-gray-700">
+                    <span className="text-xs">
+                      {categoryEmojis[ex.exercise.category] || "🏋️"}
+                    </span>
+                    {ex.exercise.name}
+                  </span>
+                  <span className="text-xs font-medium text-gray-500">
+                    {ex.sets}세트 × {ex.reps}
+                    {ex.exercise.category === "CORE" ? "초" : "회"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Button
+        onClick={() => router.push(`/workouts/${DEMO_PLAN.id}`)}
+        className="w-full"
+        size="lg"
+      >
+        운동 시작하기
+      </Button>
+      <button
+        onClick={() => setStep(0)}
+        className="w-full text-center text-sm font-medium text-gray-500 hover:text-gray-700"
+      >
+        다시 만들기
+      </button>
+    </div>
+  );
+
+  // Loading view
+  const loadingView = (
+    <div className="flex flex-col items-center justify-center py-16">
+      <div className="relative mb-6">
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-brand-200 border-t-brand-600" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-xl">🤖</span>
+        </div>
+      </div>
+      <p className="animate-pulse text-lg font-semibold text-brand-700">
+        AI가 당신에 맞는 계획을 만들고 있어요...
+      </p>
+      <p className="mt-2 text-sm text-gray-400">
+        목표와 체력 수준에 맞게 최적화 중
+      </p>
+    </div>
+  );
 
   const steps = [
     // Step 0: Goal
@@ -166,21 +295,27 @@ export default function NewWorkoutPlanPage() {
     </div>,
   ];
 
+  // Determine what to render
+  const isLoading = generating && api.isDemo();
+  const isResult = step === 3;
+
   return (
     <>
       <Header title="운동 계획 만들기" showBack />
       <div className="page-container">
         {/* Progress dots */}
-        <div className="mb-6 flex items-center justify-center gap-2">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className={`h-2 rounded-full transition-all ${
-                i === step ? "w-8 bg-brand-500" : "w-2 bg-gray-200"
-              }`}
-            />
-          ))}
-        </div>
+        {!isResult && !isLoading && (
+          <div className="mb-6 flex items-center justify-center gap-2">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className={`h-2 rounded-full transition-all ${
+                  i === step ? "w-8 bg-brand-500" : "w-2 bg-gray-200"
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 rounded-xl bg-red-50 p-3 text-center text-sm text-red-600">
@@ -188,9 +323,15 @@ export default function NewWorkoutPlanPage() {
           </div>
         )}
 
-        <Card padding="lg">{steps[step]}</Card>
+        {isLoading ? (
+          <Card padding="lg">{loadingView}</Card>
+        ) : isResult ? (
+          <Card padding="lg">{resultView}</Card>
+        ) : (
+          <Card padding="lg">{steps[step]}</Card>
+        )}
 
-        {step > 0 && (
+        {!isResult && !isLoading && step > 0 && step < 3 && (
           <button
             onClick={() => setStep(step - 1)}
             className="mt-4 w-full text-center text-sm font-medium text-gray-500 hover:text-gray-700"

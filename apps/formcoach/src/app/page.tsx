@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import api from "@/lib/api";
 
 const features = [
   {
@@ -24,6 +28,13 @@ const features = [
 ];
 
 export default function LandingPage() {
+  const router = useRouter();
+
+  function handleDemo() {
+    api.enableDemo();
+    router.push("/dashboard");
+  }
+
   return (
     <div className="min-h-dvh bg-white">
       {/* Hero */}
@@ -47,17 +58,17 @@ export default function LandingPage() {
             FormCoach가 함께합니다.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/signup"
+            <button
+              onClick={handleDemo}
               className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-white px-8 text-lg font-bold text-brand-700 shadow-lg transition hover:bg-brand-50"
             >
-              무료로 시작하기
-            </Link>
+              바로 체험하기
+            </button>
             <Link
-              href="/login"
+              href="/signup"
               className="inline-flex min-h-[52px] items-center justify-center rounded-xl border-2 border-white/30 px-8 text-lg font-semibold text-white transition hover:bg-white/10"
             >
-              로그인
+              회원가입
             </Link>
           </div>
         </div>

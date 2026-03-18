@@ -9,6 +9,8 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import api from "@/lib/api";
 
+const DEMO_PROFILE_KEY = "demo_profile_overrides";
+
 const goalLabels: Record<string, string> = {
   WEIGHT_LOSS: "체중 감량",
   MUSCLE_GAIN: "근육 증가",
@@ -21,6 +23,19 @@ const levelLabels: Record<string, string> = {
   INTERMEDIATE: "중급",
   ADVANCED: "고급",
 };
+
+function getDemoOverrides(): Record<string, any> {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(localStorage.getItem(DEMO_PROFILE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveDemoOverrides(overrides: Record<string, any>) {
+  localStorage.setItem(DEMO_PROFILE_KEY, JSON.stringify(overrides));
+}
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -42,12 +57,23 @@ export default function ProfilePage() {
           api.getMe().catch(() => ({ user: null })),
           api.getProfile().catch(() => ({ profile: null })),
         ]);
-        setUser(userRes.user);
-        setProfile(profileRes.profile);
-        if (userRes.user) setName(userRes.user.name);
-        if (profileRes.profile) {
-          setHeight(profileRes.profile.height?.toString() || "");
-          setWeight(profileRes.profile.weight?.toString() || "");
+
+        let userData = userRes.user;
+        let profileData = profileRes.profile;
+
+        // Apply demo overrides from localStorage
+        if (api.isDemo()) {
+          const overrides = getDemoOverrides();
+          if (overrides.name && userData) userData = { ...userData, name: overrides.name };
+          if (profileData) profileData = { ...profileData, ...overrides };
+        }
+
+        setUser(userData);
+        setProfile(profileData);
+        if (userData) setName(userData.name);
+        if (profileData) {
+          setHeight(profileData.height?.toString() || "");
+          setWeight(profileData.weight?.toString() || "");
         }
       } catch {
         // ignore
@@ -62,11 +88,20 @@ export default function ProfilePage() {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.updateProfile({
-        ...profile,
+      const updates: Record<string, any> = {
         height: height ? parseFloat(height) : undefined,
         weight: weight ? parseFloat(weight) : undefined,
-      });
+      };
+
+      if (api.isDemo()) {
+        // Save to localStorage for session persistence in demo mode
+        const overrides = { ...getDemoOverrides(), ...updates, name };
+        saveDemoOverrides(overrides);
+        setProfile((prev: any) => ({ ...prev, ...updates }));
+        setUser((prev: any) => prev ? { ...prev, name } : prev);
+      } else {
+        await api.updateProfile({ ...profile, ...updates });
+      }
       setEditing(false);
     } catch {
       // ignore
@@ -75,13 +110,13 @@ export default function ProfilePage() {
     }
   }
 
-  async function handleLogout() {
-    try {
-      await api.logout();
-    } catch {
-      api.clearTokens();
+  function handleLogout() {
+    // Clear all demo-related localStorage
+    if (api.isDemo()) {
+      localStorage.removeItem(DEMO_PROFILE_KEY);
     }
-    router.push("/login");
+    api.clearTokens();
+    router.push("/");
   }
 
   if (loading) {
@@ -132,6 +167,12 @@ export default function ProfilePage() {
           <h3 className="mb-3 font-bold">운동 프로필</h3>
           {editing ? (
             <form onSubmit={handleSave} className="space-y-3">
+              <Input
+                label="이름"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="이름"
+              />
               <Input
                 label="키 (cm)"
                 type="number"
