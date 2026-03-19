@@ -9,6 +9,7 @@ plz-survive-jay/
 ├── plugins/                    # 재사용 가능한 에이전트 플러그인
 │   ├── pm-agent/               # PM 팀 (7 agents) — 기획/전략/GTM
 │   ├── dev-team/               # 개발 팀 (12 agents) — 설계/구현/테스트/리뷰
+│   ├── design-team/            # 디자인 팀 (5 agents) — Stitch 기반 이미지 디자인
 │   ├── agent-maker/            # 메타 팀 (5 agents) — 에이전트 생성/검증
 │   └── ait-team/               # 앱인토스 전용 (5 agents) — 토스 미니앱
 │
@@ -31,6 +32,13 @@ plz-survive-jay/
 → 산출물: apps/{app-name}/docs/pm-outputs/
 ```
 
+### 1.5단계: 디자인 팀으로 UI 생성
+```
+"유저 스토리 기반으로 디자인 만들어줘"
+→ design-team 실행 (Stitch MCP → 스크린 이미지 생성)
+→ 산출물: Stitch 프로젝트 (스크린 이미지 + HTML) + docs/pm-outputs/design-spec.md
+```
+
 ### 2단계: 개발 팀으로 구현
 ```
 "PRD 기반으로 개발해줘"
@@ -48,6 +56,7 @@ plz-survive-jay/
 ```bash
 claude plugins add ./plugins/pm-agent
 claude plugins add ./plugins/dev-team
+claude plugins add ./plugins/design-team
 claude plugins add ./plugins/agent-maker
 claude plugins add ./plugins/ait-team
 ```
