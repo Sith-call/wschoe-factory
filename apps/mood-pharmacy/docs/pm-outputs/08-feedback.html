@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#5b13ec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#161022",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<title>기분 기록</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="mx-auto max-w-[430px] min-h-screen bg-white dark:bg-slate-900 flex flex-col shadow-xl">
+<!-- Header -->
+<header class="flex items-center p-4 justify-between sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+<button class="size-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">기분 기록</h1>
+<div class="size-10"></div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Question Section -->
+<section class="px-6 pt-8 pb-6">
+<h2 class="text-2xl font-bold leading-tight text-slate-900 dark:text-white">
+                    처방 후 기분이 어때요?
+                </h2>
+<p class="text-slate-500 dark:text-slate-400 mt-2 text-sm">현재의 감정 상태를 선택해주세요.</p>
+</section>
+<!-- Mood Scale -->
+<section class="px-4 mb-8">
+<div class="flex justify-between items-end gap-1">
+<button class="flex flex-1 flex-col items-center gap-2 group">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-all group-active:scale-95">
+<span class="material-symbols-outlined text-3xl text-slate-400">sentiment_very_dissatisfied</span>
+</div>
+<span class="text-xs font-medium text-slate-500">별로</span>
+</button>
+<button class="flex flex-1 flex-col items-center gap-2 group">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-all group-active:scale-95">
+<span class="material-symbols-outlined text-3xl text-slate-400">sentiment_dissatisfied</span>
+</div>
+<span class="text-xs font-medium text-slate-500">그저그래</span>
+</button>
+<button class="flex flex-1 flex-col items-center gap-2 group">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-all group-active:scale-95">
+<span class="material-symbols-outlined text-3xl text-slate-400">sentiment_neutral</span>
+</div>
+<span class="text-xs font-medium text-slate-500">괜찮아</span>
+</button>
+<button class="flex flex-1 flex-col items-center gap-2 group">
+<div class="size-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center shadow-[0_0_15px_rgba(91,19,236,0.3)] transition-all">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1">sentiment_satisfied</span>
+</div>
+<span class="text-xs font-bold text-primary">좋아</span>
+</button>
+<button class="flex flex-1 flex-col items-center gap-2 group">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-all group-active:scale-95">
+<span class="material-symbols-outlined text-3xl text-slate-400">sentiment_very_satisfied</span>
+</div>
+<span class="text-xs font-medium text-slate-500">최고</span>
+</button>
+</div>
+</section>
+<!-- Emotional Shift -->
+<section class="px-6 mb-8">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-2xl p-5 border border-primary/10">
+<h3 class="text-xs font-bold uppercase tracking-wider text-primary mb-4 opacity-70">Emotional Shift</h3>
+<div class="flex items-center justify-between">
+<div class="flex flex-col items-center gap-2">
+<div class="flex -space-x-2">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-2 border-white dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-500 text-lg">potted_plant</span>
+</div>
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center border-2 border-white dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-500 text-lg">cloud</span>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">BEFORE</span>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="flex items-center gap-1 text-primary">
+<div class="h-[2px] w-8 bg-gradient-to-r from-transparent to-primary/40"></div>
+<span class="material-symbols-outlined text-primary">trending_up</span>
+<div class="h-[2px] w-8 bg-gradient-to-l from-transparent to-primary/40"></div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="flex -space-x-2">
+<div class="size-10 rounded-full bg-orange-100 flex items-center justify-center border-2 border-white dark:border-slate-800">
+<span class="material-symbols-outlined text-orange-500 text-lg" style="font-variation-settings: 'FILL' 1">sunny</span>
+</div>
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border-2 border-white dark:border-slate-800">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1">auto_awesome</span>
+</div>
+</div>
+<span class="text-[10px] font-bold text-primary">AFTER</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Memo Input -->
+<section class="px-6 mb-8">
+<div class="relative">
+<textarea class="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none min-h-[120px] transition-all" maxlength="50" placeholder="한줄 메모 (선택)"></textarea>
+<div class="absolute bottom-3 right-4 text-[11px] font-medium text-slate-400">
+                        0/50
+                    </div>
+</div>
+</section>
+<!-- Action Button -->
+<section class="px-6 mb-10">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
+                    저장하기
+                </button>
+</section>
+<!-- History Preview -->
+<section class="px-6 pb-12">
+<h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center justify-between">
+                    이번 주 기록
+                    <span class="material-symbols-outlined text-slate-400 text-lg">chevron_right</span>
+</h3>
+<div class="flex justify-between">
+<!-- Day 1 -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-12 rounded-full border-2 border-primary/20 bg-white dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1">sentiment_satisfied</span>
+</div>
+<div class="text-center">
+<p class="text-[10px] font-bold text-slate-400 uppercase">05.20</p>
+<p class="text-[9px] font-medium text-slate-600 dark:text-slate-400 mt-0.5 max-w-[50px] leading-tight">스트레스 해소</p>
+</div>
+</div>
+<!-- Day 2 -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-12 rounded-full border-2 border-slate-100 bg-white dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-300 text-xl">sentiment_neutral</span>
+</div>
+<div class="text-center">
+<p class="text-[10px] font-bold text-slate-400 uppercase">05.21</p>
+<p class="text-[9px] font-medium text-slate-600 dark:text-slate-400 mt-0.5 max-w-[50px] leading-tight">심리 안정</p>
+</div>
+</div>
+<!-- Day 3 -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-12 rounded-full border-2 border-primary/30 bg-primary/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1">sentiment_very_satisfied</span>
+</div>
+<div class="text-center">
+<p class="text-[10px] font-bold text-slate-400 uppercase">05.22</p>
+<p class="text-[9px] font-medium text-slate-600 dark:text-slate-400 mt-0.5 max-w-[50px] leading-tight">활력 충전</p>
+</div>
+</div>
+<!-- Day 4 (Empty) -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-12 rounded-full border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center opacity-40">
+<span class="material-symbols-outlined text-slate-300 text-xl">add</span>
+</div>
+<div class="text-center">
+<p class="text-[10px] font-bold text-slate-300 uppercase">05.23</p>
+</div>
+</div>
+<!-- Day 5 (Empty) -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-12 rounded-full border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center opacity-40">
+<span class="material-symbols-outlined text-slate-300 text-xl">add</span>
+</div>
+<div class="text-center">
+<p class="text-[10px] font-bold text-slate-300 uppercase">오늘</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-100 dark:border-slate-800 flex justify-around items-center py-3 px-2 sticky bottom-0">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">홈</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">history</span>
+<span class="text-[10px] font-bold">기록</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">medication</span>
+<span class="text-[10px] font-bold">처방</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">프로필</span>
+</a>
+</nav>
+</div>
+</body></html>

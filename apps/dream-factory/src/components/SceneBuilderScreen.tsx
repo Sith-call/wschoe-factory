@@ -2,6 +2,22 @@ import { useState } from 'react';
 import type { DreamScene, PlaceKey, WeatherKey, PersonKey, ObjectKey } from '../types';
 import { PLACES, WEATHERS, PERSONS, OBJECTS } from '../data';
 
+// Place mood colors for background tint
+const PLACE_BG_TINTS: Record<PlaceKey, string> = {
+  ocean: 'rgba(30, 58, 95, 0.15)',
+  forest: 'rgba(20, 83, 45, 0.12)',
+  city: 'rgba(55, 65, 81, 0.12)',
+  sky: 'rgba(30, 64, 100, 0.15)',
+  underground: 'rgba(30, 20, 60, 0.15)',
+  school: 'rgba(80, 60, 30, 0.10)',
+  home: 'rgba(70, 50, 30, 0.10)',
+  unknown: 'rgba(20, 20, 60, 0.15)',
+  office: 'rgba(50, 50, 60, 0.10)',
+  cafe: 'rgba(80, 50, 20, 0.12)',
+  hospital: 'rgba(40, 60, 70, 0.10)',
+  street: 'rgba(60, 50, 40, 0.10)',
+};
+
 interface Props {
   scene: DreamScene;
   onSceneChange: (scene: DreamScene) => void;
@@ -89,8 +105,16 @@ export default function SceneBuilderScreen({ scene, onSceneChange, onNext, onBac
     else toggleObject(key as ObjectKey);
   };
 
+  // Background tint based on selected place
+  const bgTint = scene.place ? PLACE_BG_TINTS[scene.place] : 'transparent';
+
   return (
-    <div className="bg-surface text-on-surface min-h-screen relative">
+    <div className="bg-surface text-on-surface min-h-screen relative screen-enter" style={{ transition: 'background-color 0.5s ease' }}>
+      {/* Place mood tint overlay */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-5 transition-all duration-500 ease-in-out"
+        style={{ backgroundColor: bgTint }}
+      />
       {/* Top Navigation Shell */}
       <header className="fixed top-0 w-full max-w-[430px] z-50 flex justify-between items-center px-6 h-16 bg-surface-dim/60 backdrop-blur-xl shadow-[0_4px_40px_rgba(79,70,229,0.08)]">
         <button onClick={onBack} className="flex items-center gap-2 text-primary-container">
@@ -162,11 +186,12 @@ export default function SceneBuilderScreen({ scene, onSceneChange, onNext, onBac
               <button
                 key={item.key}
                 onClick={() => handleSelect(item.key)}
-                className={`${activeTab === 'place' ? 'aspect-[3/4]' : 'aspect-square'} rounded-xl flex flex-col items-center justify-center gap-3 p-4 transition-all active:scale-95 ${
+                className={`${activeTab === 'place' ? 'aspect-[3/4]' : 'aspect-square'} rounded-xl flex flex-col items-center justify-center gap-3 p-4 transition-all duration-200 active:scale-95 ${
                   selected
-                    ? 'bg-primary-container/20 border-2 border-primary shadow-[0_0_20px_rgba(79,70,229,0.2)]'
-                    : 'glass-card-subtle border border-outline-variant/10 hover:bg-surface-bright group'
+                    ? 'bg-primary-container/20 border-2 border-primary shadow-[0_0_20px_rgba(79,70,229,0.2)] scale-[1.02] glow-ring-animate'
+                    : 'glass-card-subtle border border-outline-variant/10 hover:bg-surface-bright hover:scale-[1.02] group'
                 }`}
+                style={{ transition: 'transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease' }}
               >
                 <span
                   className={`material-symbols-outlined ${activeTab === 'place' ? 'text-2xl' : 'text-3xl'} ${

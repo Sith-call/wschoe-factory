@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { DreamEntry } from '../types';
+import { useState, useMemo } from 'react';
+import type { DreamEntry, DreamEmotionKey } from '../types';
 
 interface Props {
   dreams: DreamEntry[];
@@ -7,6 +7,17 @@ interface Props {
   onGoGallery: () => void;
   onViewDream: (entry: DreamEntry) => void;
 }
+
+const EMOTION_GRADIENTS: Record<DreamEmotionKey, string> = {
+  peace: 'linear-gradient(135deg, #312e81 0%, #1e3a5f 50%, #1e1b4b 100%)',
+  fear: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #1a1625 100%)',
+  confusion: 'linear-gradient(135deg, #2e1065 0%, #4a1942 50%, #1e1b4b 100%)',
+  joy: 'linear-gradient(135deg, #4a1942 0%, #78350f 50%, #1e1b4b 100%)',
+  sorrow: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #2e1065 100%)',
+  anger: 'linear-gradient(135deg, #450a0a 0%, #2e1065 50%, #1e1b4b 100%)',
+  surprise: 'linear-gradient(135deg, #78350f 0%, #4a1942 50%, #1e1b4b 100%)',
+  longing: 'linear-gradient(135deg, #1e1b4b 0%, #164e63 50%, #1e1b4b 100%)',
+};
 
 const ONBOARDING_STEPS = [
   {
@@ -29,6 +40,27 @@ const ONBOARDING_STEPS = [
 export default function IntroScreen({ dreams, onStartDream, onGoGallery, onViewDream }: Props) {
   const latestDream = dreams.length > 0 ? dreams[0] : null;
 
+  // Extract most frequent emotion from dream history
+  const dominantEmotion = useMemo<DreamEmotionKey | null>(() => {
+    if (dreams.length === 0) return null;
+    const counts: Record<string, number> = {};
+    dreams.forEach(d => d.emotions.forEach(e => { counts[e] = (counts[e] || 0) + 1; }));
+    let max = 0;
+    let maxKey: string | null = null;
+    for (const [k, v] of Object.entries(counts)) {
+      if (v > max) { max = v; maxKey = k; }
+    }
+    return maxKey as DreamEmotionKey | null;
+  }, [dreams]);
+
+  const livingCanvasStyle = useMemo(() => {
+    if (!dominantEmotion) return {};
+    return {
+      background: EMOTION_GRADIENTS[dominantEmotion],
+      backgroundSize: '200% 200%',
+    };
+  }, [dominantEmotion]);
+
   const shouldShowOnboarding =
     dreams.length === 0 && !localStorage.getItem('dream-factory-onboarded');
   const [showOnboarding, setShowOnboarding] = useState(shouldShowOnboarding);
@@ -44,7 +76,7 @@ export default function IntroScreen({ dreams, onStartDream, onGoGallery, onViewD
   };
 
   return (
-    <div className="bg-surface-dim text-on-surface font-body min-h-screen overflow-x-hidden relative">
+    <div className={`bg-surface-dim text-on-surface font-body min-h-screen overflow-x-hidden relative screen-enter ${dominantEmotion ? 'living-canvas' : ''}`} style={livingCanvasStyle}>
       {/* Top Navigation Shell */}
       <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-transparent max-w-[430px]">
         <div className="flex items-center gap-2">
@@ -63,17 +95,35 @@ export default function IntroScreen({ dreams, onStartDream, onGoGallery, onViewD
 
         {/* Hero Section */}
         <div className="relative w-full text-center space-y-8 z-10">
-          {/* Crystal Ball Visual */}
+          {/* Abstract Constellation Visual — breathes and pulses */}
           <div className="relative mx-auto w-64 h-64 flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary-container/40 via-secondary-container/20 to-tertiary-container/30 rounded-full blur-2xl opacity-60"></div>
-            <div className="relative w-48 h-48 rounded-full crystal-glow overflow-hidden border border-white/10 flex items-center justify-center bg-indigo-950/30 backdrop-blur-md">
-              <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-              <span className="material-symbols-outlined text-tertiary/60 text-5xl animate-pulse">flare</span>
-            </div>
-            {/* Orbiting star */}
-            <div className="absolute -top-4 right-8 w-12 h-12 glass-card rounded-full border border-white/5 flex items-center justify-center">
-              <span className="material-symbols-outlined text-tertiary text-sm icon-fill">star</span>
-            </div>
+            {/* Outer glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary-container/30 via-transparent to-tertiary-container/20 rounded-full blur-3xl opacity-50" style={{ animation: 'breathe 6s ease-in-out infinite' }}></div>
+            {/* Concentric rings that breathe */}
+            <div className="absolute w-56 h-56 rounded-full border border-white/5" style={{ animation: 'breathe 8s ease-in-out infinite' }}></div>
+            <div className="absolute w-44 h-44 rounded-full border border-white/8" style={{ animation: 'breathe 6s ease-in-out infinite 1s' }}></div>
+            <div className="absolute w-32 h-32 rounded-full border border-white/10" style={{ animation: 'breathe 5s ease-in-out infinite 0.5s' }}></div>
+            <div className="absolute w-20 h-20 rounded-full border border-white/12" style={{ animation: 'breathe 4s ease-in-out infinite 1.5s' }}></div>
+            {/* Center orb */}
+            <div className="absolute w-8 h-8 rounded-full bg-gradient-to-br from-primary/40 to-tertiary/20 blur-sm" style={{ animation: 'breathe 3s ease-in-out infinite' }}></div>
+            {/* Constellation dots from user's dream symbols */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 256 256">
+              {/* Static constellation dots */}
+              <circle cx="128" cy="50" r="2" fill="#c3c0ff" opacity="0.6" style={{ animation: 'breathe 4s ease-in-out infinite 0.2s' }} />
+              <circle cx="60" cy="90" r="1.5" fill="#ffb95f" opacity="0.5" style={{ animation: 'breathe 5s ease-in-out infinite 0.8s' }} />
+              <circle cx="196" cy="85" r="1.8" fill="#c3c0ff" opacity="0.5" style={{ animation: 'breathe 4.5s ease-in-out infinite 1.2s' }} />
+              <circle cx="80" cy="170" r="2" fill="#ffb95f" opacity="0.4" style={{ animation: 'breathe 5.5s ease-in-out infinite 0.5s' }} />
+              <circle cx="180" cy="180" r="1.5" fill="#c3c0ff" opacity="0.5" style={{ animation: 'breathe 4s ease-in-out infinite 1.8s' }} />
+              <circle cx="128" cy="128" r="2.5" fill="#c3c0ff" opacity="0.7" style={{ animation: 'breathe 3s ease-in-out infinite' }} />
+              {/* Connecting lines */}
+              <line x1="128" y1="50" x2="60" y2="90" stroke="rgba(195,192,255,0.08)" strokeWidth="0.5" className="constellation-draw" />
+              <line x1="128" y1="50" x2="196" y2="85" stroke="rgba(195,192,255,0.08)" strokeWidth="0.5" className="constellation-draw" />
+              <line x1="60" y1="90" x2="128" y2="128" stroke="rgba(195,192,255,0.08)" strokeWidth="0.5" className="constellation-draw" />
+              <line x1="196" y1="85" x2="128" y2="128" stroke="rgba(195,192,255,0.08)" strokeWidth="0.5" className="constellation-draw" />
+              <line x1="128" y1="128" x2="80" y2="170" stroke="rgba(195,192,255,0.06)" strokeWidth="0.5" className="constellation-draw" />
+              <line x1="128" y1="128" x2="180" y2="180" stroke="rgba(195,192,255,0.06)" strokeWidth="0.5" className="constellation-draw" />
+              <line x1="80" y1="170" x2="180" y2="180" stroke="rgba(195,192,255,0.05)" strokeWidth="0.5" className="constellation-draw" />
+            </svg>
           </div>
 
           {/* Title */}

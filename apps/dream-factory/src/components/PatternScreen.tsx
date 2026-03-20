@@ -1,5 +1,5 @@
-import { useMemo, useCallback } from 'react';
-import type { DreamEntry } from '../types';
+import { useMemo, useCallback, useState } from 'react';
+import type { DreamEntry, DreamEmotionKey } from '../types';
 import { EMOTIONS, PLACES, OBJECTS, PERSONS, getPatternInsights } from '../data';
 
 interface Props {
@@ -8,8 +8,22 @@ interface Props {
   onBack: () => void;
 }
 
+// Emotion gradient map for story cards
+const STORY_GRADIENTS: Record<DreamEmotionKey, string> = {
+  peace: 'from-indigo-900 via-blue-900 to-indigo-950',
+  fear: 'from-slate-900 via-gray-900 to-indigo-950',
+  confusion: 'from-purple-900 via-pink-900 to-indigo-950',
+  joy: 'from-pink-900 via-amber-900 to-indigo-950',
+  sorrow: 'from-indigo-900 via-violet-900 to-indigo-950',
+  anger: 'from-red-950 via-purple-900 to-indigo-950',
+  surprise: 'from-amber-900 via-pink-900 to-indigo-950',
+  longing: 'from-indigo-900 via-cyan-900 to-indigo-950',
+};
+
 export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
   const insights = useMemo(() => getPatternInsights(dreams), [dreams]);
+  const [showDreamStory, setShowDreamStory] = useState(false);
+  const [storyCardIndex, setStoryCardIndex] = useState(0);
 
   // Monthly calendar for current month
   const monthCalendar = useMemo(() => {
@@ -150,6 +164,83 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
     return 'M ' + points.map(p => `${p.x} ${p.y}`).join(' L ');
   }, [vividnessTrend, dotHeights]);
 
+  // Dream Story cards — Spotify Wrapped style narrative
+  const storyCards = useMemo(() => {
+    if (dreams.length < 3) return [];
+
+    const dreamCount = dreams.length;
+
+    // Top place
+    const placeCounts: Record<string, number> = {};
+    dreams.forEach(d => { placeCounts[d.scene.place] = (placeCounts[d.scene.place] || 0) + 1; });
+    const topPlaceKey = Object.entries(placeCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+    const topPlace = PLACES.find(p => p.key === topPlaceKey)?.label || '미지의 장소';
+    const topPlaceCount = placeCounts[topPlaceKey] || 0;
+    const placeInsight = topPlaceCount >= 3
+      ? `${dreamCount}개의 꿈 중 ${topPlaceCount}번이나 이곳을 찾았어요. 무의식이 이곳에서 전하고 싶은 이야기가 있는 것 같아요.`
+      : `이 장소가 가장 자주 당신의 꿈에 나타났어요.`;
+
+    // Emotion arc (first recorded vs most recent)
+    const oldestDream = dreams[dreams.length - 1];
+    const newestDream = dreams[0];
+    const emotionStart = EMOTIONS.find(e => e.key === oldestDream.emotions[0])?.label || '알 수 없음';
+    const emotionEnd = EMOTIONS.find(e => e.key === newestDream.emotions[0])?.label || '알 수 없음';
+    const emotionArcInsight = emotionStart === emotionEnd
+      ? `'${emotionStart}'이라는 감정이 꾸준히 당신의 꿈을 관통하고 있어요.`
+      : `감정의 흐름이 변화하고 있어요. 당신의 내면이 움직이고 있다는 신호예요.`;
+
+    // Deep insight from pattern analysis
+    const patternInsights = getPatternInsights(dreams);
+    const deepInsight = patternInsights.length > 0
+      ? patternInsights[0]
+      : '당신의 무의식은 매일 밤 작은 이야기를 만들고 있어요. 계속 기록해보세요.';
+
+    // Dominant emotion for gradients
+    const emotionCounts: Record<string, number> = {};
+    dreams.forEach(d => d.emotions.forEach(e => { emotionCounts[e] = (emotionCounts[e] || 0) + 1; }));
+    const dominantEmotion = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0]?.[0] as DreamEmotionKey || 'peace';
+
+    return [
+      {
+        text: `이번 달, 당신은 ${dreamCount}번의 꿈을 기록했어요.`,
+        subtext: streak > 0 ? `${streak}일 연속으로 꿈을 기록하고 있어요.` : '꾸준히 기록할수록 더 깊은 이야기가 펼쳐져요.',
+        gradient: 'from-indigo-900 via-purple-900 to-indigo-950',
+      },
+      {
+        text: `가장 자주 찾아온 장소는\n'${topPlace}'였어요.`,
+        subtext: placeInsight,
+        gradient: STORY_GRADIENTS[dominantEmotion] || 'from-indigo-900 via-purple-900 to-indigo-950',
+      },
+      {
+        text: `당신의 감정은\n'${emotionStart}'에서 '${emotionEnd}'으로\n이동했어요.`,
+        subtext: emotionArcInsight,
+        gradient: 'from-violet-900 via-blue-900 to-indigo-950',
+      },
+      {
+        text: '당신의 무의식이\n전하는 메시지',
+        subtext: deepInsight,
+        gradient: 'from-indigo-950 via-slate-900 to-indigo-950',
+      },
+    ];
+  }, [dreams, streak]);
+
+  const handleStoryNext = useCallback(() => {
+    if (storyCardIndex < storyCards.length - 1) {
+      setStoryCardIndex(prev => prev + 1);
+    }
+  }, [storyCardIndex, storyCards.length]);
+
+  const handleStoryPrev = useCallback(() => {
+    if (storyCardIndex > 0) {
+      setStoryCardIndex(prev => prev - 1);
+    }
+  }, [storyCardIndex]);
+
+  const handleOpenStory = useCallback(() => {
+    setStoryCardIndex(0);
+    setShowDreamStory(true);
+  }, []);
+
   // Export handler
   const handleExport = useCallback(() => {
     const blob = new Blob([JSON.stringify(dreams, null, 2)], { type: 'application/json' });
@@ -181,7 +272,73 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
   }
 
   return (
-    <div className="min-h-screen pb-32 bg-surface text-on-surface font-body pattern-dot-bg">
+    <div className="min-h-screen pb-32 bg-surface text-on-surface font-body pattern-dot-bg screen-enter">
+      {/* Dream Story Overlay */}
+      {showDreamStory && storyCards.length > 0 && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          {/* Background */}
+          <div className={`absolute inset-0 bg-gradient-to-b ${storyCards[storyCardIndex].gradient} transition-all duration-700`} />
+
+          {/* Card content */}
+          <div
+            className="relative z-10 w-full max-w-[430px] h-full flex flex-col items-center justify-center px-10 text-center"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const clickX = e.clientX - rect.left;
+              if (clickX > rect.width / 2) handleStoryNext();
+              else handleStoryPrev();
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowDreamStory(false); }}
+              className="absolute top-6 right-6 text-white/40 hover:text-white/80 transition-colors z-20"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+
+            {/* Main text */}
+            <div key={storyCardIndex} className="screen-enter">
+              <h2 className="font-headline text-3xl leading-relaxed text-white/90 mb-6 whitespace-pre-line font-bold tracking-tight drop-shadow-[0_0_20px_rgba(195,192,255,0.3)]">
+                {storyCards[storyCardIndex].text}
+              </h2>
+              <p className="text-white/60 text-sm leading-relaxed max-w-[320px] mx-auto font-light tracking-wide">
+                {storyCards[storyCardIndex].subtext}
+              </p>
+            </div>
+
+            {/* Share button on last card */}
+            {storyCardIndex === storyCards.length - 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowDreamStory(false); }}
+                className="mt-12 px-8 py-3 rounded-full bg-white/10 border border-white/20 text-white/80 text-sm font-medium tracking-wider backdrop-blur-sm hover:bg-white/20 transition-all screen-enter"
+              >
+                돌아가기
+              </button>
+            )}
+
+            {/* Dot indicators */}
+            <div className="absolute bottom-16 flex gap-2">
+              {storyCards.map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === storyCardIndex
+                      ? 'w-6 bg-white/80'
+                      : 'w-1.5 bg-white/30'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Navigation hint */}
+            {storyCardIndex < storyCards.length - 1 && (
+              <p className="absolute bottom-8 text-white/20 text-[10px] tracking-widest uppercase">탭하여 다음</p>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* TopAppBar */}
       <header className="bg-surface/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 w-full fixed top-0 z-50 max-w-[430px]">
         <div className="flex items-center gap-2">
@@ -195,6 +352,20 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
       </header>
 
       <main className="px-6 pt-20 space-y-6">
+        {/* Dream Story CTA */}
+        {storyCards.length > 0 && (
+          <button
+            onClick={handleOpenStory}
+            className="w-full p-5 rounded-xl bg-gradient-to-r from-indigo-900/80 via-purple-900/60 to-indigo-900/80 border border-white/10 flex items-center justify-between group hover:border-white/20 transition-all duration-300 living-canvas"
+            style={{ backgroundSize: '200% 200%' }}
+          >
+            <div className="text-left">
+              <p className="font-headline text-lg text-white/90 mb-1">이번 달의 꿈 이야기 보기</p>
+              <p className="text-[11px] text-white/50 tracking-wide">당신의 무의식이 만든 내러티브</p>
+            </div>
+            <span className="material-symbols-outlined text-white/40 group-hover:text-white/70 group-hover:translate-x-1 transition-all">arrow_forward</span>
+          </button>
+        )}
         {/* Section 1: Monthly Dream Recording Calendar */}
         <section className="bg-surface-container-low p-6 rounded-xl shadow-[0_8px_32px_rgba(79,70,229,0.04)] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">

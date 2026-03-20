@@ -108,7 +108,7 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
   ];
 
   return (
-    <div className="min-h-screen flex flex-col pb-24 bg-surface text-on-surface font-body">
+    <div className="min-h-screen flex flex-col pb-24 bg-surface text-on-surface font-body screen-enter">
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-surface-dim to-transparent shadow-[0_20px_40px_rgba(195,192,255,0.08)] max-w-[430px]">
         <div className="flex items-center justify-between px-6 h-16 w-full">

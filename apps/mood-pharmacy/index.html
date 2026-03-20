@@ -1,0 +1,186 @@
+<!doctype html>
+<html class="dark" lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=430, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>감정 약국 — Mood Pharmacy</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#061a14",
+              "surface-deep": "#041210",
+              "surface-card": "#0d2e24",
+              "surface-card-hover": "#123a2e",
+              "teal": "#0a4a3a",
+              "teal-light": "#0f6b54",
+              "teal-bright": "#14d4a0",
+              "amber": "#d4a017",
+              "amber-light": "#f5c542",
+              "amber-soft": "rgba(212,160,23,0.15)",
+              "purple-calm": "#9b72cf",
+              "purple-soft": "rgba(155,114,207,0.15)",
+              "red-intense": "#e05555",
+              "red-soft": "rgba(224,85,85,0.15)",
+              "blue-sad": "#5588cc",
+              "blue-soft": "rgba(85,136,204,0.15)",
+              "green-happy": "#55cc88",
+              "green-soft": "rgba(85,204,136,0.15)",
+              "on-surface": "#e0f0ea",
+              "on-surface-dim": "#8aaa9e",
+              "on-surface-muted": "#5a7a6e",
+            },
+            animation: {
+              "fadeIn": "fadeIn 0.4s ease-out",
+              "slideUp": "slideUp 0.5s ease-out",
+              "slideDown": "slideDown 0.3s ease-out",
+              "scaleIn": "scaleIn 0.3s ease-out",
+              "pulse-slow": "pulse 3s infinite",
+              "breathe": "breathe 4s ease-in-out infinite",
+              "float": "float 3s ease-in-out infinite",
+              "shimmer": "shimmer 2s linear infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(8px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideDown: {
+                "0%": { opacity: "0", transform: "translateY(-10px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              scaleIn: {
+                "0%": { opacity: "0", transform: "scale(0.9)" },
+                "100%": { opacity: "1", transform: "scale(1)" },
+              },
+              breathe: {
+                "0%, 100%": { opacity: "0.3" },
+                "50%": { opacity: "0.7" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-6px)" },
+              },
+              shimmer: {
+                "0%": { backgroundPosition: "-200% 0" },
+                "100%": { backgroundPosition: "200% 0" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;700&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html, body, #root {
+        height: 100%;
+        width: 100%;
+        max-width: 430px;
+        margin: 0 auto;
+        font-family: 'Noto Sans KR', system-ui, sans-serif;
+        background: #061a14;
+        color: #e0f0ea;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 430px;
+        height: 100%;
+        background:
+          radial-gradient(ellipse 300px 400px at 50% 0%, rgba(10,74,58,0.3) 0%, transparent 70%),
+          radial-gradient(ellipse 200px 300px at 80% 30%, rgba(212,160,23,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse 250px 350px at 20% 70%, rgba(155,114,207,0.05) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      #root {
+        position: relative;
+        z-index: 1;
+      }
+
+      .safe-area-bottom {
+        padding-bottom: env(safe-area-inset-bottom, 8px);
+      }
+
+      ::-webkit-scrollbar { width: 3px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+      .font-serif-ko {
+        font-family: 'Noto Serif KR', serif;
+      }
+
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 430px;
+        height: 100%;
+        background-image:
+          radial-gradient(1px 1px at 15% 25%, rgba(20,212,160,0.2), transparent),
+          radial-gradient(1px 1px at 75% 15%, rgba(212,160,23,0.2), transparent),
+          radial-gradient(1px 1px at 45% 55%, rgba(155,114,207,0.15), transparent),
+          radial-gradient(1px 1px at 25% 75%, rgba(20,212,160,0.15), transparent),
+          radial-gradient(1px 1px at 65% 45%, rgba(212,160,23,0.15), transparent);
+        animation: breathe 5s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+        width: 100%;
+      }
+      input[type="range"]::-webkit-slider-track {
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(10,74,58,0.5);
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #14d4a0;
+        margin-top: -8px;
+        box-shadow: 0 0 10px rgba(20,212,160,0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

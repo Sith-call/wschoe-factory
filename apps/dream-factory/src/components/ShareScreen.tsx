@@ -21,7 +21,7 @@ export default function ShareScreen({ entry, onBack }: Props) {
   };
 
   return (
-    <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col items-center">
+    <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col items-center screen-enter">
       {/* TopAppBar */}
       <header className="flex items-center w-full px-6 py-4 bg-transparent fixed top-0 z-50 max-w-[430px]">
         <button onClick={onBack} className="text-indigo-200 hover:opacity-80 transition-opacity">

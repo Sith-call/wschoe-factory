@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#5b13ec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#161022",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "Noto Sans KR", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .bg-custom-gradient {
+            background: radial-gradient(circle at center, #2e1065 0%, #161022 100%);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark flex items-center justify-center min-h-screen">
+<!-- Main Container (Mobile Frame Width) -->
+<div class="relative w-[430px] h-[932px] bg-custom-gradient overflow-hidden flex flex-col items-center justify-between py-20 px-8">
+<!-- Top Decorations (Subtle Glows) -->
+<div class="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] bg-primary/20 blur-[100px] rounded-full"></div>
+<div class="absolute bottom-[-5%] right-[-5%] w-[250px] h-[250px] bg-primary/10 blur-[80px] rounded-full"></div>
+<!-- Top Status (Optional/Hidden in minimalist view) -->
+<div class="w-full h-10"></div>
+<!-- Centerpiece Content -->
+<div class="flex flex-col items-center w-full grow justify-center gap-12">
+<!-- Progress Ring & Illustration Container -->
+<div class="relative flex items-center justify-center w-64 h-64">
+<!-- Circular Progress Ring -->
+<svg class="absolute w-full h-full" viewbox="0 0 100 100">
+<circle class="text-primary/10 stroke-current" cx="50" cy="50" fill="transparent" r="45" stroke-width="2"></circle>
+<circle class="text-white/80 stroke-current progress-ring-circle" cx="50" cy="50" fill="transparent" r="45" stroke-dasharray="283" stroke-dashoffset="100" stroke-linecap="round" stroke-width="2"></circle>
+</svg>
+<!-- Elegant Line-Art Illustration -->
+<div class="z-10 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-[84px] text-white/90 font-extralight" style="font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 48;">
+                        mail
+                    </span>
+<div class="absolute mt-4 w-12 h-1 bg-white/20 blur-sm rounded-full"></div>
+</div>
+<!-- Subtle Inner Glow -->
+<div class="absolute w-32 h-32 bg-white/5 blur-2xl rounded-full"></div>
+</div>
+<!-- Text Content -->
+<div class="flex flex-col items-center text-center gap-4">
+<div class="flex items-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-sm text-white">check_circle</span>
+<p class="text-white text-sm font-light tracking-wide font-display">감정 분석 완료</p>
+</div>
+<div class="flex flex-col items-center gap-2">
+<h1 class="text-white text-2xl font-medium tracking-tight font-display">맞춤 처방 조합 중...</h1>
+<p class="text-white/40 text-xs font-light italic">잠시만 기다려 주세요. 당신만을 위한 위로를 빚고 있습니다.</p>
+</div>
+</div>
+</div>
+<!-- Footer / Step Indicator -->
+<div class="flex flex-col items-center gap-8 w-full pb-10">
+<!-- Step Dots (2 out of 4 filled) -->
+<div class="flex gap-3">
+<div class="h-1.5 w-1.5 rounded-full bg-white opacity-40"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_white]"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-white opacity-20"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-white opacity-20"></div>
+</div>
+<!-- Branding/Subtle Tag -->
+<div class="opacity-20 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-white">auto_awesome</span>
+<span class="text-white text-[10px] uppercase tracking-[0.2em] font-display">Mood Apothecary</span>
+</div>
+</div>
+</div>
+<!-- Background Elements (Abstract Pattern) -->
+<div class="hidden">
+<div class="bg-no-repeat bg-cover" data-alt="Dark purple radial gradient with soft glowing particles"></div>
+</div>
+</body></html>

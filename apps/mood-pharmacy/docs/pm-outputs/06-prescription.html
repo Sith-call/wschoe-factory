@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=430, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;family=Noto+Serif+KR:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5b13ec",
+                        "background-light": "#FCF9F2", // Warm cream tint requested
+                        "background-dark": "#161022",
+                        "paper": "#FFFFFF",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "serif-ko": ["Noto Serif KR", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>.paper-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCzqY3FKnF-VsmXoFSu9EU0MTpsSD0JZhGJeSxXHb9s21UWO2TQn6PdkZmB9ppI3zMKwCrqRemG6v5_1HjibnhkdNoBK9talD5-FCPBXSAVT6NEL39qRpB93XtbHJtaM-jzA--2w_P5RTasscwjPyzSyXbcMPL3kX8YiWsEMBPQzJUS8bxitnJgI0G0GaSEhUu_gbfGefeKmhZ8I-DaTBz8M_Hc0AXtlKn376qAo_mRQVS4sXgstVFvFfXbDwyXodd_0DyLfp_KAns)
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col items-center p-6">
+<!-- Top Navigation Bar -->
+<div class="w-full flex items-center justify-between mb-6">
+<button class="text-slate-900 dark:text-slate-100 p-2">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">결과 확인</h1>
+<button class="text-slate-900 dark:text-slate-100 p-2">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Main Prescription Card -->
+<div class="w-full max-w-[382px] bg-paper dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-800 relative overflow-hidden paper-texture">
+<!-- Card Header Decoration -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/10"></div>
+<div class="p-8">
+<!-- Header Section -->
+<div class="text-center mb-8">
+<h2 class="font-serif-ko text-3xl font-bold text-primary mb-2">처방전</h2>
+<div class="flex items-center justify-center gap-2 text-slate-400">
+<span class="h-px w-8 bg-slate-200"></span>
+<span class="text-[10px] tracking-[0.2em] uppercase">Prescription</span>
+<span class="h-px w-8 bg-slate-200"></span>
+</div>
+</div>
+<!-- Patient Info -->
+<div class="grid grid-cols-2 gap-y-3 mb-8 text-sm">
+<div class="flex flex-col">
+<span class="text-slate-400 text-xs mb-1">환자명</span>
+<span class="font-bold">오늘의 나</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-slate-400 text-xs mb-1">발행일</span>
+<span class="font-medium">2024.05.20</span>
+</div>
+<div class="col-span-2 flex flex-col border-t border-slate-100 dark:border-slate-800 pt-3">
+<span class="text-slate-400 text-xs mb-1">담당의</span>
+<span class="font-medium text-primary">Dr. 무드</span>
+</div>
+</div>
+<!-- Diagnosis -->
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl p-5 mb-8 text-center border border-primary/10">
+<span class="text-xs text-primary/60 font-semibold mb-1 block">증상 진단</span>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">복합 스트레스성 무기력증</h3>
+</div>
+<!-- Prescription Items -->
+<div class="space-y-4 mb-8">
+<!-- Item 1 -->
+<div class="flex items-center gap-4 group">
+<div class="flex-shrink-0 size-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-primary border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-2xl">air</span>
+</div>
+<div class="flex-grow">
+<p class="text-[15px] font-semibold text-slate-800 dark:text-slate-200">1차: 창문 열고 심호흡 5회</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 bg-red-50 text-red-600 text-[10px] font-bold rounded-full">즉시</span>
+<span class="text-slate-400 text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 2분
+                            </span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-4 group">
+<div class="flex-shrink-0 size-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-primary border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-2xl">coffee</span>
+</div>
+<div class="flex-grow">
+<p class="text-[15px] font-semibold text-slate-800 dark:text-slate-200">2차: 좋아하는 음료 사러 산책</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full">30분 내</span>
+<span class="text-slate-400 text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 20분
+                            </span>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-4 group">
+<div class="flex-shrink-0 size-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-primary border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-2xl">favorite</span>
+</div>
+<div class="flex-grow">
+<p class="text-[15px] font-semibold text-slate-800 dark:text-slate-200">3차: 좋아하는 사람에게 연락</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-full">오늘 중</span>
+<span class="text-slate-400 text-[11px] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 5분
+                            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Caution Note -->
+<div class="pt-6 border-t border-dashed border-slate-200 dark:border-slate-700">
+<div class="flex items-start gap-2 bg-amber-50/50 dark:bg-amber-900/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-amber-500 text-lg">warning</span>
+<p class="text-[11px] leading-relaxed text-amber-700 dark:text-amber-400 font-medium">
+                        주의: 과다 복용 시 기분이 너무 좋아질 수 있습니다. 효과가 너무 강할 경우 주변 사람과 행복을 나누세요.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Bottom Stamp Effect -->
+<div class="absolute bottom-4 right-6 opacity-20">
+<div class="border-4 border-primary rounded-full p-2 rotate-12 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary tracking-tighter">MOOD CLINIC</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="w-full max-w-[382px] mt-8 flex flex-col gap-3">
+<button class="w-full h-14 bg-primary hover:bg-primary/90 text-white rounded-2xl font-bold text-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+            실행하기
+            <span class="material-symbols-outlined">play_circle</span>
+</button>
+<button class="w-full h-14 bg-transparent border-2 border-primary text-primary hover:bg-primary/5 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-2">
+            공유하기
+            <span class="material-symbols-outlined">share</span>
+</button>
+<button class="mt-4 text-slate-400 dark:text-slate-500 text-sm font-medium hover:text-primary transition-colors underline underline-offset-4 decoration-slate-200">
+            다시 처방 받기
+        </button>
+</div>
+<!-- Decorative Element -->
+<div class="mt-auto py-8">
+<p class="text-[10px] text-slate-300 dark:text-slate-600 tracking-widest uppercase font-bold">Personalized Wellbeing Guide</p>
+</div>
+</body></html>

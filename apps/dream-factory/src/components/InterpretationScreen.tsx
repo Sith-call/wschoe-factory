@@ -24,7 +24,7 @@ export default function InterpretationScreen({
   };
 
   return (
-    <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col">
+    <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col screen-enter">
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-dim max-w-[430px]">
         <button onClick={onBack} className="text-primary hover:text-tertiary transition-colors duration-600">

@@ -1,5 +1,18 @@
+import { useMemo } from 'react';
 import type { DreamEmotionKey } from '../types';
 import { EMOTIONS } from '../data';
+
+// Subtle background gradients per emotion
+const EMOTION_BG_GRADIENTS: Record<DreamEmotionKey, string> = {
+  peace: 'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(59,130,246,0.06) 100%)',
+  fear: 'linear-gradient(135deg, rgba(55,65,81,0.1) 0%, rgba(15,23,42,0.08) 100%)',
+  confusion: 'linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(236,72,153,0.06) 100%)',
+  joy: 'linear-gradient(135deg, rgba(236,72,153,0.08) 0%, rgba(249,115,22,0.06) 100%)',
+  sorrow: 'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.06) 100%)',
+  anger: 'linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(147,51,234,0.06) 100%)',
+  surprise: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(236,72,153,0.06) 100%)',
+  longing: 'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(6,182,212,0.06) 100%)',
+};
 
 interface Props {
   emotions: DreamEmotionKey[];
@@ -38,8 +51,14 @@ export default function EmotionScreen({
     }
   };
 
+  // Compute background gradient from selected emotions
+  const emotionBg = useMemo(() => {
+    if (emotions.length === 0) return 'none';
+    return EMOTION_BG_GRADIENTS[emotions[0]];
+  }, [emotions]);
+
   return (
-    <div className="bg-surface text-on-surface font-body min-h-screen hide-scrollbar">
+    <div className="bg-surface text-on-surface font-body min-h-screen hide-scrollbar screen-enter" style={{ transition: 'background 0.5s ease' }}>
       {/* Top Navigation Shell */}
       <header className="fixed top-0 w-full flex justify-between items-center px-6 h-16 z-50 bg-surface-dim/40 backdrop-blur-xl max-w-[430px]">
         <button onClick={onBack} className="text-on-surface-variant hover:text-primary transition-colors">
@@ -51,7 +70,13 @@ export default function EmotionScreen({
         </button>
       </header>
 
-      <main className="pt-24 pb-32 px-6 max-w-[430px] mx-auto">
+      {/* Emotion background overlay */}
+      <div
+        className="fixed inset-0 pointer-events-none transition-all duration-500 ease-in-out"
+        style={{ background: emotionBg }}
+      />
+
+      <main className="pt-24 pb-32 px-6 max-w-[430px] mx-auto relative z-10">
         {/* Progress Indicator */}
         <div className="mb-10">
           <div className="flex justify-between items-end mb-3">
@@ -80,9 +105,10 @@ export default function EmotionScreen({
                 onClick={() => toggleEmotion(e.key)}
                 className={`rounded-xl p-5 flex flex-col items-center justify-center gap-3 transition-all duration-500 cursor-pointer ${
                   isActive
-                    ? 'glass-card active-border'
-                    : 'glass-card border border-outline-variant/10 hover:bg-surface-container-high'
+                    ? 'glass-card active-border emotion-pulse glow-ring-animate'
+                    : 'glass-card border border-outline-variant/10 hover:bg-surface-container-high hover:scale-[1.02]'
                 }`}
+                style={{ transition: 'transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease' }}
               >
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                   isActive ? 'bg-primary/10' : 'bg-surface-container-highest'

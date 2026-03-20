@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D67D61",
+                        "background-light": "#fcf9f4",
+                        "background-dark": "#1f1613",
+                        "success-muted": "#e8f5e9",
+                        "success-deep": "#4caf50",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #fcf9f4;
+        }
+        .font-serif {
+            font-family: 'Newsreader', serif;
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex justify-center">
+<div class="relative flex min-h-screen w-full max-w-[430px] flex-col bg-background-light dark:bg-background-dark overflow-x-hidden shadow-2xl">
+<!-- Top Bar -->
+<div class="flex items-center bg-background-light/80 backdrop-blur-md sticky top-0 z-10 px-4 py-4 justify-between border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display italic">Prescription Checklist</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Progress Section -->
+<div class="flex flex-col items-center gap-6 p-8 bg-gradient-to-b from-primary/5 to-transparent">
+<div class="relative flex items-center justify-center">
+<svg class="size-40">
+<circle class="text-primary/10" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary progress-ring-circle" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="293" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-3xl font-bold font-display text-primary">33%</span>
+<span class="text-xs text-slate-500 font-medium uppercase tracking-wider">1 of 3</span>
+</div>
+</div>
+<div class="text-center space-y-1">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white">처방 실행 중</h3>
+<p class="text-primary font-medium italic font-serif">“천천히 하나씩 해봐요.”</p>
+</div>
+</div>
+<!-- Task List -->
+<div class="flex flex-col gap-4 px-6 pb-20">
+<!-- Completed Card -->
+<div class="flex items-center gap-4 bg-success-muted dark:bg-success-deep/10 p-5 rounded-2xl border border-success-deep/20 transition-all">
+<div class="flex size-10 items-center justify-center bg-success-deep text-white rounded-full">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-500 text-base font-medium line-through decoration-slate-400">따뜻한 물 한 잔 마시기</p>
+<p class="text-success-deep text-xs font-bold uppercase tracking-wide">완료됨</p>
+</div>
+<div class="text-slate-400">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+</div>
+</div>
+<!-- Current/In-progress Card -->
+<div class="flex flex-col gap-4 bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-primary shadow-lg scale-[1.02] ring-4 ring-primary/5">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">NOW DOING</span>
+<p class="text-slate-900 dark:text-white text-lg font-bold">좋아하는 음료 마시기</p>
+</div>
+<div class="flex items-center gap-1 text-slate-500 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-lg">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-xs font-bold">20분</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-md shadow-primary/30 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span>시작하기</span>
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+<!-- Upcoming Card -->
+<div class="flex items-center gap-4 bg-slate-100/50 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 opacity-60">
+<div class="flex size-10 items-center justify-center bg-slate-200 dark:bg-slate-700 text-slate-400 rounded-full">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-600 dark:text-slate-300 text-base font-medium">창밖 풍경 5분간 바라보기</p>
+<p class="text-slate-400 text-xs font-bold">아직</p>
+</div>
+<div class="flex items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-xs font-bold">5분</span>
+</div>
+</div>
+<div class="py-6 text-center">
+<a class="text-slate-400 hover:text-primary transition-colors text-sm font-medium underline underline-offset-4" href="#">
+                    처방전으로 돌아가기
+                </a>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 pb-6 pt-3 flex justify-between items-center z-20">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">홈</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">assignment_turned_in</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">처방</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">history</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">기록</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">설정</p>
+</a>
+</div>
+</div>
+</body></html>
