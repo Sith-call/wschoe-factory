@@ -13,13 +13,13 @@ export interface DailyReflection {
   createdAt: string;
 }
 
-export const EMOTIONS: { type: EmotionType; label: string; icon: string; color: string }[] = [
-  { type: 'happy', label: '행복', icon: 'sentiment_very_satisfied', color: '#FFD93D' },
-  { type: 'calm', label: '평온', icon: 'spa', color: '#6BCB77' },
-  { type: 'grateful', label: '감사', icon: 'favorite', color: '#FF8E71' },
-  { type: 'tired', label: '피곤', icon: 'bedtime', color: '#9B9ECE' },
-  { type: 'anxious', label: '불안', icon: 'thunderstorm', color: '#FF6B6B' },
-  { type: 'sad', label: '우울', icon: 'water_drop', color: '#4D96FF' },
+export const EMOTIONS: { type: EmotionType; label: string; desc: string; icon: string; color: string }[] = [
+  { type: 'happy', label: '행복', desc: '기분이 좋을 때', icon: 'sentiment_very_satisfied', color: '#FFD93D' },
+  { type: 'calm', label: '평온', desc: '마음이 편할 때', icon: 'spa', color: '#6BCB77' },
+  { type: 'grateful', label: '감사', desc: '고마운 마음일 때', icon: 'favorite', color: '#FF8E71' },
+  { type: 'tired', label: '피곤', desc: '몸이 지칠 때', icon: 'bedtime', color: '#9B9ECE' },
+  { type: 'anxious', label: '불안', desc: '마음이 불안할 때', icon: 'thunderstorm', color: '#FF6B6B' },
+  { type: 'sad', label: '우울', desc: '기분이 가라앉을 때', icon: 'water_drop', color: '#4D96FF' },
 ];
 
 export const HIGHLIGHT_CATEGORIES: { type: HighlightCategory; label: string; icon: string }[] = [

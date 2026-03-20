@@ -74,8 +74,11 @@ export default function EmotionScreen({ selected, intensity, onSelect, onIntensi
                 {e.icon}
               </span>
             </div>
-            <span className={`text-sm font-medium ${selected === e.type ? '' : 'text-night-200'}`}>
+            <span className={`text-sm font-medium ${selected === e.type ? '' : 'text-on-surface'}`}>
               {e.label}
+            </span>
+            <span className={`text-[10px] ${selected === e.type ? 'opacity-80' : 'text-on-surface-variant'}`}>
+              {e.desc}
             </span>
           </button>
         ))}

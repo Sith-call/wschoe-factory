@@ -16,8 +16,9 @@ export default function EnergyScreen({ selected, onSelect, onNext, onBack }: Pro
 
   return (
     <div className="min-h-screen px-6 pt-12 pb-8 flex flex-col">
-      <button onClick={onBack} className="self-start mb-4 text-night-400 hover:text-night-200 transition-colors">
-        <span className="material-symbols-outlined">arrow_back</span>
+      <button onClick={onBack} className="self-start mb-4 flex items-center gap-1 text-on-surface-variant hover:text-on-surface transition-colors py-2 pr-3">
+        <span className="material-symbols-outlined text-xl">arrow_back</span>
+        <span className="text-sm">이전</span>
       </button>
 
       <div className="mb-2">

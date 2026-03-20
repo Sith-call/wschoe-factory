@@ -165,8 +165,8 @@ export default function CompleteScreen({ emotion, energy, highlightText, gratitu
             className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
             style={{ color: emotionData?.color, backgroundColor: `${emotionData?.color}15` }}
           >
-            <span className="material-symbols-outlined text-sm">share</span>
-            공유하기
+            <span className="material-symbols-outlined text-sm">send</span>
+            친구에게 보내기
           </button>
         </div>
       </div>
