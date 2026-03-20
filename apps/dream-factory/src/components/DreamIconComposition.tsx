@@ -1,4 +1,4 @@
-import { PLACES, WEATHERS, OBJECTS, EMOTIONS } from '../data';
+import { PLACES, WEATHERS, OBJECTS, EMOTIONS, PLACE_COLOR_SHIFTS } from '../data';
 import type { PlaceKey, WeatherKey, ObjectKey, DreamEmotionKey } from '../types';
 
 interface Props {
@@ -22,6 +22,7 @@ export default function DreamIconComposition({ place, weather, objects, emotion,
   const objectItems = objects.slice(0, 3).map(key => OBJECTS.find(o => o.key === key)!);
 
   const [gradFrom, gradTo] = emotionData?.gradient ?? ['#7C3AED', '#3B82F6'];
+  const placeShift = PLACE_COLOR_SHIFTS[place]?.hueShift ?? 0;
 
   const isLarge = size === 'large';
   const containerHeight = isLarge ? 'h-48' : 'h-36';
@@ -41,6 +42,7 @@ export default function DreamIconComposition({ place, weather, objects, emotion,
       className={`relative w-full ${containerHeight} rounded-2xl overflow-hidden`}
       style={{
         background: `linear-gradient(135deg, ${gradFrom} 0%, ${gradTo} 60%, ${gradFrom}88 100%)`,
+        filter: placeShift !== 0 ? `hue-rotate(${placeShift}deg)` : undefined,
       }}
     >
       {/* Subtle star dots overlay */}

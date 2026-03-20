@@ -94,6 +94,18 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
 
   const maxSymbolCount = topSymbols.length > 0 ? topSymbols[0].count : 1;
 
+  // Dream Color Palette — extract emotion gradients with frequency
+  const dreamColorPalette = useMemo(() => {
+    const emotionCounts: Record<string, number> = {};
+    dreams.forEach(d => d.emotions.forEach(e => { emotionCounts[e] = (emotionCounts[e] || 0) + 1; }));
+    return EMOTIONS
+      .filter(e => emotionCounts[e.key])
+      .map(e => ({ ...e, count: emotionCounts[e.key] || 0 }))
+      .sort((a, b) => b.count - a.count);
+  }, [dreams]);
+
+  const maxPaletteCount = dreamColorPalette.length > 0 ? dreamColorPalette[0].count : 1;
+
   // Emotion distribution
   const emotionDist = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -320,6 +332,77 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
                   <path className="opacity-50" d={vividnessSvgPath} fill="none" stroke="#4f46e5" strokeWidth="2" />
                 </svg>
               )}
+            </div>
+          </section>
+        )}
+
+        {/* Section 5: Dream Color Palette — "나의 꿈 컬러 팔레트" */}
+        {dreamColorPalette.length > 0 && (
+          <section className="bg-surface-container-low p-6 rounded-xl space-y-5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <span className="material-symbols-outlined text-6xl">palette</span>
+            </div>
+            <h2 className="serif-title text-lg tracking-tight">나의 꿈 컬러 팔레트</h2>
+            <p className="text-xs text-on-surface-variant -mt-3">이번 달 꿈에서 추출한 감정 색상</p>
+            <div className="flex gap-2 items-end">
+              {dreamColorPalette.map(e => {
+                // Scale width proportional to frequency: min 36px, max ~80px
+                const ratio = e.count / maxPaletteCount;
+                const width = Math.round(36 + ratio * 44);
+                const height = Math.round(48 + ratio * 32);
+                return (
+                  <div key={e.key} className="flex flex-col items-center gap-2">
+                    <div
+                      className="rounded-xl shadow-lg transition-all"
+                      style={{
+                        width: `${width}px`,
+                        height: `${height}px`,
+                        background: `linear-gradient(135deg, ${e.gradient[0]} 0%, ${e.gradient[1]} 100%)`,
+                        boxShadow: `0 4px 16px ${e.gradient[0]}40`,
+                      }}
+                    />
+                    <span className="text-[10px] text-on-surface-variant font-medium">{e.label}</span>
+                    <span className="text-[9px] text-on-surface-variant/50">{e.count}회</span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Section 6: Dream Word Cloud — "꿈의 키워드 맵" */}
+        {topSymbols.length > 0 && (
+          <section className="bg-surface-container-low p-6 rounded-xl space-y-5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <span className="material-symbols-outlined text-6xl">cloud</span>
+            </div>
+            <h2 className="serif-title text-lg tracking-tight">꿈의 키워드 맵</h2>
+            <p className="text-xs text-on-surface-variant -mt-3">자주 등장하는 상징과 키워드</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 py-4 min-h-[80px]">
+              {topSymbols.map((sym, i) => {
+                // Font size proportional to frequency: min 14px, max 32px
+                const ratio = sym.count / maxSymbolCount;
+                const fontSize = Math.round(14 + ratio * 18);
+                // Varying opacity: most frequent = full, decreasing
+                const opacity = 0.5 + ratio * 0.5;
+                // Semi-random padding for cloud effect
+                const paddingTop = [2, 8, 0, 12, 4][i % 5];
+                const paddingLeft = [4, 0, 8, 2, 6][i % 5];
+                return (
+                  <span
+                    key={i}
+                    className="font-headline text-primary inline-block transition-all"
+                    style={{
+                      fontSize: `${fontSize}px`,
+                      opacity,
+                      paddingTop: `${paddingTop}px`,
+                      paddingLeft: `${paddingLeft}px`,
+                    }}
+                  >
+                    {sym.label}
+                  </span>
+                );
+              })}
             </div>
           </section>
         )}

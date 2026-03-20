@@ -154,6 +154,22 @@ export const EMOTIONS: { key: DreamEmotionKey; label: string; emoji: string; key
 
 export const VIVIDNESS_LABELS = ['흐릿', '약간 흐릿', '보통', '선명', '생생'];
 
+// ─── Place-based color shifts for emotion x place variation (H3) ───
+export const PLACE_COLOR_SHIFTS: Record<PlaceKey, { hueShift: number }> = {
+  ocean: { hueShift: -20 },       // bluer
+  forest: { hueShift: 30 },       // greener
+  city: { hueShift: -10 },        // cooler
+  sky: { hueShift: 40 },          // cyan shift
+  underground: { hueShift: -30 }, // darker purple
+  school: { hueShift: 15 },       // warm shift
+  home: { hueShift: 10 },         // slightly warm
+  unknown: { hueShift: -40 },     // mysterious blue-shift
+  office: { hueShift: -5 },       // neutral cool
+  cafe: { hueShift: 20 },         // warm amber shift
+  hospital: { hueShift: -15 },    // clinical cool
+  street: { hueShift: 5 },        // slight warm
+};
+
 // ─── Fortune messages (40) ───
 export const FORTUNE_MESSAGES: string[] = [
   '오늘은 예상치 못한 기쁜 소식이 찾아올 거예요.',

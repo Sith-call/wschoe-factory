@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import type { DreamEntry, DreamEmotionKey } from '../types';
-import { EMOTIONS } from '../data';
+import type { DreamEntry, DreamEmotionKey, PlaceKey, ObjectKey } from '../types';
+import { EMOTIONS, PLACES, OBJECTS } from '../data';
 
 interface Props {
   dreams: DreamEntry[];
@@ -11,7 +11,7 @@ interface Props {
   onDeleteDream?: (id: string) => void;
 }
 
-type FilterKey = 'all' | 'week' | DreamEmotionKey;
+type FilterKey = 'all' | 'week' | DreamEmotionKey | `place:${PlaceKey}` | `object:${ObjectKey}`;
 
 const GRADIENT_CLASS: Record<string, string> = {
   peace: 'gradient-peace',
@@ -29,6 +29,35 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
+  // Compute top 3 places and top 3 objects by frequency
+  const topPlaces = useMemo(() => {
+    const counts: Record<string, number> = {};
+    dreams.forEach(d => {
+      counts[d.scene.place] = (counts[d.scene.place] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([key]) => {
+        const p = PLACES.find(pl => pl.key === key);
+        return { key: key as PlaceKey, label: p?.label ?? key };
+      });
+  }, [dreams]);
+
+  const topObjects = useMemo(() => {
+    const counts: Record<string, number> = {};
+    dreams.forEach(d => {
+      d.scene.objects.forEach(o => { counts[o] = (counts[o] || 0) + 1; });
+    });
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([key]) => {
+        const o = OBJECTS.find(obj => obj.key === key);
+        return { key: key as ObjectKey, label: o?.label ?? key };
+      });
+  }, [dreams]);
+
   const filteredDreams = useMemo(() => {
     let result = dreams;
 
@@ -37,6 +66,12 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       result = result.filter(d => new Date(d.date) >= oneWeekAgo);
+    } else if (filter.startsWith('place:')) {
+      const placeKey = filter.replace('place:', '') as PlaceKey;
+      result = result.filter(d => d.scene.place === placeKey);
+    } else if (filter.startsWith('object:')) {
+      const objKey = filter.replace('object:', '') as ObjectKey;
+      result = result.filter(d => d.scene.objects.includes(objKey));
     } else if (filter !== 'all') {
       result = result.filter(d => d.emotions.includes(filter as DreamEmotionKey));
     }
@@ -64,10 +99,12 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
     setDeleteConfirmId(null);
   };
 
-  const filters: { key: FilterKey; label: string }[] = [
-    { key: 'all', label: '전체' },
-    { key: 'week', label: '이번 주' },
-    ...EMOTIONS.slice(0, 3).map(e => ({ key: e.key as FilterKey, label: e.label })),
+  const filters: { key: FilterKey; label: string; group: 'base' | 'emotion' | 'place' | 'object' }[] = [
+    { key: 'all', label: '전체', group: 'base' },
+    { key: 'week', label: '이번 주', group: 'base' },
+    ...EMOTIONS.slice(0, 3).map(e => ({ key: e.key as FilterKey, label: e.label, group: 'emotion' as const })),
+    ...topPlaces.map(p => ({ key: `place:${p.key}` as FilterKey, label: p.label, group: 'place' as const })),
+    ...topObjects.map(o => ({ key: `object:${o.key}` as FilterKey, label: o.label, group: 'object' as const })),
   ];
 
   return (
@@ -110,19 +147,30 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
 
         {/* Filter Chips Section */}
         <section className="flex overflow-x-auto pb-2 gap-3 no-scrollbar -mx-5 px-5">
-          {filters.map(f => (
-            <button
-              key={f.key}
-              onClick={() => setFilter(f.key)}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-                filter === f.key
-                  ? 'bg-primary-container text-white'
-                  : 'border border-outline-variant text-on-surface-variant hover:bg-surface-container'
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
+          {filters.map(f => {
+            const isActive = filter === f.key;
+            // Group-based active colors: places = tertiary tint, objects = secondary tint
+            let activeClass = 'bg-primary-container text-white';
+            let inactiveClass = 'border border-outline-variant text-on-surface-variant hover:bg-surface-container';
+            if (f.group === 'place') {
+              activeClass = 'bg-teal-600/80 text-white';
+              inactiveClass = 'border border-teal-500/30 text-teal-300/70 hover:bg-teal-900/20';
+            } else if (f.group === 'object') {
+              activeClass = 'bg-amber-600/80 text-white';
+              inactiveClass = 'border border-amber-500/30 text-amber-300/70 hover:bg-amber-900/20';
+            }
+            return (
+              <button
+                key={f.key}
+                onClick={() => setFilter(f.key)}
+                className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                  isActive ? activeClass : inactiveClass
+                }`}
+              >
+                {f.group === 'place' ? `📍 ${f.label}` : f.group === 'object' ? `✦ ${f.label}` : f.label}
+              </button>
+            );
+          })}
         </section>
 
         {/* Masonry-style Grid Area */}
