@@ -45,24 +45,31 @@ npm run build        # 프로덕션 빌드
 
 ### 3단계: 라이브 브라우저 테스트 (필수)
 
-dev 서버가 실행 중인지 확인하고, 실행 중이 아니면 직접 시작한다:
+**참고**: 상세한 브라우저 인터랙션 테스트는 `dev-team:live-app-tester`가 gstack browse로 수행한다. 이 에이전트는 코드 기반 검증에 집중하되, 필요시 gstack browse를 보조적으로 사용한다.
+
+dev 서버가 실행 중인지 확인:
 ```bash
-# 서버 실행 여부 확인
 curl -s -o /dev/null -w "%{http_code}" http://localhost:5175 || \
 curl -s -o /dev/null -w "%{http_code}" http://localhost:5176
-# 실행 중이 아니면:
-cd {app-dir} && npx vite --port 5175 --host &
-sleep 3
+```
+
+#### gstack browse 셋업 (사용 시)
+
+```bash
+_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+B=""
+[ -n "$_ROOT" ] && [ -x "$_ROOT/.claude/skills/gstack/browse/dist/browse" ] && B="$_ROOT/.claude/skills/gstack/browse/dist/browse"
+[ -z "$B" ] && B=~/.claude/skills/gstack/browse/dist/browse
 ```
 
 #### A. 스크린 렌더링 검증 (모든 화면)
 
-각 스크린을 Playwright로 스크린샷 캡처하고 Read로 시각 확인:
+gstack browse로 스크린샷 캡처:
 
 ```bash
-# 인트로 화면
-npx playwright screenshot --viewport-size="430,932" --wait-for-timeout=5000 \
-  http://localhost:{port} /tmp/qa-{screen}.png
+$B viewport 430x932
+$B goto http://localhost:{port}
+$B snapshot -i -a -o /tmp/qa-{screen}.png
 ```
 
 스크린샷을 Read로 열어서 확인:
@@ -75,18 +82,23 @@ npx playwright screenshot --viewport-size="430,932" --wait-for-timeout=5000 \
 
 **이것이 이전 QA에서 놓친 부분이다.** 코드에 핸들러가 있어도 실제 클릭이 작동하는지는 다른 문제다.
 
-Playwright JavaScript 실행으로 버튼 클릭 + 화면 전환을 테스트:
+gstack browse의 snapshot-click-diff 패턴으로 검증:
 
 ```bash
-# 방법 1: Playwright CLI로 버튼 클릭 후 스크린샷
-npx playwright screenshot --viewport-size="430,932" --wait-for-timeout=3000 \
-  "javascript:void(document.querySelector('button[...]')?.click())" /tmp/qa-after-click.png
+# 1. 인터랙티브 요소 확인
+$B snapshot -i
 
-# 방법 2: 코드에서 직접 버튼의 실제 렌더링 상태 확인
-# - 버튼이 disabled인지
-# - 버튼이 display:none인지
-# - 버튼 위에 다른 요소가 겹쳐있는지 (z-index)
-# - 버튼의 onClick에 실제 함수가 바인딩되어 있는지
+# 2. CTA 클릭
+$B click @e{N}
+
+# 3. 화면 전환 확인 (diff로 변경 사항 비교)
+$B snapshot -D
+
+# 4. 기대한 요소가 보이는지 검증
+$B is visible ".expected-screen-element"
+
+# 5. 스크린샷 증거
+$B screenshot /tmp/qa-after-click.png
 ```
 
 최소한 확인해야 할 플로우:
@@ -97,10 +109,52 @@ npx playwright screenshot --viewport-size="430,932" --wait-for-timeout=3000 \
 
 #### C. 조건부 UI 검증
 
+gstack browse + 코드 리뷰 병행:
+
+```bash
+# 버튼 활성화 상태 확인
+$B is disabled "#submit-btn"  # 선택 전
+$B click @e{OPTION}
+$B is enabled "#submit-btn"   # 선택 후
+
+# 빈 상태 확인
+$B js "localStorage.clear()"
+$B reload
+$B snapshot -i  # 빈 상태에서의 화면
+```
+
 코드를 읽고 조건부 렌더링 분기를 확인:
 - 선택 전/후 버튼 활성화 상태
 - 빈 데이터 vs 데이터 있을 때 분기
 - 첫 방문 vs 재방문 분기
+
+### 3.5단계: E2E 유저 저니 검증 (필수)
+
+**Phase 0의 flow-graph-validator가 "구조적" 닫힘을 검증한다면, 이 단계는 "실제 런타임"에서 저니가 완주 가능한지 확인한다.**
+
+`docs/pm-outputs/screen-flow-graph.md`의 주요 유저 저니를 실제로 따라가며 테스트:
+
+```
+저니 1: 첫 방문 유저
+  앱 오픈 → [스크린샷] → CTA 클릭 → [스크린샷] → ... → 홈 도착 [스크린샷]
+  → 모든 전환이 실제로 작동하는가?
+
+저니 2: 핵심 루프
+  홈 → 퀘스트 → 루틴 완료 → 홈
+  → 데이터가 실제로 반영되는가? (XP 증가, 완료 표시)
+
+저니 3: 설정 변경
+  홈 → 프로필 → 설정 변경 → 적용 → 홈
+  → 변경 사항이 즉시 반영되는가?
+```
+
+각 저니마다:
+1. 시작 스크린 스크린샷
+2. 각 전환 후 스크린샷
+3. 최종 스크린 스크린샷
+4. 전환 실패 시 → P0 블로커
+
+**이 단계가 없으면 "개별 버튼은 되는데 전체 흐름이 안 되는" 문제를 놓친다.**
 
 ### 4단계: 코드 기반 심층 검증
 
