@@ -61,9 +61,62 @@ export default function InsightScreen() {
 
   const maxAvg = Math.max(...dayAvgs.map(d => d.avg), 1);
 
+  const handleShare = async () => {
+    const shareText = [
+      `🌙 이번 주 하루 회고`,
+      topEmotionData ? `가장 많이 느낀 감정: ${topEmotionData.label}` : '',
+      bestDay ? `에너지 최고: ${bestDay.name}요일 (${bestDay.avg.toFixed(1)})` : '',
+      `총 ${reflections.length}일 기록 중`,
+      '',
+      '#하루회고 #DailyReflect',
+    ].filter(Boolean).join('\n');
+
+    if (navigator.share) {
+      await navigator.share({ text: shareText });
+    } else {
+      await navigator.clipboard.writeText(shareText);
+      alert('클립보드에 복사되었어요!');
+    }
+  };
+
   return (
     <div className="min-h-screen px-6 pt-12 pb-24">
-      <h2 className="text-2xl font-bold mb-6">인사이트</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">인사이트</h2>
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-1.5 bg-warm-amber/10 border border-warm-amber/20 px-3 py-1.5 rounded-full text-warm-amber text-xs font-medium hover:bg-warm-amber/20 transition-colors"
+        >
+          <span className="material-symbols-outlined text-sm">share</span>
+          공유
+        </button>
+      </div>
+
+      {/* 주간 요약 공유 카드 */}
+      {topEmotionData && (
+        <div className="bg-gradient-to-br from-night-800 via-night-800 to-night-700 rounded-2xl p-5 mb-6 border border-night-600/50">
+          <div className="text-xs text-night-400 mb-3">이번 주 나의 감정</div>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: `${topEmotionData.color}20` }}>
+              <span className="material-symbols-outlined text-2xl" style={{ color: topEmotionData.color }}>
+                {topEmotionData.icon}
+              </span>
+            </div>
+            <div>
+              <div className="font-semibold" style={{ color: topEmotionData.color }}>{topEmotionData.label}</div>
+              <div className="text-xs text-night-400">{topEmotion[1]}회 기록</div>
+            </div>
+          </div>
+          <div className="flex gap-1">
+            {EMOTIONS.filter(e => emotionCounts[e.type]).map(e => (
+              <div key={e.type} className="flex-1 h-2 rounded-full" style={{
+                backgroundColor: `${e.color}60`,
+                flex: emotionCounts[e.type],
+              }} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* 인사이트 카드 */}
       <div className="space-y-3 mb-8">

@@ -8,6 +8,15 @@ interface Props {
   onNext: () => void;
 }
 
+const EMOTION_MESSAGES: Record<EmotionType, string> = {
+  happy: '좋은 하루였네요! 이 기분을 기억해두세요 ☀️',
+  calm: '평온한 하루, 소중한 순간이에요 🌿',
+  grateful: '감사할 수 있다는 건 행복한 거예요 🧡',
+  tired: '수고했어요. 오늘은 푹 쉬어요 🌙',
+  anxious: '괜찮아요, 이 감정도 지나갈 거예요 🫂',
+  sad: '힘든 날도 기록하는 당신이 대단해요 💙',
+};
+
 const EMOTION_GRADIENTS: Record<EmotionType, string> = {
   happy: 'from-yellow-900/20 via-night-900 to-night-900',
   calm: 'from-green-900/20 via-night-900 to-night-900',
@@ -74,6 +83,9 @@ export default function EmotionScreen({ selected, intensity, onSelect, onIntensi
 
       {selected && (
         <div className="animate-fade-in-up mt-4">
+          <div className="text-center mb-4 py-2">
+            <p className="text-sm text-night-200 italic">{EMOTION_MESSAGES[selected]}</p>
+          </div>
           <p className="text-sm text-night-300 mb-3">강도는 어느 정도?</p>
           <div className="flex justify-between items-center gap-2 px-2">
             <span className="text-xs text-night-400">약함</span>

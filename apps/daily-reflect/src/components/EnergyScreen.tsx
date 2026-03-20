@@ -30,35 +30,60 @@ export default function EnergyScreen({ selected, onSelect, onNext, onBack }: Pro
         <p className="text-night-300 text-sm">배터리를 채워주세요</p>
       </div>
 
-      <div className="flex flex-col items-center my-8 gap-3">
+      {/* 중앙 배터리 비주얼 */}
+      <div className="flex justify-center my-6">
+        <div className="w-16 relative">
+          <div className="w-8 h-2 bg-night-600 rounded-t-sm mx-auto" />
+          <div className="w-16 h-28 border-2 border-night-600 rounded-lg overflow-hidden bg-night-800 relative">
+            <div
+              className="absolute bottom-0 left-0 right-0 transition-all duration-500 rounded-b-sm"
+              style={{
+                height: selected > 0 ? `${(selected / 5) * 100}%` : '0%',
+                background: selected > 0
+                  ? `linear-gradient(to top, rgba(245,193,108,${0.3 + (selected/5)*0.7}), rgba(232,148,90,${0.2 + (selected/5)*0.5}))`
+                  : undefined,
+              }}
+            />
+            {selected > 0 && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-lg font-bold text-warm-amber">{selected}/5</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center gap-2.5">
         {levels.map(({ level, label, desc }) => (
           <button
             key={level}
             onClick={() => onSelect(level)}
-            className={`w-full max-w-xs flex items-center gap-4 p-4 rounded-2xl border-2 transition-all ${
+            className={`w-full max-w-xs flex items-center gap-4 p-3.5 rounded-2xl border-2 transition-all duration-200 ${
               selected === level
-                ? 'border-warm-amber bg-warm-amber/10'
+                ? 'border-warm-amber bg-warm-amber/10 scale-[1.02]'
                 : selected >= level && selected > 0
                   ? 'border-warm-amber/30 bg-warm-amber/5'
-                  : 'border-night-700'
+                  : 'border-night-700 hover:border-night-500'
             }`}
           >
-            <div className="w-10 h-10 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{
+              backgroundColor: selected >= level && selected > 0 ? `rgba(245,193,108,${level * 0.15})` : '#1a1a45',
+            }}>
               <div
-                className={`w-8 rounded-sm transition-all ${
+                className={`w-5 rounded-sm transition-all ${
                   selected >= level && selected > 0 ? 'bg-warm-amber' : 'bg-night-600'
                 }`}
-                style={{ height: `${level * 6 + 8}px` }}
+                style={{ height: `${level * 4 + 6}px` }}
               />
             </div>
-            <div className="text-left">
-              <div className={`font-semibold ${selected === level ? 'text-warm-amber' : 'text-night-100'}`}>
+            <div className="text-left flex-1">
+              <div className={`font-semibold text-sm ${selected === level ? 'text-warm-amber' : 'text-night-100'}`}>
                 {label}
               </div>
               <div className="text-xs text-night-400">{desc}</div>
             </div>
             {selected === level && (
-              <span className="material-symbols-outlined ml-auto text-warm-amber">check_circle</span>
+              <span className="material-symbols-outlined text-warm-amber text-lg">check_circle</span>
             )}
           </button>
         ))}
