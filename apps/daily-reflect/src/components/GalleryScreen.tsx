@@ -59,17 +59,20 @@ export default function GalleryScreen() {
             <button
               key={i}
               onClick={() => d.reflection && setSelectedDate(d.dateStr)}
-              className={`aspect-square rounded-xl flex items-center justify-center text-sm transition-all ${
-                isSelected ? 'ring-2 ring-warm-amber' : ''
-              } ${d.reflection ? 'cursor-pointer hover:bg-night-700' : 'cursor-default'}`}
-              style={emotion ? { backgroundColor: `${emotion.color}15` } : {}}
+              className={`aspect-square rounded-xl flex items-center justify-center text-sm transition-all duration-200 ${
+                isSelected ? 'ring-2 ring-warm-amber scale-110' : ''
+              } ${d.reflection ? 'cursor-pointer hover:scale-105' : 'cursor-default'}`}
+              style={emotion ? {
+                backgroundColor: `${emotion.color}20`,
+                boxShadow: isSelected ? `0 0 12px ${emotion.color}30` : undefined,
+              } : {}}
             >
               {emotion ? (
-                <span className="material-symbols-outlined text-base" style={{ color: emotion.color }}>
+                <span className="material-symbols-outlined text-lg" style={{ color: emotion.color }}>
                   {emotion.icon}
                 </span>
               ) : (
-                <span className="text-night-600">{d.dayNum}</span>
+                <span className="text-night-700 text-xs">{d.dayNum}</span>
               )}
             </button>
           );
@@ -77,17 +80,31 @@ export default function GalleryScreen() {
       </div>
 
       {selectedReflection && selectedEmotion && (
-        <div className="bg-night-800 rounded-2xl p-4 mb-6 animate-fade-in-up">
+        <div
+          className="rounded-2xl p-5 mb-6 animate-fade-in-up border"
+          style={{
+            backgroundColor: `${selectedEmotion.color}08`,
+            borderColor: `${selectedEmotion.color}20`,
+          }}
+        >
           <div className="flex items-center gap-3 mb-3">
-            <span className="material-symbols-outlined text-xl" style={{ color: selectedEmotion.color }}>
-              {selectedEmotion.icon}
-            </span>
-            <span className="font-medium">{selectedEmotion.label}</span>
-            <span className="text-xs text-night-400 ml-auto">{selectedDate}</span>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${selectedEmotion.color}20` }}>
+              <span className="material-symbols-outlined text-xl" style={{ color: selectedEmotion.color }}>
+                {selectedEmotion.icon}
+              </span>
+            </div>
+            <div>
+              <span className="font-semibold" style={{ color: selectedEmotion.color }}>{selectedEmotion.label}</span>
+              <div className="text-xs text-night-400">에너지 {selectedReflection.energy}/5</div>
+            </div>
+            <span className="text-xs text-night-500 ml-auto">{selectedDate}</span>
           </div>
-          <p className="text-sm text-night-200">"{selectedReflection.highlightText}"</p>
+          <p className="text-sm text-night-200 italic">"{selectedReflection.highlightText}"</p>
           {selectedReflection.gratitude && (
-            <p className="text-xs text-night-400 mt-2">감사: {selectedReflection.gratitude}</p>
+            <div className="flex items-center gap-1.5 mt-3 pt-3 border-t" style={{ borderColor: `${selectedEmotion.color}15` }}>
+              <span className="material-symbols-outlined text-warm-orange text-sm">favorite</span>
+              <p className="text-xs text-night-400">{selectedReflection.gratitude}</p>
+            </div>
           )}
         </div>
       )}

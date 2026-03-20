@@ -30,18 +30,22 @@ export default function HighlightScreen({ category, text, gratitude, onCategory,
         <p className="text-night-300 text-sm">오늘 가장 기억에 남는 순간은?</p>
       </div>
 
-      <div className="flex gap-2 my-4 overflow-x-auto pb-2">
+      <div className="grid grid-cols-5 gap-2 my-5">
         {HIGHLIGHT_CATEGORIES.map(c => (
           <button
             key={c.type}
             onClick={() => onCategory(c.type)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm ${
+            className={`flex flex-col items-center gap-1.5 py-3 rounded-xl transition-all text-xs ${
               category === c.type
-                ? 'bg-warm-amber text-night-900 font-medium'
-                : 'bg-night-700 text-night-200 hover:bg-night-600'
+                ? 'bg-warm-amber/15 border border-warm-amber/40 text-warm-amber font-medium scale-105'
+                : 'bg-night-800 border border-night-700 text-night-300 hover:border-night-500'
             }`}
           >
-            <span className="material-symbols-outlined text-lg">{c.icon}</span>
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center ${
+              category === c.type ? 'bg-warm-amber/20' : 'bg-night-700'
+            }`}>
+              <span className="material-symbols-outlined text-lg">{c.icon}</span>
+            </div>
             {c.label}
           </button>
         ))}
@@ -51,7 +55,7 @@ export default function HighlightScreen({ category, text, gratitude, onCategory,
         value={text}
         onChange={e => onText(e.target.value.slice(0, 50))}
         placeholder="한줄로 적어주세요 (최대 50자)"
-        className="w-full bg-night-800 border border-night-600 rounded-2xl p-4 text-white placeholder-night-500 resize-none h-24 focus:outline-none focus:border-warm-amber/50 transition-colors"
+        className="w-full bg-night-800 border border-night-700 rounded-2xl p-4 text-white placeholder-night-500 resize-none h-20 focus:outline-none focus:border-warm-amber/40 focus:bg-night-800/80 transition-all"
       />
       <div className="text-right text-xs text-night-500 mt-1">{text.length}/50</div>
 
