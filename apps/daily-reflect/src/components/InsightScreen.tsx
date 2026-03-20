@@ -149,7 +149,7 @@ export default function InsightScreen() {
       </div>
 
       {/* 감정 트렌드 */}
-      <div>
+      <div className="mb-8">
         <h3 className="text-sm font-medium text-night-300 mb-4">최근 감정 흐름</h3>
         <div className="flex gap-1.5 overflow-x-auto pb-2">
           {recent14.map((r, i) => {
@@ -170,6 +170,115 @@ export default function InsightScreen() {
           })}
         </div>
       </div>
+
+      {/* 감정-에너지 상관관계 (SVG 스캐터) */}
+      <div className="mb-8">
+        <h3 className="text-sm font-medium text-night-300 mb-4">감정별 평균 에너지</h3>
+        <div className="bg-night-800 rounded-xl p-4">
+          <div className="space-y-3">
+            {EMOTIONS.map(e => {
+              const emotionRefs = reflections.filter(r => r.emotion === e.type);
+              if (emotionRefs.length === 0) return null;
+              const avgEnergy = emotionRefs.reduce((s, r) => s + r.energy, 0) / emotionRefs.length;
+              const avgIntensity = emotionRefs.reduce((s, r) => s + r.emotionIntensity, 0) / emotionRefs.length;
+              return (
+                <div key={e.type} className="flex items-center gap-3">
+                  <div className="w-8 flex justify-center">
+                    <span className="material-symbols-outlined text-sm" style={{ color: e.color }}>{e.icon}</span>
+                  </div>
+                  <span className="text-xs text-night-300 w-8">{e.label}</span>
+                  <div className="flex-1 h-6 bg-night-700 rounded-full overflow-hidden relative">
+                    <div
+                      className="h-full rounded-full flex items-center justify-end pr-2"
+                      style={{
+                        width: `${(avgEnergy / 5) * 100}%`,
+                        backgroundColor: `${e.color}40`,
+                      }}
+                    >
+                      <span className="text-[10px] font-medium" style={{ color: e.color }}>
+                        {avgEnergy.toFixed(1)}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-night-500 w-10 text-right">
+                    강도 {avgIntensity.toFixed(1)}
+                  </span>
+                </div>
+              );
+            }).filter(Boolean)}
+          </div>
+          <p className="text-[10px] text-night-500 mt-3 text-center">
+            감정별 평균 에너지 레벨 · 데이터 {reflections.length}일 기준
+          </p>
+        </div>
+      </div>
+
+      {/* 에너지 추세 (최근 14일 라인) */}
+      <div className="mb-8">
+        <h3 className="text-sm font-medium text-night-300 mb-4">에너지 추세 (최근 14일)</h3>
+        <div className="bg-night-800 rounded-xl p-4">
+          <svg viewBox="0 0 300 80" className="w-full">
+            {/* 가이드 라인 */}
+            {[1, 2, 3, 4, 5].map(n => (
+              <line key={n} x1="0" y1={80 - (n / 5) * 70} x2="300" y2={80 - (n / 5) * 70}
+                stroke="#1a1a45" strokeWidth="1" />
+            ))}
+            {/* 에너지 라인 */}
+            {recent14.length > 1 && (
+              <polyline
+                fill="none"
+                stroke="#f5c16c"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                points={recent14.map((r, i) => {
+                  const x = (i / (recent14.length - 1)) * 280 + 10;
+                  const y = 80 - (r.energy / 5) * 70;
+                  return `${x},${y}`;
+                }).join(' ')}
+              />
+            )}
+            {/* 데이터 포인트 */}
+            {recent14.map((r, i) => {
+              const emotion = EMOTIONS.find(e => e.type === r.emotion);
+              const x = recent14.length > 1 ? (i / (recent14.length - 1)) * 280 + 10 : 150;
+              const y = 80 - (r.energy / 5) * 70;
+              return (
+                <circle key={i} cx={x} cy={y} r="4"
+                  fill={emotion?.color || '#f5c16c'} stroke="#121233" strokeWidth="1.5" />
+              );
+            })}
+          </svg>
+          <div className="flex justify-between mt-1">
+            <span className="text-[9px] text-night-500">{recent14[0]?.date.slice(5)}</span>
+            <span className="text-[9px] text-night-500">{recent14[recent14.length - 1]?.date.slice(5)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 깊은 인사이트 */}
+      {reflections.length >= 7 && (() => {
+        const thisWeek = sorted.slice(0, 7);
+        const lastWeek = sorted.slice(7, 14);
+        if (lastWeek.length < 5) return null;
+        const thisAvg = thisWeek.reduce((s, r) => s + r.energy, 0) / thisWeek.length;
+        const lastAvg = lastWeek.reduce((s, r) => s + r.energy, 0) / lastWeek.length;
+        const diff = thisAvg - lastAvg;
+        const trend = diff > 0.3 ? '상승' : diff < -0.3 ? '하락' : '유지';
+        const trendColor = diff > 0.3 ? '#6BCB77' : diff < -0.3 ? '#FF6B6B' : '#f5c16c';
+        const trendIcon = diff > 0.3 ? 'trending_up' : diff < -0.3 ? 'trending_down' : 'trending_flat';
+        return (
+          <div className="bg-night-800/60 rounded-xl p-4 mb-6 border border-night-700/50">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="material-symbols-outlined text-lg" style={{ color: trendColor }}>{trendIcon}</span>
+              <span className="text-sm font-medium">에너지 추세: <span style={{ color: trendColor }}>{trend}</span></span>
+            </div>
+            <p className="text-xs text-night-400">
+              이번 주 평균 {thisAvg.toFixed(1)} vs 지난 주 {lastAvg.toFixed(1)} ({diff > 0 ? '+' : ''}{diff.toFixed(1)})
+            </p>
+          </div>
+        );
+      })()}
     </div>
   );
 }
