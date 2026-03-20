@@ -64,7 +64,7 @@ export default function App() {
   };
 
   const tabBar = (
-    <nav className="fixed bottom-0 left-0 right-0 bg-night-800/95 backdrop-blur-sm border-t border-night-700 flex justify-around py-2 px-4 max-w-[430px] mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 bg-surface-container/95 backdrop-blur-sm border-t border-outline-variant/30 flex justify-around py-2 px-4 max-w-[430px] mx-auto">
       {[
         { id: 'home' as Screen, icon: 'home', label: '홈' },
         { id: 'gallery' as Screen, icon: 'calendar_month', label: '갤러리' },
@@ -75,7 +75,7 @@ export default function App() {
           key={tab.id}
           onClick={() => setScreen(tab.id)}
           className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${
-            screen === tab.id ? 'text-warm-amber' : 'text-night-300 hover:text-night-100'
+            screen === tab.id ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'
           }`}
         >
           <span className="material-symbols-outlined text-[22px]">{tab.icon}</span>
@@ -88,7 +88,7 @@ export default function App() {
   const showTabBar = ['home', 'gallery', 'insight', 'profile'].includes(screen);
 
   return (
-    <div className="max-w-[430px] mx-auto min-h-screen bg-night-900 relative">
+    <div className="max-w-[430px] mx-auto min-h-screen bg-surface relative">
       {screen === 'intro' && <IntroScreen onStart={handleIntroStart} onDemo={handleDemoMode} />}
       {screen === 'emotion' && (
         <EmotionScreen
