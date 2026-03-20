@@ -64,6 +64,7 @@ export default function App() {
   }, [resetDreamState, navigate]);
 
   const handleAnalysisComplete = useCallback(() => {
+    const lastTitle = dreams.length > 0 ? dreams[0].interpretation.title : undefined;
     const interp = generateInterpretation(
       scene.place as PlaceKey,
       scene.weather as WeatherKey,
@@ -72,6 +73,7 @@ export default function App() {
       emotions,
       vividness,
       dreams,
+      lastTitle,
     );
     const entry: DreamEntry = {
       id: `dream-${Date.now()}`,
@@ -110,6 +112,10 @@ export default function App() {
       setViewEntry(prev => prev ? { ...prev, journalMemo } : prev);
     }
   }, [viewEntry]);
+
+  const handleDeleteDream = useCallback((id: string) => {
+    setDreams(prev => prev.filter(d => d.id !== id));
+  }, []);
 
   const activeEntry = viewEntry || currentEntry;
   const isViewMode = !!viewEntry;
@@ -171,6 +177,7 @@ export default function App() {
           onGoPattern={() => navigate('pattern')}
           onBack={() => navigate('intro')}
           onStartDream={handleStartDream}
+          onDeleteDream={handleDeleteDream}
         />
       )}
       {screen === 'pattern' && (

@@ -130,15 +130,15 @@ export default function EmotionScreen({
           <div className="relative group">
             <textarea
               value={memo}
-              onChange={e => onMemoChange(e.target.value.slice(0, 80))}
+              onChange={e => onMemoChange(e.target.value.slice(0, 200))}
               placeholder="꿈에서 특별히 기억나는 것이 있다면..."
-              maxLength={80}
+              maxLength={200}
               rows={3}
               className="w-full bg-surface-container-low border-0 border-b border-outline-variant/30 focus:border-primary focus:ring-0 text-on-surface font-headline text-lg py-4 transition-all duration-700 placeholder:text-on-surface-variant/40 resize-none min-h-[120px]"
             />
             <div className="absolute bottom-0 left-0 h-[1px] w-0 bg-primary group-focus-within:w-full transition-all duration-1000"></div>
           </div>
-          <p className="text-on-surface-variant text-[10px] text-right mt-1">{memo.length}/80</p>
+          <p className="text-on-surface-variant text-[10px] text-right mt-1">{memo.length}/200</p>
         </section>
       </main>
 

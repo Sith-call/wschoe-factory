@@ -48,6 +48,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '변화와 새로운 시작을 암시합니다',
     '마음속 응어리가 씻겨 내려가는 과정입니다',
     '감정의 파도가 당신을 새로운 곳으로 데려가려 합니다',
+    '고여 있던 감정이 드디어 흐르기 시작한 징조입니다',
+    '물의 투명함은 지금 진실을 볼 준비가 되었음을 뜻합니다',
+    '깊은 물은 아직 탐험하지 않은 내면의 영역을 가리킵니다',
+    '물결의 움직임은 삶의 리듬에 다시 맞춰지고 있음을 보여줍니다',
+    '잔잔한 수면 아래 숨겨진 감정이 표면으로 올라오려 합니다',
   ]},
   { key: 'fire', label: '불', icon: 'local_fire_department', keyword: '열정', meanings: [
     '내면의 열정과 에너지를 나타냅니다',
@@ -55,6 +60,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '억압된 감정이 표출되려 합니다',
     '창조적 에너지가 폭발할 준비를 하고 있습니다',
     '오래된 것을 태우고 새것을 맞이할 시간입니다',
+    '불꽃은 어둠 속에서도 길을 밝히는 내면의 의지입니다',
+    '타오르는 불은 더 이상 참을 수 없는 진실이 있음을 말해줍니다',
+    '불의 따뜻함은 차가워진 관계나 열정이 다시 살아나고 있음을 뜻합니다',
+    '꺼지지 않는 불씨는 포기하지 않은 꿈이 여전히 살아있다는 증거입니다',
+    '불길의 방향이 당신이 나아갈 길을 가리키고 있습니다',
   ]},
   { key: 'mirror', label: '거울', icon: 'blur_on', keyword: '자아', meanings: [
     '자아 성찰과 내면 탐색을 의미합니다',
@@ -62,6 +72,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '타인의 시선에 대한 의식을 반영합니다',
     '진정한 자신의 모습을 발견하게 될 것입니다',
     '거울 너머의 또 다른 가능성이 기다리고 있습니다',
+    '거울에 비친 모습이 현실의 자신과 다르다면, 내면의 변화가 진행 중입니다',
+    '깨진 거울은 오래된 자아상을 버리고 새로운 정체성을 받아들일 때임을 뜻합니다',
+    '거울 속 눈빛은 스스로도 인식하지 못한 감정을 담고 있습니다',
+    '거울을 피하는 꿈은 직면하기 두려운 진실이 있음을 나타냅니다',
+    '맑은 거울은 자기 이해의 시야가 넓어지고 있다는 긍정적 신호입니다',
   ]},
   { key: 'key', label: '열쇠', icon: 'key', keyword: '기회', meanings: [
     '새로운 기회의 문이 열리고 있습니다',
@@ -69,6 +84,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '중요한 결정의 순간이 다가옵니다',
     '잠겨 있던 가능성이 곧 해방될 것입니다',
     '당신만이 열 수 있는 비밀이 존재합니다',
+    '열쇠를 찾았다면 준비가 완료되었다는 무의식의 확인입니다',
+    '녹슨 열쇠는 오랫동안 잊고 있던 재능이나 관계를 다시 열 시간임을 뜻합니다',
+    '여러 개의 열쇠는 선택지가 많아지고 있음을 상징합니다',
+    '열쇠를 건네받는 꿈은 누군가의 신뢰를 얻게 될 것을 암시합니다',
+    '빛나는 열쇠는 가장 중요한 답이 이미 가까이에 있음을 뜻합니다',
   ]},
   { key: 'stairs', label: '계단', icon: 'stairs', keyword: '도약', meanings: [
     '성장과 도약의 과정을 나타냅니다',
@@ -76,6 +96,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '목표를 향한 꾸준한 전진을 의미합니다',
     '한 계단씩 오르며 시야가 넓어지고 있습니다',
     '높은 곳에서 보면 지금의 고민이 작아질 것입니다',
+    '끝이 보이지 않는 계단은 장기적 목표를 향한 인내심을 시험하고 있습니다',
+    '내려가는 계단은 내면 깊숙이 탐구하려는 욕구를 반영합니다',
+    '나선형 계단은 같은 문제가 다른 수준에서 반복되고 있음을 뜻합니다',
+    '계단 위에서 내려다보는 풍경은 지금까지의 성장을 인정하라는 메시지입니다',
+    '부서진 계단은 기존 방식을 버리고 새로운 접근이 필요함을 알려줍니다',
   ]},
   { key: 'clock', label: '시계', icon: 'schedule', keyword: '시간', meanings: [
     '시간에 대한 압박감을 반영합니다',
@@ -83,6 +108,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '과거와 현재 사이의 갈등을 나타냅니다',
     '멈춰 있던 시간이 다시 흐르기 시작합니다',
     '지금 이 순간에 집중하라는 무의식의 메시지입니다',
+    '거꾸로 도는 시계는 과거의 어떤 순간을 다시 살고 싶은 마음을 뜻합니다',
+    '시계 소리는 놓치고 있는 중요한 것에 주의를 기울이라는 경고입니다',
+    '깨진 시계는 시간의 압박에서 벗어나 자유로워질 수 있다는 메시지입니다',
+    '빠르게 도는 시계바늘은 변화의 속도가 빨라지고 있음을 상징합니다',
+    '시계가 정오를 가리키는 순간은 중요한 전환점이 임박했음을 알려줍니다',
   ]},
   { key: 'flower', label: '꽃', icon: 'local_florist', keyword: '아름다움', meanings: [
     '아름다움과 성장의 결실을 상징합니다',
@@ -90,6 +120,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '내면의 아름다움이 드러날 시기입니다',
     '인내의 시간이 지나고 만개의 순간이 왔습니다',
     '작은 씨앗이 놀라운 결과로 자라날 것입니다',
+    '시든 꽃은 한 시기의 끝이자 새로운 계절의 시작을 의미합니다',
+    '야생화는 통제할 수 없는 곳에서도 아름다움이 자란다는 메시지입니다',
+    '꽃봉오리는 아직 드러나지 않은 잠재력이 곧 펼쳐질 것을 암시합니다',
+    '꽃향기가 가득한 꿈은 감각적 기쁨과 현재를 즐기라는 초대입니다',
+    '누군가에게 꽃을 주는 꿈은 표현하지 못한 감사와 애정이 있음을 뜻합니다',
   ]},
   { key: 'door', label: '문', icon: 'door_front', keyword: '전환', meanings: [
     '새로운 세계로의 전환점에 서 있습니다',
@@ -97,6 +132,11 @@ export const OBJECTS: { key: ObjectKey; label: string; icon: string; keyword: st
     '미지의 가능성이 기다리고 있습니다',
     '닫힌 문 뒤에 예상치 못한 기회가 숨어있습니다',
     '용기를 내어 문을 열면 세계가 달라질 것입니다',
+    '잠긴 문은 아직 준비되지 않은 영역이 있음을 뜻하지만, 때가 오면 열릴 것입니다',
+    '열려 있는 문은 이미 기회가 주어졌으니 행동할 때라는 메시지입니다',
+    '여러 개의 문은 다양한 가능성 중 직감을 따르라는 무의식의 조언입니다',
+    '문 뒤에서 들리는 소리는 미래에 대한 기대와 불안이 공존함을 나타냅니다',
+    '사라지는 문은 기회가 영원하지 않으니 지금 결단하라는 긴급한 메시지입니다',
   ]},
 ];
 
@@ -298,6 +338,58 @@ const EMOTION_TEXTS: Record<DreamEmotionKey, string[]> = {
   ],
 };
 
+// ─── Combination synergy texts (place_weather pairs) ───
+const COMBINATION_TEXTS: Record<string, string[]> = {
+  'ocean_rain': [
+    '비에 젖은 바다는 감정의 정화와 새로운 시작을 동시에 상징합니다. 깊은 감정의 파도가 지나간 후 맑은 수면이 드러날 것입니다.',
+    '빗속의 바다는 눈물과 무의식이 하나로 합쳐지는 순간입니다. 감정을 있는 그대로 흘려보내도 괜찮습니다.',
+  ],
+  'ocean_storm': [
+    '폭풍 속 바다는 감정적 격변의 한가운데에 있음을 뜻합니다. 파도에 맞서기보다 함께 흘러가는 것이 지금의 지혜입니다.',
+    '거센 파도가 치는 바다는 내면의 거대한 에너지가 분출되고 있음을 보여줍니다. 이 에너지를 두려워하지 마세요.',
+  ],
+  'forest_fog': [
+    '안개 낀 숲은 아직 보이지 않는 가능성이 주변에 가득하다는 신호입니다. 한 걸음씩 나아가면 길이 드러날 것입니다.',
+    '숲속 안개는 무의식이 의식의 표면으로 천천히 올라오는 과정을 상징합니다. 직감을 믿어보세요.',
+  ],
+  'forest_rain': [
+    '비에 젖은 숲은 정화와 성장이 동시에 일어나는 공간입니다. 감정의 비가 내면의 나무를 더 푸르게 만들 것입니다.',
+    '빗소리가 가득한 숲은 자연의 리듬에 몸을 맡기라는 메시지입니다. 지금은 쉬어가도 좋습니다.',
+  ],
+  'city_storm': [
+    '폭풍 속 도시는 외부 압박 속에서도 내면의 질서를 찾으려는 노력을 나타냅니다. 혼란 속의 중심을 잡으세요.',
+    '도시를 덮친 폭풍은 일상의 구조가 흔들리는 시기를 반영합니다. 하지만 폭풍 후 도시는 더 단단해집니다.',
+  ],
+  'city_rain': [
+    '비 내리는 도시의 네온 불빛은 현실의 피로 속에서도 아름다움을 찾을 수 있다는 메시지입니다.',
+    '도시의 빗속을 걷는 꿈은 일상의 감정을 씻어내고 새로운 시각을 얻을 준비가 되었음을 뜻합니다.',
+  ],
+  'sky_clear': [
+    '맑은 하늘을 나는 꿈은 제약에서 완전히 벗어난 자유로운 상태를 상징합니다. 지금 당신의 가능성은 무한합니다.',
+    '투명한 하늘 아래에서 느끼는 해방감은 현실에서도 새로운 시도를 할 준비가 되었다는 신호입니다.',
+  ],
+  'underground_fog': [
+    '안개 자욱한 지하 세계는 무의식의 가장 깊은 층에 접근하고 있음을 뜻합니다. 두렵지만 중요한 발견이 기다립니다.',
+    '지하의 안개는 억압된 기억이나 감정이 서서히 의식으로 올라오는 과정을 나타냅니다.',
+  ],
+  'home_snow': [
+    '눈 내리는 집은 안식처에서의 고요한 성찰의 시간을 상징합니다. 자기 자신과 조용히 대화할 때입니다.',
+    '하얀 눈에 덮인 집은 일상의 소음을 차단하고 본질에 집중하라는 무의식의 메시지입니다.',
+  ],
+  'school_cloudy': [
+    '흐린 하늘 아래 학교는 아직 정리되지 않은 과거의 교훈이 남아있음을 의미합니다. 배움은 끝나지 않았습니다.',
+    '구름 낀 학교 풍경은 불확실한 시기에 기본으로 돌아가라는 메시지입니다.',
+  ],
+  'ocean_fog': [
+    '안개에 둘러싸인 바다는 감정의 경계가 모호해진 상태를 뜻합니다. 지금은 판단보다 느낌에 집중하세요.',
+    '바다 위 안개는 무의식과 의식 사이의 베일이 얇아진 순간입니다. 직관이 가장 정확할 때입니다.',
+  ],
+  'sky_storm': [
+    '폭풍우 속 하늘은 자유를 향한 열망과 현실의 장벽 사이의 충돌을 상징합니다. 폭풍을 뚫고 나면 더 높이 날 수 있습니다.',
+    '하늘의 폭풍은 큰 변화 직전의 에너지 축적을 뜻합니다. 곧 돌파구가 열릴 것입니다.',
+  ],
+};
+
 const PERSON_DESCRIPTORS: Record<PersonKey, string[]> = {
   self: ['자기 자신과의 대화', '내면의 또 다른 나와의 만남', '거울 속 자신에게 건네는 질문'],
   family: ['가족과의 연결', '뿌리 깊은 유대감의 재확인', '가족이 전하는 무의식의 메시지'],
@@ -377,6 +469,7 @@ export function generateInterpretation(
   emotions: DreamEmotionKey[],
   vividness: number,
   history?: DreamEntry[],
+  lastInterpretationTitle?: string,
 ): InterpretationResult {
   const placeData = PLACES.find(p => p.key === place)!;
   const weatherData = WEATHERS.find(w => w.key === weather)!;
@@ -392,10 +485,18 @@ export function generateInterpretation(
   const personLabel = characterForTitle ? PERSONS.find(p => p.key === characterForTitle)!.label : null;
   const objectLabel = objectForTitle ? objectForTitle.label : null;
 
-  const patternIdx = seed % TITLE_PATTERNS.length;
-  const title = TITLE_PATTERNS[patternIdx](
+  let patternIdx = seed % TITLE_PATTERNS.length;
+  let title = TITLE_PATTERNS[patternIdx](
     placeData.label, weatherData.modifier, objectLabel, personLabel, emotionData.label,
   );
+
+  // Anti-repetition: if title matches last interpretation, rotate to next pattern
+  if (lastInterpretationTitle && title === lastInterpretationTitle) {
+    patternIdx = (patternIdx + 1) % TITLE_PATTERNS.length;
+    title = TITLE_PATTERNS[patternIdx](
+      placeData.label, weatherData.modifier, objectLabel, personLabel, emotionData.label,
+    );
+  }
 
   // Keywords
   const keywords: string[] = [placeData.keyword];
@@ -406,14 +507,30 @@ export function generateInterpretation(
   }
   keywords.push(emotionData.keyword);
 
-  // Interpretation text — pick variant based on seed
+  // Interpretation text — check for combination synergy first, then fall back
+  const comboKey = `${place}_${weather}`;
+  const comboTexts = COMBINATION_TEXTS[comboKey];
+
   const placeVariants = PLACE_TEXTS[place];
   const weatherVariants = WEATHER_TEXTS[weather];
   const emotionVariants = EMOTION_TEXTS[primaryEmotion];
 
-  const placeText = placeVariants[seed % placeVariants.length];
-  const weatherText = weatherVariants[(seed >> 3) % weatherVariants.length];
-  const emotionText = emotionVariants[(seed >> 6) % emotionVariants.length];
+  // Anti-repetition offset: use minute-level timestamp to shift variant selection
+  // when the same combination is recorded multiple times
+  const antiRepeatOffset = lastInterpretationTitle ? Math.floor(Date.now() / 60000) : 0;
+
+  let mainText: string;
+  if (comboTexts) {
+    // Use synergy text instead of independent place + weather concatenation
+    const synergyText = comboTexts[(seed + antiRepeatOffset) % comboTexts.length];
+    const emotionText = emotionVariants[((seed >> 6) + antiRepeatOffset) % emotionVariants.length];
+    mainText = `${synergyText} ${emotionText}`;
+  } else {
+    const placeText = placeVariants[(seed + antiRepeatOffset) % placeVariants.length];
+    const weatherText = weatherVariants[((seed >> 3) + antiRepeatOffset) % weatherVariants.length];
+    const emotionText = emotionVariants[((seed >> 6) + antiRepeatOffset) % emotionVariants.length];
+    mainText = `${placeText} ${weatherText} ${emotionText}`;
+  }
 
   const personDescriptors = characters.length > 0 ? PERSON_DESCRIPTORS[characters[0]] : [];
   const characterNote = personDescriptors.length > 0
@@ -438,13 +555,13 @@ export function generateInterpretation(
     vividnessNote = blurryNotes[seed % blurryNotes.length];
   }
 
-  const text = `${placeText} ${weatherText} ${emotionText}${characterNote}${vividnessNote ? ' ' + vividnessNote : ''}`;
+  const text = `${mainText}${characterNote}${vividnessNote ? ' ' + vividnessNote : ''}`;
 
   // Symbol readings
   const symbolReadings: SymbolReading[] = [];
   symbolReadings.push({
     symbol: place,
-    meaning: `${placeData.label} — ${placeText.slice(0, 30)}...`,
+    meaning: `${placeData.label} — ${placeVariants[seed % placeVariants.length].slice(0, 30)}...`,
   });
   for (const objKey of objects) {
     const obj = OBJECTS.find(o => o.key === objKey)!;
@@ -536,6 +653,37 @@ export function generateInterpretation(
   return { title, keywords, text, symbolReadings, fortune, personalInsight };
 }
 
+// ─── Psychology-based symbol insights ───
+const SYMBOL_PSYCHOLOGY: Record<string, string> = {
+  water: '물은 융 심리학에서 감정과 무의식의 상태를 반영합니다. 감정적 정화가 필요하거나 진행 중일 수 있어요.',
+  fire: '불은 변환의 원형 상징입니다. 내면의 열정이 분출구를 찾고 있거나, 오래된 패턴을 태우고 새로 시작하려는 욕구가 있어요.',
+  mirror: '거울은 자기 인식의 상징입니다. 자아 정체성에 대한 탐색이 활발한 시기예요.',
+  key: '열쇠는 해결의 원형입니다. 무의식이 중요한 답을 이미 알고 있다고 신호를 보내고 있어요.',
+  stairs: '계단은 의식 수준의 변화를 상징합니다. 심리적 성장 또는 내면 탐구의 욕구가 강해지고 있어요.',
+  clock: '시계는 시간 불안(time anxiety)을 반영합니다. 현재에 집중하기 어려운 상태일 수 있어요.',
+  flower: '꽃은 자기실현의 상징입니다. 개인적 성장이 결실을 맺고 있거나 새로운 가능성이 열리고 있어요.',
+  door: '문은 전환과 선택의 원형입니다. 중요한 결정의 시기가 다가오고 있음을 무의식이 인지하고 있어요.',
+  forest: '숲은 융 심리학에서 무의식의 총체를 상징합니다. 내면 깊은 곳을 탐색하려는 욕구가 있을 수 있어요.',
+  ocean: '바다는 집단 무의식과 감정의 깊이를 상징합니다. 감정적으로 깊은 곳을 탐색하려는 욕구가 강해지고 있어요.',
+  city: '도시는 사회적 자아와 페르소나를 반영합니다. 사회적 역할과 진정한 자아 사이의 균형을 찾고 있을 수 있어요.',
+  school: '학교는 미완의 과제와 자기 평가를 상징합니다. 과거의 경험에서 아직 배울 것이 남아있다고 무의식이 말하고 있어요.',
+  home: '집은 자아의 구조를 상징합니다. 정체성과 안정감에 대한 욕구가 강해지고 있어요.',
+  sky: '하늘은 초월과 자유의 원형입니다. 현실의 제약을 넘어서고 싶은 강한 열망이 있어요.',
+  underground: '지하는 억압된 기억과 그림자 자아를 상징합니다. 인정하지 않았던 내면의 측면을 마주할 준비가 되고 있어요.',
+  unknown: '미지의 장소는 자아 확장의 욕구를 반영합니다. 익숙한 것을 벗어나 새로운 자신을 발견할 시기예요.',
+};
+
+const EMOTION_PSYCHOLOGY: Record<string, string> = {
+  peace: '내면의 균형이 잘 유지되고 있다는 신호예요. 지금의 방향을 신뢰해도 좋습니다.',
+  fear: '공포의 반복은 회피하고 있는 과제가 있다는 무의식의 경고일 수 있어요. 두려움의 대상을 구체화해보세요.',
+  confusion: '혼란은 성장의 과도기에 자연스러운 감정이에요. 새로운 이해가 형성되는 중입니다.',
+  joy: '기쁨의 반복은 현재 삶의 방향이 내면의 욕구와 일치하고 있다는 긍정적 확인입니다.',
+  sorrow: '반복되는 슬픔은 아직 처리되지 않은 감정이 있다는 신호예요. 자신에게 충분한 애도의 시간을 허락해보세요.',
+  anger: '분노의 반복은 무시당한 경계가 있다는 뜻입니다. 자신의 필요를 명확히 표현할 시기예요.',
+  surprise: '놀라움은 고정된 기대가 깨지고 있다는 뜻이에요. 열린 마음으로 변화를 받아들여보세요.',
+  longing: '그리움은 충족되지 않은 핵심 욕구가 있음을 뜻합니다. 무엇을 갈망하는지 구체적으로 탐색해보세요.',
+};
+
 // ─── Pattern insights ───
 export function getPatternInsights(dreams: DreamEntry[]): string[] {
   const insights: string[] = [];
@@ -544,6 +692,7 @@ export function getPatternInsights(dreams: DreamEntry[]): string[] {
   const objCount: Record<string, number> = {};
   const placeCount: Record<string, number> = {};
   const emotionCount: Record<string, number> = {};
+  const personCount: Record<string, number> = {};
   let totalVividness = 0;
 
   for (const d of dreams) {
@@ -554,32 +703,68 @@ export function getPatternInsights(dreams: DreamEntry[]): string[] {
     for (const e of d.emotions) {
       emotionCount[e] = (emotionCount[e] || 0) + 1;
     }
+    for (const c of d.scene.characters) {
+      personCount[c] = (personCount[c] || 0) + 1;
+    }
     totalVividness += d.vividness;
   }
 
+  // Object insights with psychology
   for (const [key, count] of Object.entries(objCount)) {
     if (count >= 3) {
       const obj = OBJECTS.find(o => o.key === key)!;
-      insights.push(`최근 '${obj.label}' 상징이 자주 등장해요. ${obj.meanings[0]}`);
+      const psych = SYMBOL_PSYCHOLOGY[key] || obj.meanings[0];
+      insights.push(`최근 '${obj.label}'이(가) ${count}번 등장했어요. ${psych}`);
     }
   }
 
+  // Emotion insights with psychology
   for (const [key, count] of Object.entries(emotionCount)) {
     if (count >= 3) {
       const emo = EMOTIONS.find(e => e.key === key)!;
-      insights.push(`'${emo.label}' 감정이 반복되고 있어요. 내면의 메시지에 귀 기울여보세요.`);
+      const psych = EMOTION_PSYCHOLOGY[key] || '내면의 메시지에 귀 기울여보세요.';
+      insights.push(`'${emo.label}' 감정이 ${count}번 반복되고 있어요. ${psych}`);
     }
   }
 
-  if (totalVividness / dreams.length >= 4) {
-    insights.push('꿈이 매우 선명한 편이에요. 선명한 꿈꾸는 사람(Lucid Dreamer)의 특성이 있어요.');
+  // Vividness trend analysis
+  const avgVividness = totalVividness / dreams.length;
+  if (avgVividness >= 4) {
+    insights.push('꿈의 선명도가 높아지고 있어요. 수면의 질이 개선되고 있을 수 있어요. 선명한 꿈꾸는 사람(Lucid Dreamer)의 특성이 있습니다.');
   }
 
+  // Check if vividness is increasing over recent dreams
+  if (dreams.length >= 4) {
+    const recent = dreams.slice(0, 4).map(d => d.vividness);
+    const firstHalf = (recent[2] + recent[3]) / 2;
+    const secondHalf = (recent[0] + recent[1]) / 2;
+    if (secondHalf > firstHalf + 0.5) {
+      insights.push('꿈의 선명도가 높아지고 있어요. 수면의 질이 개선되고 있을 수 있어요.');
+    } else if (firstHalf > secondHalf + 0.5) {
+      insights.push('최근 꿈의 선명도가 낮아지고 있어요. 수면 환경이나 스트레스 수준을 확인해보세요.');
+    }
+  }
+
+  // Place insights with psychology
   for (const [key, count] of Object.entries(placeCount)) {
     if (count >= 3) {
       const pl = PLACES.find(p => p.key === key)!;
-      const texts = PLACE_TEXTS[key as PlaceKey];
-      insights.push(`무의식이 자주 '${pl.label}'을 찾아가요. ${texts[0].slice(0, 30)}...`);
+      const psych = SYMBOL_PSYCHOLOGY[key] || PLACE_TEXTS[key as PlaceKey][0];
+      insights.push(`무의식이 자주 '${pl.label}'을(를) ${count}번 찾아가고 있어요. ${psych}`);
+    }
+  }
+
+  // Emotion trend (shift detection)
+  if (dreams.length >= 4) {
+    const NEGATIVE: DreamEmotionKey[] = ['fear', 'sorrow', 'anger', 'confusion'];
+    const recent3 = dreams.slice(0, 3).map(d => d.emotions[0]);
+    const older3 = dreams.slice(Math.max(0, dreams.length - 3)).map(d => d.emotions[0]);
+    const recentNeg = recent3.filter(e => NEGATIVE.includes(e)).length;
+    const olderNeg = older3.filter(e => NEGATIVE.includes(e)).length;
+    if (recentNeg < olderNeg && olderNeg >= 2) {
+      insights.push('감정이 긍정적인 방향으로 변화하고 있어요. 내면의 치유가 진행되고 있는 좋은 신호입니다.');
+    } else if (recentNeg > olderNeg && recentNeg >= 2) {
+      insights.push('감정이 무거운 방향으로 변화하고 있어요. 자신을 돌보는 시간을 가져보세요.');
     }
   }
 

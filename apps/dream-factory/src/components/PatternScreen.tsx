@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import type { DreamEntry } from '../types';
-import { EMOTIONS, PLACES, OBJECTS, getPatternInsights } from '../data';
+import { EMOTIONS, PLACES, OBJECTS, PERSONS, getPatternInsights } from '../data';
 
 interface Props {
   dreams: DreamEntry[];
@@ -11,23 +11,61 @@ interface Props {
 export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
   const insights = useMemo(() => getPatternInsights(dreams), [dreams]);
 
-  // Dot calendar: last 14 days
-  const dotCalendar = useMemo(() => {
-    const dots: { date: string; hasRecord: boolean }[] = [];
+  // Monthly calendar for current month
+  const monthCalendar = useMemo(() => {
     const now = new Date();
-    for (let i = 13; i >= 0; i--) {
+    const year = now.getFullYear();
+    const month = now.getMonth(); // 0-indexed
+    const today = now.getDate();
+
+    // First day of month (0=Sun, adjust to Mon-based: Mon=0 ... Sun=6)
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const mondayOffset = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const dreamDates = new Set(dreams.map(d => d.date.split('T')[0]));
+
+    const cells: { day: number | null; hasRecord: boolean; isFuture: boolean }[] = [];
+
+    // Empty cells before 1st
+    for (let i = 0; i < mondayOffset; i++) {
+      cells.push({ day: null, hasRecord: false, isFuture: false });
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const isFuture = d > today;
+      cells.push({ day: d, hasRecord: dreamDates.has(dateStr), isFuture });
+    }
+
+    const monthName = `${year}년 ${month + 1}월`;
+    return { cells, monthName };
+  }, [dreams]);
+
+  // Streak counter — consecutive days with at least one dream record ending at today or yesterday
+  const streak = useMemo(() => {
+    const dreamDates = new Set(dreams.map(d => d.date.split('T')[0]));
+    const now = new Date();
+    let count = 0;
+    // Start from today and go backwards
+    for (let i = 0; i < 365; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().split('T')[0];
-      const hasRecord = dreams.some(dr => dr.date.split('T')[0] === dateStr);
-      dots.push({ date: dateStr, hasRecord });
+      if (dreamDates.has(dateStr)) {
+        count++;
+      } else {
+        // Allow streak to start from yesterday if today has no record yet
+        if (i === 0) continue;
+        break;
+      }
     }
-    return dots;
+    return count;
   }, [dreams]);
 
   const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
 
-  // Top 5 symbols
+  // Top 5 symbols — count places, objects, AND persons
   const topSymbols = useMemo(() => {
     const counts: Record<string, { label: string; count: number }> = {};
     dreams.forEach(d => {
@@ -43,12 +81,18 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
           counts[o].count++;
         }
       });
+      d.scene.characters.forEach(c => {
+        const per = PERSONS.find(p => p.key === c);
+        if (per) {
+          counts[c] = counts[c] || { label: per.label, count: 0 };
+          counts[c].count++;
+        }
+      });
     });
     return Object.values(counts).sort((a, b) => b.count - a.count).slice(0, 5);
   }, [dreams]);
 
   const maxSymbolCount = topSymbols.length > 0 ? topSymbols[0].count : 1;
-  const barWidths = [90, 65, 55, 40, 25];
 
   // Emotion distribution
   const emotionDist = useMemo(() => {
@@ -73,12 +117,39 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
     });
   }, [emotionDist]);
 
-  // Vividness trend
+  // Vividness trend — use actual data, map 1-5 range to 20-80px
   const vividnessTrend = useMemo(() => {
     return dreams.slice(0, 7).reverse().map(d => d.vividness);
   }, [dreams]);
 
-  const dotHeights = [20, 45, 30, 60, 50, 80, 70];
+  const dotHeights = useMemo(() => {
+    return vividnessTrend.map(v => 20 + (v - 1) * 15);
+  }, [vividnessTrend]);
+
+  // Generate SVG path from actual data points
+  const vividnessSvgPath = useMemo(() => {
+    if (vividnessTrend.length < 2) return '';
+    const chartHeight = 96; // h-24 = 96px
+    const points = vividnessTrend.map((_v, i) => {
+      const x = 24 + i * (336 / Math.max(vividnessTrend.length - 1, 1));
+      const y = chartHeight - dotHeights[i] - 4; // offset for dot radius
+      return { x, y };
+    });
+    return 'M ' + points.map(p => `${p.x} ${p.y}`).join(' L ');
+  }, [vividnessTrend, dotHeights]);
+
+  // Export handler
+  const handleExport = useCallback(() => {
+    const blob = new Blob([JSON.stringify(dreams, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dream-factory-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [dreams]);
 
   if (dreams.length < 3) {
     return (
@@ -112,28 +183,55 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
       </header>
 
       <main className="px-6 pt-20 space-y-6">
-        {/* Section 1: Dream Recording Frequency */}
+        {/* Section 1: Monthly Dream Recording Calendar */}
         <section className="bg-surface-container-low p-6 rounded-xl shadow-[0_8px_32px_rgba(79,70,229,0.04)] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <span className="material-symbols-outlined text-6xl">calendar_month</span>
           </div>
-          <h2 className="serif-title text-lg mb-6 tracking-tight flex items-center gap-2">
-            꿈 기록 빈도
-            <span className="text-xs font-body text-on-surface-variant font-normal">최근 14일</span>
+          <h2 className="serif-title text-lg mb-2 tracking-tight flex items-center gap-2">
+            꿈 기록 달력
           </h2>
-          <div className="grid grid-cols-7 gap-y-4 text-center">
+          <p className="text-xs text-on-surface-variant mb-5">{monthCalendar.monthName}</p>
+          <div className="grid grid-cols-7 gap-y-3 text-center">
             {dayLabels.map(day => (
               <div key={day} className="text-[10px] text-on-surface-variant uppercase tracking-widest">{day}</div>
             ))}
-            {dotCalendar.map((dot, i) => (
-              <div key={i} className="flex justify-center">
-                <div className={`w-4 h-4 rounded-full ${
-                  dot.hasRecord
-                    ? 'bg-primary shadow-[0_0_10px_rgba(167,165,255,0.4)]'
-                    : 'border border-outline-variant/30'
-                }`}></div>
+            {monthCalendar.cells.map((cell, i) => (
+              <div key={i} className="flex flex-col items-center gap-1">
+                {cell.day !== null ? (
+                  <>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      cell.isFuture
+                        ? ''
+                        : cell.hasRecord
+                          ? 'bg-primary shadow-[0_0_10px_rgba(167,165,255,0.4)]'
+                          : 'border border-outline-variant/30'
+                    }`}>
+                      {cell.isFuture ? null : null}
+                    </div>
+                    <span className={`text-[9px] ${cell.isFuture ? 'text-on-surface-variant/30' : 'text-on-surface-variant/60'}`}>{cell.day}</span>
+                  </>
+                ) : (
+                  <div className="w-5 h-5"></div>
+                )}
               </div>
             ))}
+          </div>
+
+          {/* Streak Counter */}
+          <div className="mt-6 pt-4 border-t border-outline-variant/10 flex items-center gap-3">
+            <span className="material-symbols-outlined text-2xl text-amber-400">local_fire_department</span>
+            {streak > 0 ? (
+              <div>
+                <p className="text-sm font-bold text-on-surface">연속 {streak}일 기록 중</p>
+                <p className="text-[10px] text-on-surface-variant">꾸준한 기록이 더 깊은 자기 이해로 이어져요</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-sm font-medium text-on-surface-variant">오늘 첫 기록을 시작해보세요</p>
+                <p className="text-[10px] text-on-surface-variant/60">매일 기록하면 연속 기록이 쌓여요</p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -151,7 +249,7 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
                   <div
                     className="h-full bg-gradient-to-r from-primary-container to-[#A78BFA] rounded-full shadow-[0_0_8px_rgba(79,70,229,0.3)]"
                     style={{
-                      width: `${barWidths[i] || (sym.count / maxSymbolCount) * 90}%`,
+                      width: `${Math.max((sym.count / maxSymbolCount) * 100, 8)}%`,
                       opacity: 1 - i * 0.1,
                     }}
                   ></div>
@@ -179,8 +277,8 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
               ))}
             </svg>
             <div className="absolute inset-0 flex items-center justify-center flex-col">
-              <span className="text-2xl font-bold font-body">{Math.round(emotionDist.reduce((s, e) => s + e.pct, 0))}%</span>
-              <span className="text-[10px] text-on-surface-variant uppercase tracking-widest">분석 완료</span>
+              <span className="text-lg font-bold font-body">{emotionDist.length > 0 ? emotionDist[0].label : '—'}</span>
+              <span className="text-[10px] text-on-surface-variant uppercase tracking-widest">가장 많은 감정</span>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 text-left px-2">
@@ -216,31 +314,46 @@ export default function PatternScreen({ dreams, onGoGallery, onBack }: Props) {
                   ></div>
                 </div>
               ))}
-              {/* SVG Line */}
-              <svg className="absolute bottom-0 left-0 w-full h-full pointer-events-none overflow-visible" preserveAspectRatio="none">
-                <path className="opacity-50" d="M 24 74 L 80 49 L 136 64 L 192 34 L 248 44 L 304 14 L 360 24" fill="none" stroke="#4f46e5" strokeWidth="2" />
-              </svg>
+              {/* SVG Line — data-driven path */}
+              {vividnessSvgPath && (
+                <svg className="absolute bottom-0 left-0 w-full h-full pointer-events-none overflow-visible" preserveAspectRatio="none">
+                  <path className="opacity-50" d={vividnessSvgPath} fill="none" stroke="#4f46e5" strokeWidth="2" />
+                </svg>
+              )}
             </div>
           </section>
         )}
 
-        {/* Insights Card */}
+        {/* Insights Cards — show all insights */}
         {insights.length > 0 && (
-          <div className="bg-surface-container-high border border-primary/10 p-6 rounded-lg relative overflow-hidden">
-            <div className="flex items-start gap-4">
-              <div className="bg-primary/20 p-2 rounded-full">
-                <span className="material-symbols-outlined text-primary icon-fill">auto_awesome</span>
+          <div className="space-y-4">
+            {insights.map((insight, i) => (
+              <div key={i} className="bg-surface-container-high border border-primary/10 p-6 rounded-lg relative overflow-hidden">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/20 p-2 rounded-full">
+                    <span className="material-symbols-outlined text-primary icon-fill">auto_awesome</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-primary mb-1">패턴 인사이트</h3>
+                    <p className="text-sm text-on-surface-variant leading-relaxed">
+                      {insight}
+                    </p>
+                  </div>
+                </div>
+                <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
               </div>
-              <div>
-                <h3 className="font-bold text-primary mb-1">패턴 인사이트</h3>
-                <p className="text-sm text-on-surface-variant leading-relaxed">
-                  {insights[0]}
-                </p>
-              </div>
-            </div>
-            <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-primary/5 rounded-full blur-2xl"></div>
+            ))}
           </div>
         )}
+
+        {/* Export Button */}
+        <button
+          onClick={handleExport}
+          className="w-full py-3 rounded-xl border border-primary/20 text-primary text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors"
+        >
+          <span className="material-symbols-outlined text-lg">download</span>
+          꿈 기록 내보내기 (JSON)
+        </button>
       </main>
 
       {/* BottomNavBar — consistent 기록/갤러리/통계 */}

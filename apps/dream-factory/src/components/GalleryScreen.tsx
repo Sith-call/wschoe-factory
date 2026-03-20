@@ -8,6 +8,7 @@ interface Props {
   onGoPattern: () => void;
   onBack: () => void;
   onStartDream: () => void;
+  onDeleteDream?: (id: string) => void;
 }
 
 type FilterKey = 'all' | 'week' | DreamEmotionKey;
@@ -23,18 +24,45 @@ const GRADIENT_CLASS: Record<string, string> = {
   anger: 'gradient-anger',
 };
 
-export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack, onStartDream }: Props) {
+export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack, onStartDream, onDeleteDream }: Props) {
   const [filter, setFilter] = useState<FilterKey>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const filteredDreams = useMemo(() => {
-    if (filter === 'all') return dreams;
+    let result = dreams;
+
+    // Apply filter
     if (filter === 'week') {
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-      return dreams.filter(d => new Date(d.date) >= oneWeekAgo);
+      result = result.filter(d => new Date(d.date) >= oneWeekAgo);
+    } else if (filter !== 'all') {
+      result = result.filter(d => d.emotions.includes(filter as DreamEmotionKey));
     }
-    return dreams.filter(d => d.emotions.includes(filter as DreamEmotionKey));
-  }, [dreams, filter]);
+
+    // Apply search
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter(d => {
+        const title = d.interpretation.title.toLowerCase();
+        const keywords = d.interpretation.keywords.join(' ').toLowerCase();
+        const symbols = d.interpretation.symbolReadings.map(s => s.meaning).join(' ').toLowerCase();
+        const memo = (d.memo || '').toLowerCase();
+        const text = d.interpretation.text.toLowerCase();
+        return title.includes(q) || keywords.includes(q) || symbols.includes(q) || memo.includes(q) || text.includes(q);
+      });
+    }
+
+    return result;
+  }, [dreams, filter, searchQuery]);
+
+  const handleDelete = (id: string) => {
+    if (onDeleteDream) {
+      onDeleteDream(id);
+    }
+    setDeleteConfirmId(null);
+  };
 
   const filters: { key: FilterKey; label: string }[] = [
     { key: 'all', label: '전체' },
@@ -59,6 +87,26 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
           <button className="pb-2 text-lg font-headline font-bold text-white active-tab-underline tracking-wide">갤러리</button>
           <button onClick={onGoPattern} className="pb-2 text-lg font-headline font-medium text-on-surface-variant opacity-60 hover:opacity-100 transition-opacity">패턴 분석</button>
         </nav>
+
+        {/* Search Input */}
+        <div className="relative">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-lg">search</span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="꿈 제목, 키워드, 상징으로 검색..."
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant/20 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary/40"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50"
+            >
+              <span className="material-symbols-outlined text-lg">close</span>
+            </button>
+          )}
+        </div>
 
         {/* Filter Chips Section */}
         <section className="flex overflow-x-auto pb-2 gap-3 no-scrollbar -mx-5 px-5">
@@ -96,10 +144,19 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
                 <article
                   key={dream.id}
                   onClick={() => onViewDream(dream)}
-                  className={`glass-card-subtle dream-card-shadow card-radius overflow-hidden flex flex-col transition-transform active:scale-[0.98] cursor-pointer ${
+                  className={`glass-card-subtle dream-card-shadow card-radius overflow-hidden flex flex-col transition-transform active:scale-[0.98] cursor-pointer relative group ${
                     isOddColumn ? 'mt-4' : ''
                   }`}
                 >
+                  {/* Delete button */}
+                  {onDeleteDream && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(dream.id); }}
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-surface-dim/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                    >
+                      <span className="material-symbols-outlined text-on-surface-variant text-sm">close</span>
+                    </button>
+                  )}
                   <div className={`h-1.5 w-full ${gradientCls}`}></div>
                   <div className="p-5 flex flex-col gap-3">
                     <span className="text-[10px] uppercase tracking-widest text-primary-fixed-dim font-bold">
@@ -114,6 +171,30 @@ export default function GalleryScreen({ dreams, onViewDream, onGoPattern, onBack
           </section>
         )}
       </main>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setDeleteConfirmId(null)}>
+          <div className="bg-surface-container-high rounded-2xl p-6 mx-6 max-w-sm w-full shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-bold text-on-surface mb-2">꿈 기록 삭제</h3>
+            <p className="text-sm text-on-surface-variant mb-6">이 꿈 기록을 삭제할까요? 삭제된 기록은 복구할 수 없어요.</p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-4 py-2 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container transition-colors"
+              >
+                취소
+              </button>
+              <button
+                onClick={() => handleDelete(deleteConfirmId)}
+                className="px-4 py-2 rounded-lg text-sm bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+              >
+                삭제
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating Action Button */}
       <button
