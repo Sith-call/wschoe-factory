@@ -124,6 +124,7 @@ export default function App() {
           emotion={emotion!}
           energy={energy}
           highlightText={highlightText}
+          gratitude={gratitude}
           onHome={() => setScreen('home')}
         />
       )}
