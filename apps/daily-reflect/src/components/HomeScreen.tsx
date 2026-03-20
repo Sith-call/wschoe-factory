@@ -48,6 +48,15 @@ export default function HomeScreen({ onStartReflection }: Props) {
 
   const quoteOfDay = QUOTES[new Date().getDate() % QUOTES.length];
 
+  const EMOTION_ENCOURAGEMENTS: Record<string, string> = {
+    happy: '행복한 오늘이었네요! 이 에너지를 내일도 가져가세요 ✨',
+    calm: '평온한 하루, 이런 날이 쌓이면 큰 힘이 됩니다 🌿',
+    grateful: '감사함을 느끼는 당신은 이미 풍요로운 사람이에요 🧡',
+    tired: '오늘 수고 많았어요. 충분히 쉬는 것도 실력이에요 🌙',
+    anxious: '불안한 마음도 기록한 당신, 내일은 더 나을 거예요 💫',
+    sad: '힘든 날도 지나가요. 기록한 것만으로도 충분해요 💙',
+  };
+
   return (
     <div className="min-h-screen px-6 pt-12 pb-24">
       <div className="flex items-center justify-between mb-8">
@@ -84,6 +93,9 @@ export default function HomeScreen({ onStartReflection }: Props) {
               "{todayReflection.highlightText}"
             </p>
           )}
+          <p className="text-xs mt-3 pt-2" style={{ color: todayEmotion?.color, opacity: 0.8 }}>
+            {EMOTION_ENCOURAGEMENTS[todayReflection.emotion]}
+          </p>
         </div>
       ) : (
         <button

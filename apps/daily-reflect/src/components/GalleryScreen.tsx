@@ -109,6 +109,25 @@ export default function GalleryScreen() {
         </div>
       )}
 
+      {/* 이번 달 하이라이트 모아보기 */}
+      {monthEmotions.length > 0 && !selectedDate && (
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-night-300 mb-3">이번 달 하이라이트</h3>
+          <div className="space-y-2">
+            {monthEmotions.slice(0, 5).map((r, i) => {
+              const em = EMOTIONS.find(e => e.type === r.emotion);
+              return (
+                <div key={i} className="flex items-center gap-2.5 bg-night-800/50 rounded-xl px-3 py-2.5">
+                  <span className="material-symbols-outlined text-sm" style={{ color: em?.color }}>{em?.icon}</span>
+                  <p className="text-xs text-night-300 flex-1 truncate">{r.highlightText || '기록 없음'}</p>
+                  <span className="text-[10px] text-night-500">{r.date.slice(5)}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {Object.keys(emotionCounts).length > 0 && (
         <div>
           <h3 className="text-sm font-medium text-night-300 mb-3">이번 달 감정 분포</h3>
