@@ -68,7 +68,7 @@ export default function App() {
       {[
         { id: 'home' as Screen, icon: 'home', label: '홈' },
         { id: 'gallery' as Screen, icon: 'calendar_month', label: '갤러리' },
-        { id: 'insight' as Screen, icon: 'insights', label: '인사이트' },
+        { id: 'insight' as Screen, icon: 'insights', label: '내 패턴' },
         { id: 'profile' as Screen, icon: 'person', label: '프로필' },
       ].map(tab => (
         <button
@@ -79,7 +79,7 @@ export default function App() {
           }`}
         >
           <span className="material-symbols-outlined text-[22px]">{tab.icon}</span>
-          <span className="text-[10px] font-medium">{tab.label}</span>
+          <span className="text-xs font-medium">{tab.label}</span>
         </button>
       ))}
     </nav>

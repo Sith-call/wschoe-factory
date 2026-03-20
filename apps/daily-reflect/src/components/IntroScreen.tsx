@@ -32,7 +32,7 @@ export default function IntroScreen({ onStart, onDemo }: Props) {
             오늘 하루, 나는 어땠을까?
           </h2>
           <p className="text-on-surface-variant text-base leading-relaxed max-w-[280px] mx-auto mt-2 font-body">
-            퇴근 후 3분이면 충분해요. 감정, 에너지, 하이라이트를 기록하고 나만의 패턴을 발견하세요.
+            퇴근 후 3분이면 충분해요. 감정, 에너지, 오늘의 기억을 기록하고 나만의 패턴을 발견하세요.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export default function IntroScreen({ onStart, onDemo }: Props) {
             onClick={onDemo}
             className="w-full py-4 rounded-full border border-outline-variant text-on-surface-variant font-medium text-base hover:bg-surface-container-low transition-colors font-body"
           >
-            데모 모드로 둘러보기
+            체험해보기
           </button>
         </div>
       </div>

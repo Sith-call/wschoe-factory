@@ -115,7 +115,7 @@ export default function HomeScreen({ onStartReflection }: Props) {
             const emotionData = d.emotion ? EMOTIONS.find(e => e.type === d.emotion) : null;
             return (
               <div key={i} className={`flex flex-col items-center gap-1.5 flex-1 py-2.5 rounded-xl transition-colors ${d.isToday ? 'bg-night-800 border border-night-700' : ''}`}>
-                <span className="text-[10px] text-night-400">{d.day}</span>
+                <span className="text-xs text-on-surface-variant">{d.day}</span>
                 <div
                   className="w-9 h-9 rounded-full flex items-center justify-center text-xs"
                   style={{

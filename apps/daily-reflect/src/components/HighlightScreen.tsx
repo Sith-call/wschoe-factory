@@ -26,8 +26,8 @@ export default function HighlightScreen({ category, text, gratitude, onCategory,
           <div className="h-1 flex-1 rounded-full bg-warm-amber" />
           <div className="h-1 flex-1 rounded-full bg-warm-amber" />
         </div>
-        <h2 className="text-2xl font-bold mb-2">오늘의 하이라이트</h2>
-        <p className="text-night-300 text-sm">오늘 가장 기억에 남는 순간은?</p>
+        <h2 className="text-2xl font-bold mb-2">오늘 기억나는 것</h2>
+        <p className="text-on-surface-variant text-sm">오늘 가장 기억에 남는 순간은?</p>
       </div>
 
       <div className="grid grid-cols-5 gap-2 my-5">

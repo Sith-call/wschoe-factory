@@ -112,7 +112,7 @@ export default function GalleryScreen() {
       {/* 이번 달 하이라이트 모아보기 */}
       {monthEmotions.length > 0 && !selectedDate && (
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-night-300 mb-3">이번 달 하이라이트</h3>
+          <h3 className="text-sm font-medium text-on-surface-variant mb-3">이번 달 기억들</h3>
           <div className="space-y-2">
             {monthEmotions.slice(0, 5).map((r, i) => {
               const em = EMOTIONS.find(e => e.type === r.emotion);

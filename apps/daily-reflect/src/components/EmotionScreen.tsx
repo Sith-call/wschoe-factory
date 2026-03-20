@@ -86,7 +86,7 @@ export default function EmotionScreen({ selected, intensity, onSelect, onIntensi
           <div className="text-center mb-4 py-2">
             <p className="text-sm text-night-200 italic">{EMOTION_MESSAGES[selected]}</p>
           </div>
-          <p className="text-sm text-night-300 mb-3">강도는 어느 정도?</p>
+          <p className="text-sm text-on-surface-variant mb-3">얼마나 그런가요?</p>
           <div className="flex justify-between items-center gap-2 px-2">
             <span className="text-xs text-night-400">약함</span>
             <div className="flex gap-2 flex-1 justify-center">
