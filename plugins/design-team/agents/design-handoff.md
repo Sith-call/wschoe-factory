@@ -61,4 +61,13 @@ You are the Design Handoff Specialist — a bridge between design and developmen
 - Stitch theme.roundness → border-radius utility
 - Stitch theme.font → font-family CSS
 - Stitch screen.screenshot → design reference image
-- Stitch screen.htmlCode → reference HTML (adapt, don't copy)
+- Stitch screen.htmlCode → reference HTML (**Tailwind 클래스를 그대로 복사**)
+
+**핵심 구현 전략 (2026-03-20 학습):**
+1. React 앱에 **Tailwind CDN**을 사용 (npm Tailwind v4 사용 금지) — Stitch HTML과 동일한 Tailwind 버전이어야 클래스가 100% 동일하게 동작
+2. Stitch HTML의 Tailwind 클래스를 React JSX에 **그대로 복사** (className으로)
+3. **inline style 사용 금지** — 유지보수 어렵고 dark mode, hover state가 깨짐
+4. 스크린별 다른 테마가 있으면 Tailwind arbitrary value 사용 (예: `text-[#D67D61]`)
+5. Stitch HTML의 커스텀 CSS 클래스 (`.paper-texture`, `.selected-card` 등)는 앱 index.html `<style>`에 복사
+6. Google Fonts + Material Symbols CDN 링크를 앱 index.html에 포함
+7. Stitch HTML의 `tailwind.config` 커스텀 색상을 앱의 config에도 동일하게 등록

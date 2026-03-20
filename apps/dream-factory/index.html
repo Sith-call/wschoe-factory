@@ -1,0 +1,282 @@
+<!doctype html>
+<html class="dark" lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=430, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>꿈 공장 — Dream Factory</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-background": "#e4dfff",
+              "on-secondary-fixed-variant": "#4f319c",
+              "inverse-primary": "#4d44e3",
+              "tertiary-container": "#885500",
+              "on-tertiary": "#472a00",
+              "on-surface-variant": "#c7c4d8",
+              "surface-container-lowest": "#0d082c",
+              "surface-variant": "#343054",
+              "secondary-fixed-dim": "#cebdff",
+              "error-container": "#93000a",
+              "on-secondary-container": "#bea8ff",
+              "surface-container-highest": "#343054",
+              "inverse-surface": "#e4dfff",
+              "on-error-container": "#ffdad6",
+              "error": "#ffb4ab",
+              "on-tertiary-fixed": "#2a1700",
+              "surface-bright": "#383559",
+              "primary-fixed": "#e2dfff",
+              "primary-fixed-dim": "#c3c0ff",
+              "on-primary": "#1d00a5",
+              "on-primary-fixed": "#0f0069",
+              "on-secondary-fixed": "#21005e",
+              "on-tertiary-container": "#ffd4a4",
+              "on-tertiary-fixed-variant": "#653e00",
+              "surface-dim": "#120e31",
+              "on-primary-container": "#dad7ff",
+              "primary": "#c3c0ff",
+              "tertiary-fixed": "#ffddb8",
+              "on-error": "#690005",
+              "background": "#120e31",
+              "inverse-on-surface": "#2f2c50",
+              "secondary-fixed": "#e8ddff",
+              "on-secondary": "#381385",
+              "surface-container": "#1e1b3e",
+              "tertiary-fixed-dim": "#ffb95f",
+              "secondary-container": "#4f319c",
+              "on-surface": "#e4dfff",
+              "surface-container-high": "#292649",
+              "surface-tint": "#c3c0ff",
+              "outline-variant": "#464555",
+              "surface-container-low": "#1a1739",
+              "on-primary-fixed-variant": "#3323cc",
+              "primary-container": "#4f46e5",
+              "surface": "#120e31",
+              "secondary": "#cebdff",
+              "outline": "#918fa1",
+              "tertiary": "#ffb95f"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif KR", "serif"],
+              "body": ["Be Vietnam Pro", "Noto Sans KR", "sans-serif"],
+              "label": ["Be Vietnam Pro", "sans-serif"],
+              "dream-quote": ["Cormorant Garamond", "serif"],
+              "branding": ["Cormorant Garamond", "serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "1rem",
+              "lg": "2rem",
+              "xl": "3rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400;1,600&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@200;400;700;900&display=swap" rel="stylesheet" />
+
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Be Vietnam Pro', 'Noto Sans KR', sans-serif;
+        background: #120e31;
+        color: #e4dfff;
+        max-width: 430px;
+        margin: 0 auto;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      #root { min-height: 100dvh; }
+
+      /* Material Symbols */
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .icon-fill {
+        font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+
+      /* Glass-morphism cards */
+      .glass-card {
+        background: rgba(52, 48, 84, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .glass-card-subtle {
+        background: rgba(30, 27, 62, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      /* glass-panel removed — use glass-card-subtle instead */
+
+      /* Star field background */
+      .star-field {
+        background-image: radial-gradient(circle at 2px 2px, rgba(195, 192, 255, 0.15) 1px, transparent 0);
+        background-size: 32px 32px;
+      }
+      .star-field-share {
+        background-image: radial-gradient(circle, #ffffff 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+
+      /* Glow effects */
+      .crystal-glow {
+        box-shadow: 0 0 60px 10px rgba(167, 139, 250, 0.25), inset 0 0 40px rgba(255, 185, 95, 0.1);
+      }
+      .nebula-glow {
+        box-shadow: 0 0 25px rgba(79, 70, 229, 0.3);
+      }
+      .dream-card-shadow {
+        box-shadow: 0 20px 40px rgba(195, 192, 255, 0.08);
+      }
+
+      /* Active/selected states */
+      .active-border {
+        border: 1px solid rgba(195, 192, 255, 0.5);
+        box-shadow: inset 0 0 12px rgba(79, 70, 229, 0.4);
+      }
+
+      /* Emotion gradients */
+      .gradient-peace { background: linear-gradient(to right, #6366F1, #3B82F6); }
+      .gradient-fear { background: linear-gradient(to right, #334155, #0F172A); }
+      .gradient-joy { background: linear-gradient(to right, #EC4899, #F59E0B); }
+      .gradient-sorrow { background: linear-gradient(to right, #4338CA, #7C3AED); }
+      .gradient-surprise { background: linear-gradient(to right, #FBBF24, #F472B6); }
+      .gradient-longing { background: linear-gradient(to right, #4F46E5, #06B6D4); }
+      .gradient-confusion { background: linear-gradient(to right, #8B5CF6, #EC4899); }
+      .gradient-anger { background: linear-gradient(to right, #DC2626, #9333EA); }
+
+      /* Masonry grid */
+      .masonry-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        align-items: start;
+      }
+
+      /* Active tab underline */
+      .active-tab-underline {
+        border-bottom: 2px solid #c3c0ff;
+      }
+
+      /* Dream card gradient (share screen) */
+      .dream-card-gradient {
+        background: linear-gradient(135deg, #4f46e5 0%, #1a1739 100%);
+      }
+
+      /* Analysis screen */
+      .mystic-gradient {
+        background: radial-gradient(circle at center, #3730a3 0%, #0d082c 70%, #0d082c 100%);
+      }
+      .crystal-ball-glow {
+        background: radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.4) 0%, rgba(75, 44, 152, 0.2) 50%, transparent 100%);
+        box-shadow: 0 0 80px 10px rgba(167, 139, 250, 0.15), inset 0 0 40px rgba(245, 158, 11, 0.1);
+      }
+      .swirl-1 {
+        background: radial-gradient(ellipse at center, rgba(167, 139, 250, 0.3) 0%, transparent 70%);
+        filter: blur(20px);
+      }
+      .swirl-2 {
+        background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.2) 0%, transparent 70%);
+        filter: blur(25px);
+      }
+      .constellation-line {
+        stroke: rgba(206, 189, 255, 0.08);
+      }
+      .star-dot {
+        fill: #ffb95f;
+        filter: drop-shadow(0 0 4px #ffb95f);
+      }
+
+      /* Animations */
+      .pulse-text {
+        animation: pulse-opacity 3s ease-in-out infinite;
+      }
+      @keyframes pulse-opacity {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+
+      .ease-out-expo {
+        transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* Card reveal */
+      @keyframes card-reveal {
+        0% { opacity: 0; transform: scale(0.8) rotateY(90deg); }
+        50% { opacity: 0.5; transform: scale(0.9) rotateY(45deg); }
+        100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+      }
+      .card-reveal {
+        animation: card-reveal 0.8s ease-out forwards;
+      }
+
+      /* Fade in up */
+      @keyframes fade-in-up {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in-up {
+        animation: fade-in-up 0.6s ease-out forwards;
+      }
+
+      /* Scrollbar hide */
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      /* Slider styling */
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 6px;
+        background: #343054;
+        border-radius: 9999px;
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        border: 2px solid #4f46e5;
+        box-shadow: 0 0 15px rgba(255,255,255,0.6);
+      }
+
+      /* Pattern screen dot background */
+      .pattern-dot-bg {
+        background-image: radial-gradient(circle at 2px 2px, rgba(167, 165, 255, 0.05) 1px, transparent 0);
+        background-size: 24px 24px;
+      }
+
+      /* Standardized card border-radius */
+      .card-radius { border-radius: 1.5rem; }
+      .card-radius-sm { border-radius: 1rem; }
+
+      /* Serif title helper */
+      .serif-title { font-family: 'Noto Serif KR', serif; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

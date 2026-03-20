@@ -100,8 +100,8 @@ npx -p playwright playwright screenshot \
 1. Playwright로 현재 앱 스크린샷 캡처 (430×932)
 2. Stitch ground truth PNG와 Read로 나란히 비교 (두 이미지 동시 열기)
 3. Stitch HTML 소스에서 정확한 CSS 값 참조 (Read로 HTML 파일 열기)
-4. 모든 시각적 차이를 **inline style**로 수정 (Tailwind 클래스 아님)
-5. Stitch asset 활용: Google Fonts CDN, Material Symbols → SVG 변환
+4. 모든 시각적 차이를 **Stitch HTML의 Tailwind 클래스 복사**로 수정 (inline style 사용 금지)
+5. Stitch asset 활용: Google Fonts CDN, Material Symbols Outlined
 6. `npm run build` 빌드 검증
 
 **순서**: IntroScreen → QuestionScreen → ResultScreen → LoadingScreen
@@ -126,20 +126,71 @@ npx -p playwright playwright screenshot \
 - **Ground Truth = 렌더링된 PNG**: Stitch 썸네일이 아닌, 동일 뷰포트에서 렌더링한 PNG가 기준
 - **변형 탐색**: 디자인 개선이 필요하면 `generate_variants`로 대안 탐색
 
-## Inline Style 전략
+## Tailwind CDN 전략 (2026-03-20 학습 반영)
 
-Tailwind v4는 CDN 버전(Stitch)과 다르게 동작할 수 있다.
-모든 시각적 속성은 inline style로 작성하여 정확한 렌더링을 보장한다:
+**핵심 원칙: Stitch HTML과 동일한 Tailwind CDN을 사용하면 클래스를 그대로 복사할 수 있다.**
 
-```tsx
-// ❌ Tailwind 클래스 (v4 호환 불확실)
-<div className="pt-12 mb-6 rounded-xl shadow-sm">
+Stitch MCP가 생성하는 HTML은 Tailwind CDN(`cdn.tailwindcss.com`)을 사용한다.
+React 앱의 `index.html`에도 **동일한 Tailwind CDN**을 넣으면 Stitch HTML의 클래스가 100% 동일하게 동작한다.
 
-// ✅ Inline style (정확한 값 보장)
-<div style={{ paddingTop: 48, marginBottom: 24, borderRadius: 16, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+```html
+<!-- index.html에 Tailwind CDN 포함 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 ```
 
-예외: `flex`, `grid`, `relative`, `absolute` 같은 레이아웃 유틸리티는 Tailwind 사용 가능.
+```tsx
+// ✅ Stitch HTML의 Tailwind 클래스를 그대로 복사
+<div className="pt-12 mb-6 rounded-xl shadow-sm bg-primary/5">
+
+// ❌ inline style 사용 금지 (유지보수 어렵고 dark mode 깨짐)
+<div style={{ paddingTop: 48, marginBottom: 24 }}>
+```
+
+**npm Tailwind v4를 사용하지 않는다** — CDN 버전과 클래스 해석이 다를 수 있기 때문.
+
+### 스크린별 테마 차이 처리
+
+Stitch가 스크린마다 다른 색상 테마를 생성할 수 있다 (예: 체크리스트 스크린이 테라코타 #D67D61 사용).
+이 경우 Tailwind arbitrary value를 사용:
+
+```tsx
+// 메인 테마와 다른 색상이 필요한 스크린
+<div className="text-[#D67D61] bg-[#fcf9f4] border-[#D67D61]">
+<h1 className="font-editorial italic">Prescription Checklist</h1>
+```
+
+### 커스텀 CSS 클래스
+
+Stitch HTML에서 사용하는 커스텀 CSS 클래스는 반드시 앱 index.html의 `<style>` 태그에 복사:
+- `.selected-card` — 선택된 카드 스타일
+- `.bg-custom-gradient` — 다크 분석 화면 배경
+- `.paper-texture` — 처방전 카드 종이 질감 (Google CDN 이미지)
+- `.progress-ring-circle` — SVG 프로그레스 링 애니메이션
+
+### Tailwind 커스텀 색상 등록
+
+Stitch HTML의 `tailwind.config`에서 사용하는 커스텀 색상들을 앱의 tailwind.config에도 동일하게 등록:
+```javascript
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#5b13ec",        // Stitch 메인 테마 색상
+        "primary-soft": "#ede7fe",
+        "accent-pink": "#fce7f3",
+        // ... Stitch HTML에서 추출
+      }
+    }
+  }
+}
+```
+
+### Google Fonts & Material Icons
+
+Stitch HTML이 사용하는 모든 폰트를 앱 index.html에 CDN 링크로 추가:
+- Plus Jakarta Sans, Noto Sans KR (메인)
+- Newsreader, Manrope (체크리스트 테마)
+- Material Symbols Outlined (아이콘)
 
 ## Communication
 
