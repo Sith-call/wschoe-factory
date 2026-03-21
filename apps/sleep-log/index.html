@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>수면 일지</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Nanum+Gothic:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Nanum Gothic", "sans-serif"],
+              dm: ["DM Sans", "sans-serif"],
+            },
+            colors: {
+              bg: "#f0fdfa",
+              surface: "#ffffff",
+              "surface-alt": "#f0fdfa",
+              "text-primary": "#134e4a",
+              "text-secondary": "#4a7c72",
+              "text-tertiary": "#99b3ad",
+              primary: "#0d9488",
+              "primary-light": "#ccfbf1",
+              "primary-dark": "#115e59",
+              accent: "#f59e0b",
+              border: "#d1d5db",
+              "quality-1": "#e0f2fe",
+              "quality-2": "#bae6fd",
+              "quality-3": "#7dd3fc",
+              "quality-4": "#38bdf8",
+              "quality-5": "#0d9488",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Nanum Gothic", sans-serif;
+        background-color: #f0fdfa;
+        color: #134e4a;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .font-dm {
+        font-family: "DM Sans", sans-serif;
+      }
+      .slide-left-enter {
+        animation: slideLeftIn 250ms ease-out forwards;
+      }
+      .slide-right-enter {
+        animation: slideRightIn 250ms ease-out forwards;
+      }
+      @keyframes slideLeftIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideRightIn {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .fade-enter {
+        animation: fadeIn 200ms ease-out forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,148 @@
+import type { QuizQuestion } from '../types';
+
+export const questions: QuizQuestion[] = [
+  {
+    id: 1,
+    category: 'cafe',
+    categoryLabel: '카페 소비',
+    text: '일주일에 카페를\n몇 번 가시나요?',
+    options: [
+      { text: '거의 안 가요', score: 1 },
+      { text: '주 1-2회', score: 2 },
+      { text: '주 3-4회', score: 3 },
+      { text: '거의 매일', score: 4 },
+    ],
+  },
+  {
+    id: 2,
+    category: 'delivery',
+    categoryLabel: '배달 소비',
+    text: '일주일에 배달 음식을\n몇 번 시키시나요?',
+    options: [
+      { text: '거의 안 시켜요', score: 1 },
+      { text: '주 1-2회', score: 2 },
+      { text: '주 3-4회', score: 3 },
+      { text: '거의 매일', score: 4 },
+    ],
+  },
+  {
+    id: 3,
+    category: 'shopping',
+    categoryLabel: '쇼핑 소비',
+    text: '최근 한 달, 계획에 없던\n물건을 산 적이 있나요?',
+    options: [
+      { text: '없어요', score: 1 },
+      { text: '1-2번', score: 2 },
+      { text: '3-5번', score: 3 },
+      { text: '셀 수 없어요', score: 4 },
+    ],
+  },
+  {
+    id: 4,
+    category: 'subscription',
+    categoryLabel: '구독 소비',
+    text: '현재 구독 중인 서비스가\n몇 개인가요?',
+    options: [
+      { text: '0-1개', score: 1 },
+      { text: '2-3개', score: 2 },
+      { text: '4-6개', score: 3 },
+      { text: '7개 이상', score: 4 },
+    ],
+  },
+  {
+    id: 5,
+    category: 'transport',
+    categoryLabel: '교통 소비',
+    text: '일주일에 택시를\n몇 번 타시나요?',
+    options: [
+      { text: '거의 안 타요', score: 1 },
+      { text: '주 1-2회', score: 2 },
+      { text: '주 3-4회', score: 3 },
+      { text: '거의 매일', score: 4 },
+    ],
+  },
+  {
+    id: 6,
+    category: 'nightlife',
+    categoryLabel: '유흥 소비',
+    text: '한 달에 음주 모임이\n몇 번인가요?',
+    options: [
+      { text: '월 0-1회', score: 1 },
+      { text: '월 2-3회', score: 2 },
+      { text: '월 4-6회', score: 3 },
+      { text: '월 7회 이상', score: 4 },
+    ],
+  },
+  {
+    id: 7,
+    category: 'cafe',
+    categoryLabel: '카페 소비',
+    text: '카페에서 한 번에 보통\n얼마를 쓰시나요?',
+    options: [
+      { text: '3천원 이하', score: 1 },
+      { text: '3-5천원', score: 2 },
+      { text: '5-7천원', score: 3 },
+      { text: '7천원 이상', score: 4 },
+    ],
+  },
+  {
+    id: 8,
+    category: 'delivery',
+    categoryLabel: '배달 소비',
+    text: '배달 주문 시 평균\n금액은 얼마인가요?',
+    options: [
+      { text: '1만원 이하', score: 1 },
+      { text: '1-2만원', score: 2 },
+      { text: '2-3만원', score: 3 },
+      { text: '3만원 이상', score: 4 },
+    ],
+  },
+  {
+    id: 9,
+    category: 'shopping',
+    categoryLabel: '쇼핑 소비',
+    text: '온라인 쇼핑몰 장바구니에\n물건이 몇 개 있나요?',
+    options: [
+      { text: '0-2개', score: 1 },
+      { text: '3-5개', score: 2 },
+      { text: '6-10개', score: 3 },
+      { text: '10개 이상', score: 4 },
+    ],
+  },
+  {
+    id: 10,
+    category: 'subscription',
+    categoryLabel: '구독 소비',
+    text: '최근 3개월간 한 번도\n안 쓴 구독이 있나요?',
+    options: [
+      { text: '없어요', score: 1 },
+      { text: '1개', score: 2 },
+      { text: '2-3개', score: 3 },
+      { text: '4개 이상', score: 4 },
+    ],
+  },
+  {
+    id: 11,
+    category: 'transport',
+    categoryLabel: '교통 소비',
+    text: '걸어서 15분 거리도\n택시를 타시나요?',
+    options: [
+      { text: '절대 안 타요', score: 1 },
+      { text: '가끔', score: 2 },
+      { text: '자주', score: 3 },
+      { text: '항상', score: 4 },
+    ],
+  },
+  {
+    id: 12,
+    category: 'nightlife',
+    categoryLabel: '유흥 소비',
+    text: '한 번 음주 모임에 보통\n얼마를 쓰시나요?',
+    options: [
+      { text: '2만원 이하', score: 1 },
+      { text: '2-5만원', score: 2 },
+      { text: '5-10만원', score: 3 },
+      { text: '10만원 이상', score: 4 },
+    ],
+  },
+];

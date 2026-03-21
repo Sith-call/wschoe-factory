@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>컬러 매치 — 색감 테스트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Pretendard', 'DM Sans', 'system-ui', 'sans-serif'],
+              heading: ['DM Sans', 'Pretendard', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              primary: '#2dd4bf',
+              surface: '#f0fdfa',
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+    />
+    <style>
+      @keyframes card-enter {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .animate-card-enter {
+        animation: card-enter 0.25s ease-out forwards;
+      }
+      @keyframes correct-flash {
+        0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+        100% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      }
+      .animate-correct {
+        animation: correct-flash 0.4s ease-out;
+      }
+      @keyframes wrong-shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-4px); }
+        40%, 80% { transform: translateX(4px); }
+      }
+      .animate-wrong {
+        animation: wrong-shake 0.35s ease-out;
+      }
+      /* Haptic-style quick vibrate on wrong answer */
+      @keyframes haptic-vibrate {
+        0% { transform: translateX(0); }
+        10% { transform: translateX(-2px); }
+        20% { transform: translateX(2px); }
+        30% { transform: translateX(-2px); }
+        40% { transform: translateX(2px); }
+        50% { transform: translateX(0); }
+        100% { transform: translateX(0); }
+      }
+      .animate-haptic {
+        animation: haptic-vibrate 0.15s linear;
+      }
+      /* Confetti dot falling animation */
+      @keyframes confetti-fall {
+        0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+      }
+      .confetti-dot {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        top: 0;
+        animation: confetti-fall linear forwards;
+        pointer-events: none;
+      }
+      .confetti-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 50;
+      }
+      /* Focus style for grid squares */
+      button:focus-visible {
+        outline: 2px solid #2dd4bf;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body class="bg-white min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

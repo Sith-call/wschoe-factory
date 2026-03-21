@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>소비 체질 개선</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: { DEFAULT: '#0d9488', dark: '#0f766e', light: '#ccfbf1' },
+              surface: { DEFAULT: '#f8fafc', alt: '#f1f5f9' },
+              txt: { primary: '#1e293b', secondary: '#64748b', tertiary: '#94a3b8' },
+              border: '#e2e8f0',
+              success: '#16a34a',
+              error: '#dc2626',
+              warning: '#d97706',
+            },
+            fontFamily: {
+              sans: ['SUIT Variable', 'Inter', 'system-ui', 'sans-serif'],
+              num: ['Inter', 'SUIT Variable', 'system-ui', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'SUIT Variable', 'Inter', system-ui, sans-serif;
+        background: #f8fafc;
+        color: #1e293b;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      #root { max-width: 480px; margin: 0 auto; min-height: 100dvh; position: relative; overflow: hidden; }
+
+      @keyframes pulse-border {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      @keyframes check-draw {
+        from { stroke-dashoffset: 24; }
+        to { stroke-dashoffset: 0; }
+      }
+      @keyframes count-up {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes scale-in {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      @keyframes option-tap {
+        0% { background-color: transparent; }
+        50% { background-color: rgba(13, 148, 136, 0.08); }
+        100% { background-color: transparent; }
+      }
+      @keyframes slide-up {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      @keyframes radar-draw {
+        from { opacity: 0; transform: scale(0); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      @keyframes circle-progress {
+        from { stroke-dashoffset: 213; }
+        to { stroke-dashoffset: 0; }
+      }
+      .animate-pulse-border { animation: pulse-border 1.5s ease-in-out infinite; }
+      .animate-check-draw { animation: check-draw 0.5s ease-out forwards; }
+      .animate-count-up { animation: count-up 0.3s ease-out forwards; }
+      .animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
+      .animate-slide-up { animation: slide-up 0.3s ease-out forwards; }
+      .animate-radar-draw { animation: radar-draw 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+      .animate-circle-progress { animation: circle-progress 2s ease-out forwards; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

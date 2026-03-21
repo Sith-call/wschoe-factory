@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>산수 챌린지 — Speed Math</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#2563eb',
+              'primary-light': '#93c5fd',
+              surface: '#ffffff',
+              bg: '#eff6ff',
+              correct: '#16a34a',
+              wrong: '#dc2626',
+            },
+            fontFamily: {
+              mono: ['"Space Mono"', 'monospace'],
+              sans: ['"Nanum Gothic"', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      @keyframes slideInRight {
+        from { transform: translateX(60px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-6px); }
+        40% { transform: translateX(6px); }
+        60% { transform: translateX(-4px); }
+        80% { transform: translateX(4px); }
+      }
+      @keyframes flashGreen {
+        0% { border-color: #16a34a; box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+        50% { border-color: #16a34a; box-shadow: 0 0 0 8px rgba(22,163,74,0); }
+        100% { border-color: #16a34a; box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+      }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
+      }
+      @keyframes scaleIn {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+      .animate-slide-in { animation: slideInRight 0.3s ease-out; }
+      .animate-shake { animation: shake 0.4s ease-out; }
+      .animate-flash-green { animation: flashGreen 0.5s ease-out; }
+      .animate-pulse-timer { animation: pulse 0.6s ease-in-out; }
+      .animate-scale-in { animation: scaleIn 0.25s ease-out; }
+    </style>
+  </head>
+  <body class="bg-bg font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>소리 공방 — Noise Maker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: '#fefce8',
+              surface: '#fefdf5',
+              forest: '#365314',
+              lime: '#84cc16',
+            },
+            fontFamily: {
+              outfit: ['Outfit', 'sans-serif'],
+              nanum: ['Nanum Gothic', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'Outfit', 'Nanum Gothic', sans-serif;
+      }
+
+      .slider-channel::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #365314;
+        cursor: pointer;
+        border: 2px solid #fefce8;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+
+      .slider-channel::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #365314;
+        cursor: pointer;
+        border: 2px solid #fefce8;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+
+      .slider-channel::-webkit-slider-runnable-track {
+        height: 6px;
+        border-radius: 9999px;
+        background: #e5e7eb;
+      }
+
+      .slider-channel::-moz-range-track {
+        height: 6px;
+        border-radius: 9999px;
+        background: #e5e7eb;
+      }
+
+      .slider-master::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #365314;
+        cursor: pointer;
+        border: 2px solid #fefce8;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+
+      .slider-master::-moz-range-thumb {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #365314;
+        cursor: pointer;
+        border: 2px solid #fefce8;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+
+      .slider-master::-webkit-slider-runnable-track {
+        height: 8px;
+        border-radius: 9999px;
+        background: #e5e7eb;
+      }
+
+      .slider-master::-moz-range-track {
+        height: 8px;
+        border-radius: 9999px;
+        background: #e5e7eb;
+      }
+
+      @keyframes eq-bar-1 {
+        0%, 100% { height: 4px; }
+        50% { height: 18px; }
+      }
+      @keyframes eq-bar-2 {
+        0%, 100% { height: 6px; }
+        50% { height: 24px; }
+      }
+      @keyframes eq-bar-3 {
+        0%, 100% { height: 4px; }
+        50% { height: 14px; }
+      }
+
+      .eq-bar-1 {
+        animation: eq-bar-1 1.2s ease-in-out infinite;
+      }
+      .eq-bar-2 {
+        animation: eq-bar-2 0.8s ease-in-out infinite;
+      }
+      .eq-bar-3 {
+        animation: eq-bar-3 1.5s ease-in-out infinite;
+      }
+
+      .eq-bar-idle {
+        height: 4px !important;
+        animation: none !important;
+        transition: height 0.3s ease;
+      }
+
+      input[type='range'] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="bg-cream min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

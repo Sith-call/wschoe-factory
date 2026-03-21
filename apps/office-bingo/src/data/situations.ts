@@ -1,0 +1,73 @@
+import { BingoCell } from '../types';
+
+export const situations: BingoCell[] = [
+  // meeting (회의)
+  { id: 1, text: '회의 중 딴생각', category: 'meeting' },
+  { id: 2, text: '끝날 듯 안 끝나는 회의', category: 'meeting' },
+  { id: 3, text: '회의 중 폰 몰래 확인', category: 'meeting' },
+  { id: 4, text: '이 회의 메일로 될 텐데', category: 'meeting' },
+  { id: 5, text: '회의록 작성 떠넘기기', category: 'meeting' },
+  { id: 6, text: '음소거 안 된 줄 모르고 한숨', category: 'meeting' },
+  { id: 7, text: '카메라 끄고 딴짓', category: 'meeting' },
+  { id: 8, text: '회의 시작 5분 전에 안건 받음', category: 'meeting' },
+  { id: 9, text: '누가 화면 공유하실 분', category: 'meeting' },
+  { id: 10, text: '결론 없이 끝나는 회의', category: 'meeting' },
+  { id: 11, text: '다음 회의에서 논의합시다', category: 'meeting' },
+  { id: 12, text: '회의 중 배 꼬르륵', category: 'meeting' },
+
+  // lunch (점심)
+  { id: 13, text: '뭐 먹지 10분 고민', category: 'lunch' },
+  { id: 14, text: '맨날 같은 메뉴', category: 'lunch' },
+  { id: 15, text: '점심값 만원 돌파', category: 'lunch' },
+  { id: 16, text: '먹자마자 졸림', category: 'lunch' },
+  { id: 17, text: '혼밥', category: 'lunch' },
+  { id: 18, text: '점심시간에 업무 연락 옴', category: 'lunch' },
+  { id: 19, text: '배달 40분 기다림', category: 'lunch' },
+  { id: 20, text: '다이어트 중인데 치킨', category: 'lunch' },
+  { id: 21, text: '커피 두 잔째', category: 'lunch' },
+  { id: 22, text: '편의점 도시락', category: 'lunch' },
+  { id: 23, text: '점심 약속 취소됨', category: 'lunch' },
+  { id: 24, text: '후식으로 카페 가기', category: 'lunch' },
+
+  // work (업무)
+  { id: 25, text: '퇴근 5분 전 업무 지시', category: 'work' },
+  { id: 26, text: '메일 읽씹', category: 'work' },
+  { id: 27, text: 'Ctrl+Z 연타', category: 'work' },
+  { id: 28, text: '저장 안 하고 날림', category: 'work' },
+  { id: 29, text: '엑셀 안 열림', category: 'work' },
+  { id: 30, text: '프린터 고장', category: 'work' },
+  { id: 31, text: '업무 중 유튜브', category: 'work' },
+  { id: 32, text: '야근 확정', category: 'work' },
+  { id: 33, text: '슬랙 알림 폭탄', category: 'work' },
+  { id: 34, text: '보고서 수정 3회차', category: 'work' },
+  { id: 35, text: '오타 발견 못하고 전송', category: 'work' },
+  { id: 36, text: '브라우저 탭 30개', category: 'work' },
+
+  // people (사람)
+  { id: 37, text: '상사 눈치 보기', category: 'people' },
+  { id: 38, text: '동기랑 수다', category: 'people' },
+  { id: 39, text: '신입 질문 공세', category: 'people' },
+  { id: 40, text: '옆자리 통화 소음', category: 'people' },
+  { id: 41, text: '엘리베이터 어색한 침묵', category: 'people' },
+  { id: 42, text: '인사만 하는 사이', category: 'people' },
+  { id: 43, text: '누군가의 생일 축하', category: 'people' },
+  { id: 44, text: '재택하는 동료 부러움', category: 'people' },
+  { id: 45, text: '퇴근하는 동료 눈빛', category: 'people' },
+  { id: 46, text: '팀장님 기분 파악', category: 'people' },
+  { id: 47, text: '나만 야근', category: 'people' },
+  { id: 48, text: '회식 불참 눈치', category: 'people' },
+
+  // mood (기분)
+  { id: 49, text: '출근길 한숨', category: 'mood' },
+  { id: 50, text: '월요병', category: 'mood' },
+  { id: 51, text: '금요일 설렘', category: 'mood' },
+  { id: 52, text: '연차 쓰고 싶다', category: 'mood' },
+  { id: 53, text: '이직 사이트 구경', category: 'mood' },
+  { id: 54, text: '연봉 계산기 검색', category: 'mood' },
+  { id: 55, text: '칼퇴 성공', category: 'mood' },
+  { id: 56, text: '보람찬 하루', category: 'mood' },
+  { id: 57, text: '무한 하품', category: 'mood' },
+  { id: 58, text: '내일이 금요일', category: 'mood' },
+  { id: 59, text: '주말 계획 세우기', category: 'mood' },
+  { id: 60, text: '퇴근 카운트다운', category: 'mood' },
+];

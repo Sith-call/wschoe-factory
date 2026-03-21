@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>끝말잇기</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#14b8a6",
+              "primary-dark": "#0d9488",
+              secondary: "#f0abfc",
+              "secondary-light": "#fdf4ff",
+              surface: "#ffffff",
+              bg: "#f0fdf4",
+            },
+            fontFamily: {
+              sans: ['Pretendard', 'sans-serif'],
+              en: ['Outfit', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Pretendard', sans-serif;
+        background-color: #f0fdf4;
+        color: #1e293b;
+      }
+      @keyframes slideFromRight {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes slideFromLeft {
+        from { opacity: 0; transform: translateX(-40px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      .animate-slide-right {
+        animation: slideFromRight 250ms ease-out forwards;
+      }
+      .animate-slide-left {
+        animation: slideFromLeft 250ms ease-out forwards;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-Bwr5TswB.js"></script>
+  </head>
+  <body class="bg-bg">
+    <div id="root"></div>
+  </body>
+</html>

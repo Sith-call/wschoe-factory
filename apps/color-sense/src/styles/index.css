@@ -1,0 +1,118 @@
+/* Color Sense Test — Custom Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Wanted Sans Variable', 'SUIT Variable', system-ui, sans-serif;
+  background: #fafafa;
+  color: #18181b;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular nums for scores/timers */
+.font-tabular {
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+/* Game grid */
+.game-grid {
+  display: grid;
+  gap: 4px;
+  padding: 0;
+}
+.grid-2x2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3x3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4x4 { grid-template-columns: repeat(4, 1fr); }
+.grid-5x5 { grid-template-columns: repeat(5, 1fr); }
+.grid-6x6 { grid-template-columns: repeat(6, 1fr); }
+
+/* Game tile */
+.game-tile {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 50ms ease;
+  outline: none;
+}
+.game-tile:active {
+  transform: scale(0.95);
+}
+
+/* Correct flash */
+@keyframes correct-flash {
+  0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+  100% { box-shadow: 0 0 0 3px rgba(34, 197, 94, 0); }
+}
+.tile-correct {
+  animation: correct-flash 100ms ease-out;
+}
+
+/* Wrong shake */
+@keyframes wrong-shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+.tile-wrong {
+  animation: wrong-shake 200ms ease-out;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+}
+
+/* Screen fade */
+@keyframes screen-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.screen-enter {
+  animation: screen-fade-in 150ms ease-in-out;
+}
+
+/* Score counter */
+@keyframes count-up {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* Modal slide up */
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.modal-enter {
+  animation: slide-up 300ms ease-out;
+}
+
+/* Modal slide down */
+@keyframes slide-down {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+.modal-exit {
+  animation: slide-down 200ms ease-in forwards;
+}
+
+/* Badge scale entrance */
+@keyframes badge-pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.badge-enter {
+  animation: badge-pop 200ms ease-out;
+}
+
+/* Timer bar colors */
+.timer-normal { background: #a1a1aa; }
+.timer-warning { background: #f59e0b; }
+.timer-danger { background: #ef4444; }
+
+/* Scrollbar hide */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
