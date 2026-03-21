@@ -29,7 +29,7 @@ export function SettingsPage({
   let currentStreak = 0;
   for (let i = 0; i < dates.length; i++) {
     const r = records[dates[i]];
-    if (r.morningLog || r.nightLog) {
+    if (r.morningLog && r.nightLog) {
       currentStreak++;
       maxStreak = Math.max(maxStreak, currentStreak);
     } else {

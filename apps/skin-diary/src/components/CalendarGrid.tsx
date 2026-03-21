@@ -58,10 +58,10 @@ export function CalendarGrid({ year, month, records, onDateSelect }: CalendarGri
           return (
             <button
               key={dateStr}
-              onClick={() => hasRecord && onDateSelect(dateStr)}
+              onClick={() => onDateSelect(dateStr)}
               className={`aspect-square rounded-lg flex flex-col items-center justify-center relative ${
                 isToday ? 'border-2 border-sd-primary' : ''
-              } ${hasRecord ? 'cursor-pointer' : 'cursor-default'}`}
+              } cursor-pointer`}
               style={score ? { backgroundColor: SCORE_BG[score] } : undefined}
               aria-label={`${month + 1}월 ${day}일${score ? ` ${score}점` : ''}`}
             >

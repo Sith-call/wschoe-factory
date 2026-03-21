@@ -16,6 +16,16 @@ interface HomePageProps {
   onOpenSettings: () => void;
   bestProduct?: ProductInsight | null;
   worstVariable?: VariableInsight | null;
+  onNavigateToInsight?: () => void;
+  onEditMorning?: () => void;
+  onEditNight?: () => void;
+}
+
+function getTimeGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return '좋은 아침이에요';
+  if (hour < 18) return '좋은 오후예요';
+  return '오늘 하루 수고했어요';
 }
 
 export function HomePage({
@@ -28,6 +38,9 @@ export function HomePage({
   onOpenSettings,
   bestProduct,
   worstVariable,
+  onNavigateToInsight,
+  onEditMorning,
+  onEditNight,
 }: HomePageProps) {
   const today = getToday();
   const todayRecord = records[today];
@@ -46,18 +59,19 @@ export function HomePage({
     }
   }
 
+  const timeGreeting = getTimeGreeting();
   const greeting = hasMorning
     ? `${userName}님, 오늘도 기록했어요`
-    : `안녕, ${userName || ''}님\n오늘 피부는 어때?`;
+    : `${timeGreeting}, ${userName || ''}님\n오늘 피부는 어때?`;
 
   return (
     <div className="pb-20">
       {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
-        <button onClick={onOpenProducts} aria-label="제품 관리" className="text-sd-text min-w-[44px] min-h-[44px] flex items-center justify-center">
+        <button onClick={onOpenProducts} aria-label="제품 관리" className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ color: '#8b7e7e' }}>
           <LeafIcon size={22} />
         </button>
-        <button onClick={onOpenSettings} aria-label="설정" className="text-sd-text min-w-[44px] min-h-[44px] flex items-center justify-center">
+        <button onClick={onOpenSettings} aria-label="설정" className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ color: '#8b7e7e' }}>
           <SettingsIcon size={22} />
         </button>
       </div>
@@ -69,21 +83,28 @@ export function HomePage({
       </h1>
 
       {/* Morning log card */}
-      <div className="rounded-2xl p-5 mb-4" style={{ backgroundColor: '#fdf8f4' }}>
-        <div className="flex items-center gap-2 mb-3">
-          <SunIcon size={20} color="#c2847a" />
+      <div className="rounded-2xl p-5 mb-3" style={{ backgroundColor: '#fdf8f4' }}>
+        <div className="flex items-center gap-2.5 mb-3">
+          <SunIcon size={22} color="#d4956a" />
           <span className="font-heading text-lg text-sd-text">오늘 아침 피부</span>
         </div>
 
         {hasMorning ? (
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-number text-xl text-sd-text font-semibold">
-                {todayRecord.morningLog!.score}점
-              </span>
-              <span className="font-body text-sm text-sd-text-secondary">
-                {SCORE_LABELS[todayRecord.morningLog!.score]}
-              </span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="font-number text-xl text-sd-text font-semibold">
+                  {todayRecord.morningLog!.score}점
+                </span>
+                <span className="font-body text-sm text-sd-text-secondary">
+                  {SCORE_LABELS[todayRecord.morningLog!.score]}
+                </span>
+              </div>
+              {onEditMorning && (
+                <button onClick={onEditMorning} className="font-body text-sm text-sd-primary">
+                  수정
+                </button>
+              )}
             </div>
             <p className="font-body text-sm text-sd-text-secondary mt-1">
               {todayRecord.morningLog!.keywords.map(k => KEYWORD_LABELS[k as SkinKeyword]).join(', ')}
@@ -96,7 +117,7 @@ export function HomePage({
           </div>
         ) : (
           <div>
-            <p className="font-body text-sm text-sd-text-secondary mb-3">아직 기록 전이에요</p>
+            <p className="font-body text-sm text-sd-text-secondary mb-3">오늘 아침 피부는 어땠는지 남겨봐요</p>
             <button
               onClick={onOpenMorningLog}
               className="bg-sd-primary text-white rounded-xl px-5 py-2.5 font-body font-medium text-sm w-full"
@@ -109,16 +130,23 @@ export function HomePage({
 
       {/* Night log card */}
       <div className="rounded-2xl p-5 mb-6" style={{ backgroundColor: '#f0e8e4' }}>
-        <div className="flex items-center gap-2 mb-3">
-          <MoonIcon size={20} color="#c2847a" />
+        <div className="flex items-center gap-2.5 mb-3">
+          <MoonIcon size={22} color="#8a7a9e" />
           <span className="font-heading text-lg text-sd-text">오늘 밤 루틴</span>
         </div>
 
         {hasNight ? (
           <div>
-            <p className="font-body text-sm text-sd-text mb-1">
-              {todayRecord.nightLog!.products.join(', ')}
-            </p>
+            <div className="flex items-center justify-between mb-1">
+              <p className="font-body text-sm text-sd-text">
+                {todayRecord.nightLog!.products.join(', ')}
+              </p>
+              {onEditNight && (
+                <button onClick={onEditNight} className="font-body text-sm text-sd-primary flex-shrink-0 ml-2">
+                  수정
+                </button>
+              )}
+            </div>
             {todayRecord.nightLog!.variables.length > 0 && (
               <p className="font-body text-[0.8125rem] text-sd-text-secondary mt-1">
                 생활: {todayRecord.nightLog!.variables.map(v => {
@@ -134,7 +162,7 @@ export function HomePage({
           </div>
         ) : (
           <div>
-            <p className="font-body text-sm text-sd-text-secondary mb-3">아직 기록 전이에요</p>
+            <p className="font-body text-sm text-sd-text-secondary mb-3">오늘 밤 루틴을 기록해봐요</p>
             <button
               onClick={onOpenNightLog}
               className={`rounded-xl px-5 py-2.5 font-body font-medium text-sm w-full ${
@@ -152,10 +180,17 @@ export function HomePage({
       {/* Weekly summary */}
       <WeeklySummary records={records} />
 
-      {/* Insight summary */}
-      {(bestProduct || worstVariable) && (
-        <div className="bg-white border border-sd-border rounded-xl p-4 mt-4">
-          <p className="font-heading text-sm text-sd-text font-medium mb-2">이번 주 발견</p>
+      {/* Insight summary — tappable to navigate to insight tab */}
+      {(bestProduct || worstVariable) ? (
+        <button
+          onClick={onNavigateToInsight}
+          className="w-full text-left rounded-xl p-4 mt-4 border border-sd-border"
+          style={{ backgroundColor: '#fdf8f4' }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="font-heading text-sm text-sd-text font-medium">이번 주 발견</p>
+            <span className="font-body text-[0.75rem] text-sd-text-secondary">자세히 보기 &rsaquo;</span>
+          </div>
           {bestProduct && (
             <p className="font-body text-[0.8125rem] text-sd-text-secondary">
               가장 좋았던 제품: <span className="text-sd-text font-medium">{bestProduct.productName}</span> (사용 시 +{bestProduct.impact.toFixed(1)}점)
@@ -166,6 +201,16 @@ export function HomePage({
               가장 나빴던 변수: <span className="text-sd-text font-medium">{VARIABLE_LABELS[worstVariable.variable as Variable]}</span> (다음날 {worstVariable.impact.toFixed(1)}점)
             </p>
           )}
+        </button>
+      ) : (
+        <div
+          className="rounded-xl p-4 mt-4 border border-sd-border"
+          style={{ backgroundColor: '#fdf8f4' }}
+        >
+          <p className="font-heading text-sm text-sd-text font-medium mb-1">이번 주 발견</p>
+          <p className="font-body text-[0.8125rem] text-sd-text-secondary">
+            7일 이상 기록하면 인사이트가 나와요
+          </p>
         </div>
       )}
 

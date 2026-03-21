@@ -5,11 +5,11 @@ import type { Variable } from '../types';
 import { useInsights } from '../hooks/useInsights';
 import { InsightCard } from '../components/InsightCard';
 
-function getProductVerdict(impact: number, usedDays: number): string {
-  if (usedDays < 3) return '더 지켜봐야 해요';
-  if (impact > 0.3) return '계속 사용하세요';
-  if (impact < -0.3) return '주의가 필요해요';
-  return '더 지켜봐야 해요';
+function getProductVerdict(impact: number, usedDays: number, avgWhenUsed: number, avgWhenNotUsed: number): string {
+  if (usedDays < 3) return `아직 ${usedDays}회만 사용했어요. ${3 - usedDays}회 더 사용하면 판단할 수 있어요`;
+  if (impact > 0.3) return `계속 사용하세요 — 사용한 ${usedDays}일간 평균 ${avgWhenUsed.toFixed(1)}점 (미사용 시 ${avgWhenNotUsed.toFixed(1)}점)`;
+  if (impact < -0.3) return `주의가 필요해요 — 사용한 ${usedDays}일간 평균 ${avgWhenUsed.toFixed(1)}점 (미사용 시 ${avgWhenNotUsed.toFixed(1)}점)`;
+  return `아직 뚜렷한 차이가 없어요 — ${usedDays}일간 평균 ${avgWhenUsed.toFixed(1)}점 (미사용 시 ${avgWhenNotUsed.toFixed(1)}점)`;
 }
 
 interface InsightPageProps {
@@ -104,7 +104,7 @@ export function InsightPage({ records, products }: InsightPageProps) {
                     avgWhenUsed={p.avgScoreWhenUsed}
                     avgWhenNotUsed={p.avgScoreWhenNotUsed}
                     impact={p.impact}
-                    verdict={getProductVerdict(p.impact, p.usedDays)}
+                    verdict={getProductVerdict(p.impact, p.usedDays, p.avgScoreWhenUsed, p.avgScoreWhenNotUsed)}
                   />
                 ))}
               </div>
@@ -124,7 +124,7 @@ export function InsightPage({ records, products }: InsightPageProps) {
                     avgWhenUsed={p.avgScoreWhenUsed}
                     avgWhenNotUsed={p.avgScoreWhenNotUsed}
                     impact={p.impact}
-                    verdict={getProductVerdict(p.impact, p.usedDays)}
+                    verdict={getProductVerdict(p.impact, p.usedDays, p.avgScoreWhenUsed, p.avgScoreWhenNotUsed)}
                   />
                 ))}
               </div>
@@ -144,7 +144,7 @@ export function InsightPage({ records, products }: InsightPageProps) {
                     avgWhenUsed={p.avgScoreWhenUsed}
                     avgWhenNotUsed={p.avgScoreWhenNotUsed}
                     impact={p.impact}
-                    verdict={getProductVerdict(p.impact, p.usedDays)}
+                    verdict={getProductVerdict(p.impact, p.usedDays, p.avgScoreWhenUsed, p.avgScoreWhenNotUsed)}
                   />
                 ))}
               </div>

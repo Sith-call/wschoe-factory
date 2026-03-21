@@ -9,6 +9,7 @@ interface DayDetailProps {
   records: Record<string, SkinRecord>;
   onClose: () => void;
   onEdit?: (date: string) => void;
+  onEditNight?: (date: string) => void;
 }
 
 const SCORE_COLORS: Record<number, string> = {
@@ -19,12 +20,46 @@ const SCORE_COLORS: Record<number, string> = {
   5: '#7ac27a',
 };
 
-export function DayDetail({ date, records, onClose, onEdit }: DayDetailProps) {
+export function DayDetail({ date, records, onClose, onEdit, onEditNight }: DayDetailProps) {
   const record = records[date];
   const prevDate = getPrevDate(date);
   const prevRecord = records[prevDate];
 
-  if (!record) return null;
+  if (!record) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
+        <div className="absolute inset-0 bg-black/30" style={{ opacity: 1, transition: 'opacity 150ms' }} />
+        <div
+          className="relative bg-sd-bg rounded-t-2xl w-full max-w-[430px] max-h-[70vh] overflow-y-auto p-5 pb-8"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="w-10 h-1 bg-sd-border rounded-full mx-auto mb-4" />
+          <h3 className="font-heading text-lg text-sd-text mb-4">{formatDate(date)}</h3>
+          <p className="font-body text-sm text-sd-text-secondary mb-4">이 날은 기록이 없어요</p>
+          {(onEdit || onEditNight) && (
+            <div className="space-y-2">
+              {onEdit && (
+                <button
+                  onClick={() => onEdit(date)}
+                  className="w-full bg-sd-primary text-white rounded-xl px-5 py-2.5 font-body font-medium text-sm"
+                >
+                  아침 피부 기록하기
+                </button>
+              )}
+              {onEditNight && (
+                <button
+                  onClick={() => onEditNight(date)}
+                  className="w-full border border-sd-primary text-sd-primary rounded-xl px-5 py-2.5 font-body font-medium text-sm"
+                >
+                  밤 루틴 기록하기
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
@@ -37,8 +72,27 @@ export function DayDetail({ date, records, onClose, onEdit }: DayDetailProps) {
 
         <h3 className="font-heading text-lg text-sd-text mb-4">{formatDate(date)}</h3>
 
+        {prevRecord?.nightLog && (
+          <div className="mb-4">
+            <p className="font-body text-sm text-sd-text-secondary mb-2">전날 밤 루틴</p>
+            <p className="font-body text-sm text-sd-text mb-1">
+              루틴: {prevRecord.nightLog.products.join(', ')}
+            </p>
+            {prevRecord.nightLog.variables.length > 0 && (
+              <p className="font-body text-sm text-sd-text">
+                생활 변수: {prevRecord.nightLog.variables.map(v => VARIABLE_LABELS[v as Variable]).join(', ')}
+              </p>
+            )}
+          </div>
+        )}
+
+        {prevRecord?.nightLog && record.morningLog && (
+          <p className="font-body text-[0.75rem] text-sd-text-secondary text-center my-2">그 결과</p>
+        )}
+
         {record.morningLog && (
           <div className="mb-4">
+            {prevRecord?.nightLog && <div className="border-t border-dashed border-sd-border mb-4" />}
             <p className="font-body text-sm text-sd-text-secondary mb-2">아침 피부</p>
             <div className="flex items-center gap-2 mb-2">
               <span
@@ -60,23 +114,6 @@ export function DayDetail({ date, records, onClose, onEdit }: DayDetailProps) {
               </p>
             )}
           </div>
-        )}
-
-        {prevRecord?.nightLog && (
-          <>
-            <div className="border-t border-dashed border-sd-border my-4" />
-            <div>
-              <p className="font-body text-sm text-sd-text-secondary mb-2">전날 밤 기록</p>
-              <p className="font-body text-sm text-sd-text mb-1">
-                루틴: {prevRecord.nightLog.products.join(', ')}
-              </p>
-              {prevRecord.nightLog.variables.length > 0 && (
-                <p className="font-body text-sm text-sd-text">
-                  생활 변수: {prevRecord.nightLog.variables.map(v => VARIABLE_LABELS[v as Variable]).join(', ')}
-                </p>
-              )}
-            </div>
-          </>
         )}
 
         {record.nightLog && record.nightLog.variables.length > 0 && (

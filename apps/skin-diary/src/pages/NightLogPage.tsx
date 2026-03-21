@@ -24,6 +24,7 @@ export function NightLogPage({ products, records, onSave, onClose, onAddProduct,
   const [selectedVariables, setSelectedVariables] = useState<Variable[]>(
     existingLog?.variables || []
   );
+  const [memo, setMemo] = useState(existingLog?.memo || '');
 
   const prevDate = getPrevDate(targetDate);
   const prevLog = records[prevDate]?.nightLog;
@@ -39,6 +40,7 @@ export function NightLogPage({ products, records, onSave, onClose, onAddProduct,
     onSave(targetDate, {
       products: selectedProducts,
       variables: selectedVariables,
+      memo: memo.trim() || undefined,
       loggedAt: new Date().toISOString(),
     });
     onClose();
@@ -98,6 +100,21 @@ export function NightLogPage({ products, records, onSave, onClose, onAddProduct,
             <VariableChips
               selected={selectedVariables}
               onChange={setSelectedVariables}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-dashed border-sd-border" />
+
+          {/* Memo section */}
+          <div>
+            <h2 className="font-heading text-lg text-sd-text mb-4">메모</h2>
+            <textarea
+              value={memo}
+              onChange={e => setMemo(e.target.value)}
+              placeholder="오늘 밤 루틴에 대해 메모할 게 있다면 적어봐"
+              className="w-full border border-sd-border rounded-xl px-4 py-3 font-body text-sm text-sd-text bg-white resize-none focus:outline-none focus:border-sd-primary"
+              rows={3}
             />
           </div>
         </div>

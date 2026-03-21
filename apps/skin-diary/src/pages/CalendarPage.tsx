@@ -7,9 +7,10 @@ import { DayDetail } from '../components/DayDetail';
 interface CalendarPageProps {
   records: Record<string, SkinRecord>;
   onEditDate?: (date: string) => void;
+  onEditNightDate?: (date: string) => void;
 }
 
-export function CalendarPage({ records, onEditDate }: CalendarPageProps) {
+export function CalendarPage({ records, onEditDate, onEditNightDate }: CalendarPageProps) {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -37,6 +38,8 @@ export function CalendarPage({ records, onEditDate }: CalendarPageProps) {
     ? (morningScores.reduce((a, b) => a + b, 0) / morningScores.length).toFixed(1)
     : null;
   const recordedDays = monthRecords.filter(r => r.morningLog || r.nightLog).length;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const recordPercent = daysInMonth > 0 ? Math.round((recordedDays / daysInMonth) * 100) : 0;
 
   return (
     <div className="pb-20">
@@ -70,7 +73,7 @@ export function CalendarPage({ records, onEditDate }: CalendarPageProps) {
         )}
         {recordedDays > 0 && (
           <p className="font-body text-sm text-sd-text-secondary">
-            기록률: {recordedDays}일
+            기록률: <span className="font-number text-sd-text font-medium">{recordedDays}/{daysInMonth}일 ({recordPercent}%)</span>
           </p>
         )}
       </div>
@@ -84,6 +87,10 @@ export function CalendarPage({ records, onEditDate }: CalendarPageProps) {
           onEdit={(date: string) => {
             setSelectedDate(null);
             if (onEditDate) onEditDate(date);
+          }}
+          onEditNight={(date: string) => {
+            setSelectedDate(null);
+            if (onEditNightDate) onEditNightDate(date);
           }}
         />
       )}

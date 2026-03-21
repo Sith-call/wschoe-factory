@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import type { ProductCategory } from './types';
+import { getToday } from './utils/date';
 import { useRecords } from './hooks/useRecords';
 import { useProducts } from './hooks/useProducts';
 import { isOnboarded, setOnboarded, getProfile, saveProfile, isDemoMode as checkDemoMode, setDemoMode, clearAllData } from './utils/storage';
@@ -33,6 +34,16 @@ export default function App() {
     setTimeout(() => setToastMessage(null), 2000);
   }, []);
   const { products, activeProducts, archivedProducts, addProduct, removeProduct, archiveProduct, unarchiveProduct, loadProducts } = useProducts();
+
+  // Auto-load demo data on app start if demo mode is ON but records are empty
+  useEffect(() => {
+    if (demoMode && Object.keys(records).length === 0) {
+      const demo = loadDemoData();
+      loadRecords(demo.records);
+      loadProducts(demo.products);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { productInsights, variableInsights } = useInsights(records, activeProducts);
 
   // Best product and worst variable for home insight summary
@@ -132,6 +143,9 @@ export default function App() {
             onOpenSettings={() => setOverlay('settings')}
             bestProduct={bestProduct}
             worstVariable={worstVariable}
+            onNavigateToInsight={() => setActiveTab('insight')}
+            onEditMorning={() => { setEditDate(getToday()); setOverlay('morningLog'); }}
+            onEditNight={() => { setEditDate(getToday()); setOverlay('nightLog'); }}
           />
         )}
         {activeTab === 'calendar' && (
@@ -147,6 +161,10 @@ export default function App() {
               } else {
                 setOverlay('morningLog');
               }
+            }}
+            onEditNightDate={(date: string) => {
+              setEditDate(date);
+              setOverlay('nightLog');
             }}
           />
         )}

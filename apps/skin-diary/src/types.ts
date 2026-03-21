@@ -21,7 +21,9 @@ export type SkinKeyword =
   | 'bright'
   | 'red'
   | 'tight'
-  | 'smooth';
+  | 'smooth'
+  | 'pore'
+  | 'sebum';
 
 export type ProductCategory =
   | 'cleansing'
@@ -45,6 +47,7 @@ export interface Product {
 export interface NightLog {
   products: string[];
   variables: Variable[];
+  memo?: string;
   loggedAt: string;
 }
 
@@ -107,6 +110,8 @@ export const KEYWORD_LABELS: Record<SkinKeyword, string> = {
   red: '붉음',
   tight: '당김',
   smooth: '매끈',
+  pore: '모공',
+  sebum: '피지',
 };
 
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
@@ -137,6 +142,7 @@ export const ALL_VARIABLES: Variable[] = [
 export const ALL_KEYWORDS: SkinKeyword[] = [
   'moist', 'dry', 'trouble', 'pimple', 'flaky',
   'greasy', 'dull', 'bright', 'red', 'tight', 'smooth',
+  'pore', 'sebum',
 ];
 
 export const CATEGORY_ORDER: ProductCategory[] = [
