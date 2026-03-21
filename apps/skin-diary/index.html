@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>피부 일지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Crimson+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'sd-bg': '#fdf8f4',
+              'sd-surface': '#ffffff',
+              'sd-text': '#3d2c2c',
+              'sd-text-secondary': '#8b7e7e',
+              'sd-text-tertiary': '#b5aaaa',
+              'sd-primary': '#c2847a',
+              'sd-primary-light': '#f5ebe8',
+              'sd-primary-dark': '#9b6259',
+              'sd-accent': '#7ea5c2',
+              'sd-success': '#7ab87a',
+              'sd-warning': '#c9a84c',
+              'sd-danger': '#c27a7a',
+              'sd-border': '#ece4df',
+              'sd-score-1': '#e8a0a0',
+              'sd-score-2': '#e8c4a0',
+              'sd-score-3': '#e8dca0',
+              'sd-score-4': '#a0d4a0',
+              'sd-score-5': '#7ac27a',
+            },
+            fontFamily: {
+              'heading': ['"Gowun Batang"', 'serif'],
+              'body': ['"SUIT Variable"', 'sans-serif'],
+              'number': ['"Crimson Pro"', 'serif'],
+            },
+          },
+        },
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
