@@ -8,6 +8,8 @@ import { computePPF } from '../models/ppf';
 import { computeComparativeAdvantage } from '../models/comparativeAdvantage';
 import { computeMultiplier } from '../models/multiplier';
 import { computeISLM } from '../models/islm';
+import { computeAdAs } from '../models/adAs';
+import { computeCrowdingOut } from '../models/crowdingOut';
 
 const modelFunctions: Record<string, (vars: Record<string, number>) => ModelOutput> = {
   'supply-demand': computeSupplyDemand,
@@ -18,6 +20,8 @@ const modelFunctions: Record<string, (vars: Record<string, number>) => ModelOutp
   'comparative-advantage': computeComparativeAdvantage,
   'multiplier': computeMultiplier,
   'is-lm': computeISLM,
+  'ad-as': computeAdAs,
+  'crowding-out': computeCrowdingOut,
 };
 
 export function useModel(modelId: string, variables: Variable[]) {

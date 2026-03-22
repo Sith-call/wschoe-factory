@@ -32,13 +32,13 @@ export const conceptHypotheses: Record<string, HypothesisQuestion[]> = {
   'supply-demand': [
     {
       id: 'sd-hyp-1',
-      scenario: '한국은행이 기준금리를 0.5%p 인상했습니다.',
-      question: '어떤 변화가 생길까요?',
-      options: ['물가 하락', '소비 증가', '수요 증가'],
+      scenario: '소비자들의 소득이 크게 증가했습니다.',
+      question: '시장에 어떤 변화가 생길까요?',
+      options: ['수요곡선 우측 이동 → 균형가격 상승', '공급곡선 우측 이동 → 균형가격 하락', '변화 없음'],
       correctIndex: 0,
-      correctExplanation: '금리 인상 → 대출 비용 증가 → 소비 위축 → 수요 감소 → 물가 하락',
-      sideEffect: '하지만 예상 못한 부작용도 있어요: 경기 위축 가능성이 높아집니다.',
-      presetValues: { income: 3, cost: 4, tax: 5 },
+      correctExplanation: '소득 증가 → 정상재의 수요 증가 → 수요곡선 우측 이동 → 균형가격 상승, 균형거래량 증가',
+      sideEffect: '단, 열등재(라면, 중고품 등)는 소득 증가 시 오히려 수요가 감소합니다.',
+      presetValues: { income: 8, cost: 5, tax: 5 },
     },
     {
       id: 'sd-hyp-2',
@@ -145,17 +145,51 @@ export const conceptHypotheses: Record<string, HypothesisQuestion[]> = {
       presetValues: { govSpending: 80, moneySupply: 50 },
     },
   ],
+  'ad-as': [
+    {
+      id: 'adas-hyp-1',
+      scenario: '정부가 대규모 재정지출을 합니다.',
+      question: '단기적으로 물가와 GDP는 어떻게 변할까요?',
+      options: ['물가↑ + GDP↑', '물가↓ + GDP↑', '물가↑ + GDP↓'],
+      correctIndex: 0,
+      correctExplanation: '재정지출 증가 → AD곡선 우측 이동 → 단기적으로 물가 상승 + 실질GDP 증가. 장기적으로는 SRAS가 좌이동하여 물가만 상승하고 GDP는 잠재 수준으로 회귀합니다.',
+      sideEffect: '장기적으로 물가만 오르고 GDP는 잠재 수준(LRAS)으로 돌아갑니다. 이것이 재정정책의 장기적 한계입니다.',
+      presetValues: { govSpending: 80, moneySupply: 50, oilShock: 0 },
+    },
+    {
+      id: 'adas-hyp-2',
+      scenario: '유가가 3배로 급등했습니다.',
+      question: '경제에 어떤 일이 벌어질까요?',
+      options: ['물가↑ + GDP↑', '물가↓ + GDP↓', '물가↑ + GDP↓ (스태그플레이션)'],
+      correctIndex: 2,
+      correctExplanation: '유가 급등 → 생산비용 증가 → SRAS곡선 좌측 이동 → 물가 상승 + GDP 감소. 이것이 스태그플레이션(stagflation)입니다.',
+      sideEffect: '1970년대 오일쇼크 때 실제로 발생했으며, 물가도 오르고 경기도 침체되어 정책 대응이 매우 어렵습니다.',
+      presetValues: { govSpending: 50, moneySupply: 50, oilShock: 8 },
+    },
+  ],
+  'crowding-out': [
+    {
+      id: 'co-hyp-1',
+      scenario: '정부가 50조원의 재정지출을 단행합니다. MPC는 0.8입니다.',
+      question: '단순 승수효과(250조) 대비 실제 GDP 증가는?',
+      options: ['250조원 (승수효과 그대로)', '250조원보다 적음 (구축효과)', '250조원보다 많음'],
+      correctIndex: 1,
+      correctExplanation: '정부 차입 증가 → 이자율 상승 → 민간 투자 감소(구축효과) → 순 GDP 증가분은 단순 승수효과보다 작습니다.',
+      sideEffect: '구축효과의 크기는 경제 상황에 따라 다릅니다. 불황기(유휴 자원 多)에는 구축효과가 작고, 호황기(자원 부족)에는 구축효과가 큽니다.',
+      presetValues: { deltaG: 50, mpc: 80 },
+    },
+  ],
 };
 
 export const conceptScenarios: Record<string, ScenarioPreset[]> = {
   'supply-demand': [
     {
-      id: 'sd-rate-hike',
-      title: '기준금리 0.5%p 인상',
-      description: '한국은행이 기준금리를 올리면?',
-      icon: 'account_balance',
-      values: { income: 3, cost: 4, tax: 5 },
-      explanation: '금리 인상 → 대출 비용 증가 → 소비 감소(소득 효과 축소) + 생산 비용 소폭 증가 → 수요곡선 좌측 이동, 균형가격 하락. 이것이 금리 인상의 물가 안정 효과입니다.',
+      id: 'sd-income-boom',
+      title: '소비자 소득 급증 (경기 호황)',
+      description: '소비자 소득이 20% 증가하면?',
+      icon: 'trending_up',
+      values: { income: 8, cost: 3, tax: 5 },
+      explanation: '소득 증가 → 정상재의 수요 증가 → 수요곡선 우측 이동 → 균형가격 상승 + 균형수량 증가. 단, 열등재(라면, 중고품 등)는 소득 증가 시 오히려 수요가 감소합니다.',
     },
     {
       id: 'sd-oil-shock',
@@ -290,6 +324,42 @@ export const conceptScenarios: Record<string, ScenarioPreset[]> = {
       icon: 'currency_exchange',
       values: { govSpending: 50, moneySupply: 80 },
       explanation: '통화공급 증가 → LM곡선 우측 이동 → 이자율 하락 + 국민소득 증가. 이자율 하락은 투자를 촉진하여 경기를 부양합니다. 경기 침체 시 중앙은행이 금리를 내리는 이유입니다.',
+    },
+  ],
+  'ad-as': [
+    {
+      id: 'adas-fiscal',
+      title: '대규모 재정지출',
+      description: '정부가 재정을 크게 확장하면?',
+      icon: 'account_balance',
+      values: { govSpending: 80, moneySupply: 50, oilShock: 0 },
+      explanation: '정부지출 증가 → AD곡선 우측 이동 → 단기: 물가 상승 + GDP 증가. SRAS와 교차하는 새 균형에서 물가와 GDP 모두 상승합니다. 장기적으로는 임금 조정으로 SRAS가 좌이동하여 물가만 상승합니다.',
+    },
+    {
+      id: 'adas-oil-shock',
+      title: '유가 3배 급등 (스태그플레이션)',
+      description: '원유 가격이 3배로 오르면?',
+      icon: 'local_gas_station',
+      values: { govSpending: 50, moneySupply: 50, oilShock: 8 },
+      explanation: '유가 급등 → 생산비용 증가 → SRAS곡선 좌측 이동 → 물가 상승 + GDP 감소 = 스태그플레이션. 1973년, 1979년 오일쇼크 때 실제로 발생했으며, 물가 안정과 경기 부양을 동시에 달성할 수 없는 정책 딜레마가 발생합니다.',
+    },
+  ],
+  'crowding-out': [
+    {
+      id: 'co-large-fiscal',
+      title: '대규모 재정지출의 구축효과',
+      description: '정부가 50조원을 투입하면?',
+      icon: 'account_balance',
+      values: { deltaG: 50, mpc: 80 },
+      explanation: '정부지출 50조 → 승수 5 → 이론적 GDP 250조 증가. 그러나 정부 차입 → 이자율 상승 → 민간 투자 감소(구축효과) → 실제 GDP 증가는 250조보다 작습니다. 구축효과가 승수효과의 일부를 상쇄합니다.',
+    },
+    {
+      id: 'co-small-spending',
+      title: '소규모 재정지출',
+      description: '적은 규모의 재정지출은?',
+      icon: 'savings',
+      values: { deltaG: 10, mpc: 70 },
+      explanation: '소규모 정부지출 → 이자율 상승 폭이 작음 → 구축효과 미미 → 승수효과가 상대적으로 온전하게 작동합니다. 재정지출 규모가 클수록 구축효과도 커지는 비선형 관계입니다.',
     },
   ],
 };
@@ -504,6 +574,72 @@ export const conceptQuizzes: Record<string, QuizQuestion[]> = {
       explanation: '이자율이 0%에 가까우면 LM곡선이 수평이 되어 통화공급을 늘려도 이자율이 더 이상 떨어지지 않습니다. 이때는 재정정책만 효과가 있습니다. 2008년 금융위기 이후 미국, 일본, 유럽이 이 상황에 직면했습니다.',
     },
   ],
+  'ad-as': [
+    {
+      id: 'adas-q1',
+      question: 'AD곡선이 우하향하는 이유는?',
+      options: [
+        '물가 상승 → 실질 자산 감소 → 소비 감소',
+        '물가 상승 → 생산량 증가',
+        '물가 하락 → 수입 증가',
+        '물가와 GDP는 무관하다',
+      ],
+      correctIndex: 0,
+      explanation: '물가가 오르면 화폐의 실질 구매력이 떨어지고(부의 효과), 이자율이 상승하며(이자율 효과), 순수출이 감소(환율 효과)하여 총수요가 줄어듭니다.',
+    },
+    {
+      id: 'adas-q2',
+      question: 'SRAS곡선이 우상향하는 이유는?',
+      options: [
+        '물가 상승 → 기업 이윤 증가 → 생산 확대',
+        '물가 하락 → 생산 비용 감소',
+        '물가와 공급은 무관하다',
+        '임금이 즉시 조정되어서',
+      ],
+      correctIndex: 0,
+      explanation: '단기적으로 임금과 일부 비용은 경직적입니다. 물가가 오르면 매출(수입)은 늘지만 비용은 즉각 오르지 않아 이윤이 증가하고, 기업이 생산을 확대합니다.',
+    },
+    {
+      id: 'adas-q3',
+      question: 'LRAS(장기 총공급곡선)가 수직인 이유는?',
+      options: [
+        '장기에는 모든 가격과 임금이 조정되어 물가와 무관하게 잠재 GDP에서 생산',
+        '장기에는 수요가 공급을 결정해서',
+        '장기에는 물가가 변하지 않아서',
+        '정부 정책이 장기에는 효과가 있어서',
+      ],
+      correctIndex: 0,
+      explanation: '장기적으로 임금, 계약, 가격이 모두 조정되면 물가 수준에 관계없이 경제는 잠재 GDP(자연 산출량) 수준에서 생산합니다. 이것이 LRAS가 수직인 이유이며, 장기적으로 물가만 변하고 실질 GDP는 잠재 수준으로 회귀합니다.',
+    },
+  ],
+  'crowding-out': [
+    {
+      id: 'co-q1',
+      question: '구축효과(Crowding-out)란 무엇인가요?',
+      options: [
+        '정부 지출이 민간 소비를 늘리는 효과',
+        '정부 차입 증가 → 이자율 상승 → 민간 투자 감소',
+        '세금 감면으로 소비가 늘어나는 효과',
+        '수출 증가로 수입이 줄어드는 효과',
+      ],
+      correctIndex: 1,
+      explanation: '정부가 재정지출을 위해 차입을 늘리면 자금 시장에서 자금 수요가 증가하여 이자율이 상승하고, 높아진 이자율로 인해 민간 기업의 투자가 줄어듭니다.',
+    },
+    {
+      id: 'co-q2',
+      question: '구축효과가 크면 재정정책의 승수효과는?',
+      options: ['더 커진다', '더 작아진다', '변하지 않는다', '음수가 된다'],
+      correctIndex: 1,
+      explanation: '구축효과가 크면 정부지출 증가분의 상당 부분이 민간 투자 감소로 상쇄되어, 실제 GDP 증가분(순 승수효과)이 이론적 승수보다 작아집니다.',
+    },
+    {
+      id: 'co-q3',
+      question: '구축효과가 가장 작은 경제 상황은?',
+      options: ['호황기 (완전고용)', '불황기 (높은 실업률)', '인플레이션이 높을 때', '금리가 높을 때'],
+      correctIndex: 1,
+      explanation: '불황기에는 유휴 자원과 유휴 자금이 많아 정부 차입이 이자율을 크게 올리지 않습니다. 따라서 구축효과가 작고 재정정책이 효과적입니다. 이것이 케인스가 불황기 재정지출을 강조한 이유입니다.',
+    },
+  ],
 };
 
 export const concepts: Concept[] = [
@@ -685,7 +821,7 @@ export const concepts: Concept[] = [
     category: '거시경제',
     icon: 'bar_chart',
     description: '국가 경제의 총체적인 성적표, 국내총생산의 이해. 소비, 투자, 정부지출, 순수출이 어떻게 GDP를 구성하는지 살펴봅니다.',
-    coreExplanation: 'GDP(국내총생산)는 한 나라 안에서 일정 기간 동안 생산된 모든 최종 재화와 서비스의 시장 가치입니다. GDP = C(소비) + I(투자) + G(정부지출) + NX(순수출) 공식으로 계산합니다. 한국의 경우 소비가 약 50%, 투자 30%, 정부지출 17%, 순수출 3% 비중입니다. GDP는 경제 규모와 성장을 측정하는 가장 중요한 지표이지만, 소득 분배, 환경 파괴, 삶의 질 등은 반영하지 못하는 한계가 있습니다.',
+    coreExplanation: 'GDP(국내총생산)는 한 나라 안에서 일정 기간 동안 생산된 모든 최종 재화와 서비스의 시장 가치입니다. GDP = C(소비) + I(투자) + G(정부지출) + NX(순수출) 공식으로 계산합니다. 한국의 경우 소비가 약 50%, 투자 30%, 정부지출 17%, 순수출 3% 비중입니다. GDP는 경제 규모와 성장을 측정하는 가장 중요한 지표이지만, 소득 분배, 환경 파괴, 삶의 질 등은 반영하지 못하는 한계가 있습니다. 참고: 이 모델의 수치는 실질 GDP 기준입니다. 명목 GDP는 물가 변동을 포함하지만, 실제 경제성장을 측정하려면 물가 변동분을 제거한 실질 GDP를 봐야 합니다.',
     keyTerms: [
       { term: 'GDP', definition: '국내총생산. 일정 기간 한 나라에서 생산된 최종 재화의 총 가치' },
       { term: '소비 (C)', definition: '가계의 재화와 서비스 구입 지출' },
@@ -759,7 +895,7 @@ export const concepts: Concept[] = [
     category: '거시경제',
     icon: 'trending_up',
     description: '물가 상승의 원인과 경제에 미치는 파급 효과. 통화량과 유통속도가 물가에 어떤 영향을 미치는지 실험해봅니다.',
-    coreExplanation: '피셔 방정식(MV=PY)에 따르면, 통화량(M)과 유통속도(V)의 곱은 물가(P)와 실질GDP(Y)의 곱과 같습니다. 통화량이 늘면 물가가 오르는 인플레이션이 발생합니다. 인플레이션은 수요견인(총수요 증가)과 비용인상(생산비용 증가) 두 가지 원인으로 발생합니다. 적정 인플레이션(2%)은 경제에 건전하지만, 과도한 인플레이션은 화폐가치 하락과 불확실성을 초래합니다. 중앙은행은 기준금리를 통해 통화량을 조절하여 물가를 안정시킵니다.',
+    coreExplanation: '피셔 방정식(MV=PY)에 따르면, 통화량(M)과 유통속도(V)의 곱은 물가(P)와 실질GDP(Y)의 곱과 같습니다. 통화량이 늘면 물가가 오르는 인플레이션이 발생합니다. 인플레이션은 수요견인(총수요 증가)과 비용인상(생산비용 증가) 두 가지 원인으로 발생합니다. 적정 인플레이션(2%)은 경제에 건전하지만, 과도한 인플레이션은 화폐가치 하락과 불확실성을 초래합니다. 중앙은행은 기준금리를 통해 통화량을 조절하여 물가를 안정시킵니다. 주의: 이 모델은 장기적 관계를 보여줍니다. 단기적으로는 통화의 유통속도가 변동하고 물가가 경직적이어서, 통화량 증가가 즉각적인 물가 상승으로 이어지지 않을 수 있습니다.',
     keyTerms: [
       { term: '인플레이션', definition: '물가가 지속적으로 상승하는 현상' },
       { term: '통화량 (M)', definition: '경제에 풀린 돈의 총량' },
@@ -876,7 +1012,7 @@ export const concepts: Concept[] = [
     category: '거시경제',
     icon: 'stacked_bar_chart',
     description: '정부가 1원을 쓰면 GDP는 1원 이상 증가한다? 승수 효과의 원리를 연쇄 소비 과정으로 직접 확인합니다.',
-    coreExplanation: '승수 효과란 정부지출(또는 투자) 증가분이 연쇄적인 소비를 통해 GDP를 그 이상으로 증가시키는 현상입니다. 승수 = 1/(1-MPC)로, MPC(한계소비성향)가 0.8이면 승수는 5입니다. 정부가 10조원을 지출하면 → 소득 수령자가 8조원 소비(MPC=0.8) → 그 수령자가 6.4조원 소비 → ... 이런 연쇄 과정으로 GDP가 50조원 증가합니다. 케인스는 이 원리로 불황기 정부의 적극적 재정지출을 주장했습니다.',
+    coreExplanation: '승수 효과란 정부지출(또는 투자) 증가분이 연쇄적인 소비를 통해 GDP를 그 이상으로 증가시키는 현상입니다. 승수 = 1/(1-MPC)로, MPC(한계소비성향)가 0.8이면 승수는 5입니다. 정부가 10조원을 지출하면 → 소득 수령자가 8조원 소비(MPC=0.8) → 그 수령자가 6.4조원 소비 → ... 이런 연쇄 과정으로 GDP가 50조원 증가합니다. 케인스는 이 원리로 불황기 정부의 적극적 재정지출을 주장했습니다. 한계: 이 단순 승수(1/(1-MPC))는 구축효과를 무시합니다. 실제로는 정부 지출 증가 → 이자율 상승 → 민간 투자 감소(구축효과)가 발생하여 실제 승수는 이보다 작을 수 있습니다.',
     keyTerms: [
       { term: '승수', definition: '초기 지출 증가가 GDP를 몇 배 증가시키는지를 나타내는 값' },
       { term: 'MPC', definition: '한계소비성향. 추가 소득 중 소비에 사용되는 비율' },
@@ -977,6 +1113,123 @@ export const concepts: Concept[] = [
       ],
     },
   },
+  {
+    id: 'ad-as',
+    title: '총수요-총공급 (AD-AS)',
+    titleEn: 'Aggregate Demand - Aggregate Supply',
+    category: '거시경제',
+    icon: 'auto_graph',
+    description: '거시경제의 핵심 모델. 정부정책과 외부 충격이 물가와 GDP를 어떻게 동시에 결정하는지 실험합니다.',
+    coreExplanation: 'AD-AS 모델은 거시경제에서 물가 수준과 실질 GDP가 어떻게 결정되는지를 보여줍니다. 총수요(AD)곡선은 우하향합니다: 물가가 오르면 실질 구매력이 줄고 이자율이 올라 소비와 투자가 감소합니다. 단기 총공급(SRAS)곡선은 우상향합니다: 물가가 오르면 단기적으로 기업 이윤이 늘어 생산을 확대합니다. 장기 총공급(LRAS)은 잠재 GDP에서 수직선입니다: 장기적으로 물가와 무관하게 경제는 자연 산출량 수준에서 생산합니다. 정부지출이나 통화량 증가는 AD를 우측 이동시키고, 유가 등 원자재 가격 변화는 SRAS를 이동시킵니다. AD와 SRAS의 교차점에서 균형 물가와 실질GDP가 결정됩니다.',
+    keyTerms: [
+      { term: '총수요 (AD)', definition: '경제 전체의 재화와 서비스에 대한 총 수요. 물가↑ → AD↓' },
+      { term: '단기 총공급 (SRAS)', definition: '단기적으로 기업들이 생산하려는 총량. 물가↑ → SRAS↑' },
+      { term: '장기 총공급 (LRAS)', definition: '잠재 GDP에서의 수직선. 장기 균형 산출량' },
+      { term: '스태그플레이션', definition: '물가 상승과 경기 침체가 동시에 발생하는 현상 (SRAS 좌이동)' },
+      { term: '잠재 GDP', definition: '모든 자원이 정상적으로 활용될 때의 GDP 수준' },
+    ],
+    realWorldExamples: [
+      {
+        icon: 'local_gas_station',
+        title: '1970년대 오일쇼크',
+        description: '유가 급등 → SRAS 좌이동 → 스태그플레이션 발생',
+      },
+      {
+        icon: 'account_balance',
+        title: '코로나 재정부양',
+        description: '대규모 재정지출 → AD 우이동 → 물가 상승 + 경기 회복',
+      },
+    ],
+    relatedConceptIds: ['supply-demand', 'inflation', 'gdp', 'is-lm'],
+    modelConfig: {
+      id: 'ad-as',
+      variables: [
+        {
+          id: 'govSpending',
+          name: '정부지출 (G)',
+          unit: '조원',
+          min: 10,
+          max: 100,
+          defaultValue: 50,
+          step: 5,
+          description: '정부지출을 늘리면 AD곡선이 우측으로 이동합니다.',
+        },
+        {
+          id: 'moneySupply',
+          name: '통화량 (M)',
+          unit: '조원',
+          min: 10,
+          max: 100,
+          defaultValue: 50,
+          step: 5,
+          description: '통화량을 늘리면 AD곡선이 우측으로 이동합니다.',
+        },
+        {
+          id: 'oilShock',
+          name: '원자재 가격 충격',
+          unit: 'Lv.',
+          min: 0,
+          max: 10,
+          defaultValue: 0,
+          step: 1,
+          description: '원자재 가격이 오르면 SRAS곡선이 좌측으로 이동합니다.',
+        },
+      ],
+    },
+  },
+  {
+    id: 'crowding-out',
+    title: '구축효과',
+    titleEn: 'Crowding-out Effect',
+    category: '거시경제',
+    icon: 'compress',
+    description: '정부가 돈을 쓰면 민간 투자가 줄어든다? 승수효과의 현실적 한계를 직접 확인합니다.',
+    coreExplanation: '구축효과(Crowding-out Effect)란 정부가 재정지출을 위해 차입을 늘리면, 자금 시장에서 자금 수요가 증가하여 이자율이 상승하고, 높아진 이자율로 인해 민간 기업의 투자가 감소하는 현상입니다. 이로 인해 정부지출의 GDP 증가 효과(승수효과)가 일부 상쇄됩니다. 순 GDP 증가분 = 승수효과 - 구축효과입니다. 구축효과의 크기는 경제 상황에 따라 다릅니다: 불황기에는 유휴 자금이 많아 구축효과가 작고, 호황기에는 자원이 부족하여 구축효과가 큽니다.',
+    keyTerms: [
+      { term: '구축효과', definition: '정부 차입 → 이자율↑ → 민간 투자↓ 현상' },
+      { term: '순 승수', definition: '구축효과를 감안한 실제 GDP 증가 배율' },
+      { term: '자금 시장', definition: '자금의 수요(차입)와 공급(저축)이 만나 이자율이 결정되는 시장' },
+      { term: '완전 구축', definition: '정부지출 증가분만큼 민간 투자가 감소하여 GDP 변화가 0인 극단적 경우' },
+    ],
+    realWorldExamples: [
+      {
+        icon: 'trending_up',
+        title: '재정적자와 금리 상승',
+        description: '정부 차입 증가 → 채권 수익률 상승 → 기업 대출 금리 동반 상승',
+      },
+      {
+        icon: 'construction',
+        title: '불황기 재정지출의 효과',
+        description: '유휴 자원이 많으면 구축효과가 작아 재정정책이 효과적',
+      },
+    ],
+    relatedConceptIds: ['multiplier', 'gdp', 'is-lm'],
+    modelConfig: {
+      id: 'crowding-out',
+      variables: [
+        {
+          id: 'deltaG',
+          name: '정부지출 증가분',
+          unit: '조원',
+          min: 1,
+          max: 100,
+          defaultValue: 10,
+          step: 1,
+          description: '정부가 추가로 지출하는 금액입니다. 클수록 이자율 상승과 구축효과가 커집니다.',
+        },
+        {
+          id: 'mpc',
+          name: '한계소비성향 (MPC)',
+          unit: '%',
+          min: 10,
+          max: 95,
+          defaultValue: 70,
+          step: 5,
+          description: '소득이 1원 증가할 때 소비에 사용하는 비율입니다. 높을수록 승수가 커집니다.',
+        },
+      ],
+    },
+  },
 ];
 
 export function getConceptById(id: string): Concept | undefined {
@@ -1003,6 +1256,8 @@ export const conceptDifficulty: Record<string, DifficultyLevel> = {
   'multiplier': '중급',
   'comparative-advantage': '중급',
   'is-lm': '심화',
+  'ad-as': '심화',
+  'crowding-out': '심화',
 };
 
 export const conceptOneLiner: Record<string, string> = {
@@ -1014,6 +1269,8 @@ export const conceptOneLiner: Record<string, string> = {
   'comparative-advantage': '각자 잘하는 걸 만들고 교환하면 모두가 이득이다',
   'multiplier': '정부가 1원을 쓰면, 돈이 돌고 돌아 경제 전체에 몇 배의 효과가 난다',
   'is-lm': '금리와 GDP가 재정정책, 통화정책에 따라 어떻게 움직이는지 보여주는 모델',
+  'ad-as': '물가와 GDP가 동시에 결정되는 거시경제의 핵심 모델 — 정책과 외부 충격의 효과를 분석',
+  'crowding-out': '정부가 돈을 빌리면 이자율이 올라 민간 투자가 줄어드는 현상 — 승수효과의 현실적 한계',
 };
 
 export const conceptNewsConnections: Record<string, NewsConnection[]> = {
@@ -1103,6 +1360,28 @@ export const conceptNewsConnections: Record<string, NewsConnection[]> = {
       source: '서울경제',
       date: '2025.11',
       explanation: '금리 인상 = LM곡선 좌측 이동 → 이자율 상승 + 국민소득 감소. 물가 잡으려고 금리 올렸는데 경기도 같이 식은 것.',
+    },
+  ],
+  'ad-as': [
+    {
+      headline: '"유가 급등에 물가-경기 동반 악화 우려" — 스태그플레이션 경고',
+      source: '한국경제',
+      date: '2025.10',
+      explanation: '유가 상승 → SRAS 좌이동 → 물가↑+GDP↓. AD-AS 모델의 스태그플레이션 시나리오가 현실에서 나타난 것.',
+    },
+    {
+      headline: '"정부 추경 편성에 물가 상승 압력" — 재정확장의 양면',
+      source: '매일경제',
+      date: '2025.09',
+      explanation: '재정지출 확대 → AD 우이동 → 단기 GDP↑ 하지만 물가도↑. AD-AS 모델이 보여주는 정책의 트레이드오프.',
+    },
+  ],
+  'crowding-out': [
+    {
+      headline: '"국채 발행 급증에 시장금리 상승" — 민간 투자 위축 우려',
+      source: '한국경제',
+      date: '2025.11',
+      explanation: '정부 차입(국채) 증가 → 채권 시장 자금 수요↑ → 시장 금리↑ → 기업 투자 비용 증가. 구축효과의 전형적 메커니즘.',
     },
   ],
 };
