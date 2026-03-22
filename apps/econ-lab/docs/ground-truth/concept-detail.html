@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800&amp;family=Manrope:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "tertiary-container": "#2e200b",
+              "surface-container-low": "#f5f3f0",
+              "primary": "#040d1b",
+              "tertiary-fixed": "#f9debe",
+              "surface-container-highest": "#e4e2df",
+              "on-primary-fixed-variant": "#3e4758",
+              "on-secondary-fixed": "#281900",
+              "error": "#ba1a1a",
+              "background": "#fbf9f6",
+              "inverse-primary": "#bec7db",
+              "surface-bright": "#fbf9f6",
+              "on-primary-container": "#818a9d",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#eae8e5",
+              "on-error-container": "#93000a",
+              "error-container": "#ffdad6",
+              "surface": "#fbf9f6",
+              "on-tertiary": "#ffffff",
+              "tertiary": "#150a00",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#75777d",
+              "surface-container": "#efeeeb",
+              "secondary": "#7e5703",
+              "surface-tint": "#565f70",
+              "on-tertiary-fixed": "#261905",
+              "tertiary-fixed-dim": "#dcc3a3",
+              "on-tertiary-container": "#9c866a",
+              "on-surface": "#1b1c1a",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#dbdad7",
+              "secondary-fixed-dim": "#f3be67",
+              "primary-fixed": "#dae3f7",
+              "surface-variant": "#e4e2df",
+              "on-tertiary-fixed-variant": "#55442c",
+              "on-secondary-fixed-variant": "#604100",
+              "inverse-on-surface": "#f2f0ed",
+              "secondary-container": "#ffc971",
+              "primary-container": "#1a2332",
+              "secondary-fixed": "#ffdead",
+              "on-primary-fixed": "#131c2a",
+              "primary-fixed-dim": "#bec7db",
+              "outline-variant": "#c5c6cc",
+              "on-secondary-container": "#795200",
+              "on-background": "#1b1c1a",
+              "inverse-surface": "#30312f",
+              "on-surface-variant": "#45474c"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Manrope"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-low font-body text-on-surface selection:bg-secondary-container">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-[#fbf9f6] dark:bg-[#040d1b] transition-colors">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="active:scale-95 duration-200 hover:bg-[#f5f3f0]/50 dark:hover:bg-[#1a2332]/50 transition-colors p-1">
+<span class="material-symbols-outlined text-[#1a2332] dark:text-[#fbf9f6]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Epilogue'] font-extrabold text-2xl tracking-tight text-[#1a2332] dark:text-[#fbf9f6]">수요와 공급</h1>
+</div>
+<span class="font-['Manrope'] font-semibold text-[11px] px-3 py-1 border border-secondary text-secondary rounded-full">미시경제학</span>
+</div>
+</header>
+<main class="max-w-[430px] mx-auto pb-32 px-6 pt-4 space-y-10">
+<!-- Card 1: Core Concept -->
+<section class="bg-surface-container-lowest rounded-lg p-6 shadow-[0_20px_40px_rgba(27,28,26,0.03)] border border-outline-variant/10">
+<h2 class="font-headline font-bold text-lg text-primary mb-4 flex items-center gap-2">
+<span class="w-1.5 h-6 bg-secondary"></span>
+                핵심 개념
+            </h2>
+<p class="font-body text-on-surface-variant leading-relaxed text-base">
+                시장에서 가격은 <span class="font-bold text-primary">수요(사려는 양)</span>와 <span class="font-bold text-primary">공급(팔려는 양)</span>이 만나는 곳에서 결정됩니다.
+            </p>
+</section>
+<!-- Visual Section: Supply/Demand Curve -->
+<section class="space-y-4">
+<div class="bg-white rounded-lg p-8 border border-outline-variant/15 flex flex-col items-center justify-center relative aspect-square overflow-hidden shadow-sm">
+<!-- Grid Lines Background -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(#1a2332 1px, transparent 1px), linear-gradient(90deg, #1a2332 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative w-full h-full border-l-2 border-b-2 border-primary-container/20">
+<!-- Price Axis Label -->
+<span class="absolute -left-8 top-0 font-label text-xs font-bold text-on-surface-variant">가격(P)</span>
+<!-- Quantity Axis Label -->
+<span class="absolute -right-2 -bottom-6 font-label text-xs font-bold text-on-surface-variant">수량(Q)</span>
+<!-- Supply Curve (S) -->
+<svg class="absolute inset-0 w-full h-full overflow-visible">
+<line stroke="#040d1b" stroke-width="2.5" x1="10%" x2="90%" y1="90%" y2="10%"></line>
+<text class="font-label text-[10px] font-bold fill-primary" x="85%" y="5%">공급곡선(S)</text>
+</svg>
+<!-- Demand Curve (D) -->
+<svg class="absolute inset-0 w-full h-full overflow-visible">
+<line stroke="#040d1b" stroke-width="2.5" x1="10%" x2="90%" y1="10%" y2="90%"></line>
+<text class="font-label text-[10px] font-bold fill-primary" x="85%" y="95%">수요곡선(D)</text>
+</svg>
+<!-- Equilibrium Point (E) -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-3 h-3 bg-secondary rounded-full border-2 border-white ring-4 ring-secondary/10"></div>
+<span class="font-label text-[11px] font-bold text-secondary mt-1">균형점(E)</span>
+</div>
+<!-- Dashed Lines to Axes -->
+<div class="absolute top-1/2 left-0 right-1/2 h-[1px] border-t border-dashed border-outline-variant"></div>
+<div class="absolute top-1/2 left-1/2 bottom-0 w-[1px] border-l border-dashed border-outline-variant"></div>
+</div>
+</div>
+<p class="text-center font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60">Static Curator Diagram Model 1.0</p>
+</section>
+<!-- Section 2: Key Terms -->
+<section>
+<h2 class="font-headline font-bold text-lg text-primary mb-6">알아야 할 용어</h2>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 bg-surface-container-high rounded-full font-body text-sm font-semibold text-primary transition-colors hover:bg-secondary-container/20">균형가격</span>
+<span class="px-4 py-2 bg-surface-container-high rounded-full font-body text-sm font-semibold text-primary transition-colors hover:bg-secondary-container/20">초과수요</span>
+<span class="px-4 py-2 bg-surface-container-high rounded-full font-body text-sm font-semibold text-primary transition-colors hover:bg-secondary-container/20">초과공급</span>
+<span class="px-4 py-2 bg-surface-container-high rounded-full font-body text-sm font-semibold text-primary transition-colors hover:bg-secondary-container/20">수요곡선 이동</span>
+<span class="px-4 py-2 bg-surface-container-high rounded-full font-body text-sm font-semibold text-primary transition-colors hover:bg-secondary-container/20">공급곡선 이동</span>
+</div>
+</section>
+<!-- Section 3: Real Life Examples -->
+<section>
+<h2 class="font-headline font-bold text-lg text-primary mb-6">실생활 예시</h2>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-5 bg-surface-container-lowest rounded-lg border border-outline-variant/5">
+<div class="w-12 h-12 rounded bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary-container" data-icon="mask">masks</span>
+</div>
+<div>
+<h3 class="font-bold text-primary font-body">마스크 대란 (2020)</h3>
+<p class="text-sm text-on-surface-variant mt-1 leading-snug">공급이 줄고 수요가 급증 → 가격 폭등</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-5 bg-surface-container-lowest rounded-lg border border-outline-variant/5">
+<div class="w-12 h-12 rounded bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary-container" data-icon="local_gas_station">local_gas_station</span>
+</div>
+<div>
+<h3 class="font-bold text-primary font-body">유류세 인하</h3>
+<p class="text-sm text-on-surface-variant mt-1 leading-snug">세금 감소 → 공급곡선 우하향 이동 → 가격 하락</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA -->
+<button class="w-full bg-[#d4a24e] hover:bg-secondary text-white font-headline font-extrabold py-5 rounded-lg flex items-center justify-center gap-3 shadow-lg shadow-secondary/20 transition-all active:translate-y-0.5">
+            직접 실험해보기
+            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Section 4: Related Concepts -->
+<section>
+<h2 class="font-headline font-bold text-lg text-primary mb-4">연관 개념</h2>
+<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-4 -mx-2 px-2">
+<div class="flex-shrink-0 w-32 aspect-[3/4] bg-primary-container rounded-lg p-4 flex flex-col justify-end">
+<span class="font-label text-[10px] text-secondary-container font-bold mb-1 uppercase tracking-tighter">Related 01</span>
+<h4 class="font-body font-bold text-white text-sm">탄력성</h4>
+</div>
+<div class="flex-shrink-0 w-32 aspect-[3/4] bg-primary-container rounded-lg p-4 flex flex-col justify-end">
+<span class="font-label text-[10px] text-secondary-container font-bold mb-1 uppercase tracking-tighter">Related 02</span>
+<h4 class="font-body font-bold text-white text-sm">가격 상한제</h4>
+</div>
+<div class="flex-shrink-0 w-32 aspect-[3/4] bg-primary-container rounded-lg p-4 flex flex-col justify-end">
+<span class="font-label text-[10px] text-secondary-container font-bold mb-1 uppercase tracking-tighter">Related 03</span>
+<h4 class="font-body font-bold text-white text-sm">소비자잉여</h4>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fbf9f6] dark:bg-[#040d1b] bg-opacity-95 backdrop-blur-md border-t-[0.5px] border-[#1a2332]/10 dark:border-[#fbf9f6]/10 shadow-[0_-4px_20px_rgba(26,35,50,0.05)]">
+<button class="flex flex-col items-center justify-center text-[#1a2332] dark:text-[#fbf9f6] opacity-60 hover:opacity-100 transition-opacity active:translate-y-0.5 duration-150">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Manrope'] font-semibold text-[11px] mt-1">홈</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#7e5703] dark:text-[#ffc971] bg-[#ffc971]/10 rounded-xl px-3 py-1 active:translate-y-0.5 duration-150">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-['Manrope'] font-semibold text-[11px] mt-1">용어</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#1a2332] dark:text-[#fbf9f6] opacity-60 hover:opacity-100 transition-opacity active:translate-y-0.5 duration-150">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+<span class="font-['Manrope'] font-semibold text-[11px] mt-1">실험실</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#1a2332] dark:text-[#fbf9f6] opacity-60 hover:opacity-100 transition-opacity active:translate-y-0.5 duration-150">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-['Manrope'] font-semibold text-[11px] mt-1">진도</span>
+</button>
+</nav>
+</body></html>

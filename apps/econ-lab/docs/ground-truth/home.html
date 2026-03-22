@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>경제 실험실 - 홈</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&amp;family=Manrope:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#565f70",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#dae3f7",
+              "on-tertiary-fixed": "#261905",
+              "primary-fixed-dim": "#bec7db",
+              "surface-container-highest": "#e4e2df",
+              "on-secondary-container": "#795200",
+              "secondary-fixed-dim": "#f3be67",
+              "secondary": "#7e5703",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#f9debe",
+              "background": "#fbf9f6",
+              "on-surface": "#1b1c1a",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#75777d",
+              "primary": "#040d1b",
+              "on-tertiary": "#ffffff",
+              "tertiary": "#150a00",
+              "inverse-surface": "#30312f",
+              "surface-dim": "#dbdad7",
+              "primary-container": "#1a2332",
+              "surface-container-high": "#eae8e5",
+              "outline-variant": "#c5c6cc",
+              "surface-container": "#efeeeb",
+              "on-background": "#1b1c1a",
+              "inverse-primary": "#bec7db",
+              "on-tertiary-container": "#9c866a",
+              "on-secondary-fixed-variant": "#604100",
+              "on-secondary-fixed": "#281900",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-variant": "#e4e2df",
+              "secondary-container": "#ffc971",
+              "on-primary-fixed-variant": "#3e4758",
+              "on-tertiary-fixed-variant": "#55442c",
+              "on-primary-container": "#818a9d",
+              "surface-container-low": "#f5f3f0",
+              "error": "#ba1a1a",
+              "on-primary": "#ffffff",
+              "on-surface-variant": "#45474c",
+              "inverse-on-surface": "#f2f0ed",
+              "tertiary-fixed-dim": "#dcc3a3",
+              "surface": "#fbf9f6",
+              "secondary-fixed": "#ffdead",
+              "surface-bright": "#fbf9f6",
+              "tertiary-container": "#2e200b",
+              "on-primary-fixed": "#131c2a"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Manrope"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #fbf9f6;
+        color: #1b1c1a;
+      }
+      .asymmetric-bleed {
+        margin-right: -1.5rem;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#fbf9f6] dark:bg-slate-900 border-b border-[#040d1b]/5">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#040d1b] dark:text-slate-100" data-icon="science">science</span>
+<h1 class="font-['Epilogue'] font-extrabold text-[#040d1b] dark:text-slate-100 text-xl tracking-tight">경제 실험실</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex flex-col items-end">
+<span class="font-['Space_Grotesk'] text-[10px] font-bold text-secondary uppercase tracking-widest">Progress</span>
+<span class="font-['Space_Grotesk'] text-xs font-medium text-primary">12/45 개념 학습 완료</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="person">person</span>
+</div>
+</div>
+</div>
+<div class="bg-[#f2f0ed] dark:bg-slate-800 h-px w-full"></div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-16">
+<!-- Hero Section: 오늘의 발견 -->
+<section class="relative">
+<div class="grid lg:grid-cols-12 gap-10 items-center">
+<div class="lg:col-span-7 space-y-8">
+<header class="space-y-2">
+<span class="font-['Space_Grotesk'] text-sm font-bold text-secondary tracking-[0.2em] uppercase">Today's Discovery</span>
+<h2 class="font-headline font-extrabold text-5xl md:text-6xl text-primary leading-[1.1] tracking-tight">수요와 공급</h2>
+</header>
+<p class="text-on-surface-variant text-lg leading-relaxed max-w-xl">
+                        가격을 움직여보세요 — 수요와 공급이 어떻게 반응하는지 직접 실험해볼 수 있어요. 시장의 보이지 않는 손이 어떻게 균형을 찾는지 관찰하세요.
+                    </p>
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 font-bold tracking-tight hover:opacity-90 active:scale-95 transition-all flex items-center gap-3 shadow-sm">
+<span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+                        바로 실험하기
+                    </button>
+</div>
+<div class="lg:col-span-5">
+<div class="relative bg-surface-container-low p-8 rounded-lg aspect-square border border-outline-variant/10 shadow-sm overflow-hidden group">
+<!-- Abstract Supply/Demand Curve UI -->
+<div class="absolute inset-0 p-12 flex flex-col justify-between opacity-40">
+<div class="h-px w-full bg-primary/10"></div>
+<div class="h-px w-full bg-primary/10"></div>
+<div class="h-px w-full bg-primary/10"></div>
+<div class="h-px w-full bg-primary/10"></div>
+</div>
+<svg class="relative z-10 w-full h-full drop-shadow-lg" viewbox="0 0 400 400">
+<!-- Demand Curve (Red) -->
+<path d="M 50 50 L 350 350" fill="none" stroke="#ba1a1a" stroke-linecap="round" stroke-width="4"></path>
+<!-- Supply Curve (Blue) -->
+<path d="M 50 350 L 350 50" fill="none" stroke="#1a2332" stroke-linecap="round" stroke-width="4"></path>
+<!-- Equilibrium Point -->
+<circle class="animate-pulse" cx="200" cy="200" fill="#7e5703" r="8"></circle>
+</svg>
+<div class="absolute bottom-6 right-6 font-label text-[10px] text-primary/40 tracking-widest uppercase">Exhibit ID: SD-041</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Learning Section -->
+<section class="space-y-10">
+<div class="flex items-end justify-between">
+<h3 class="font-headline font-bold text-3xl text-primary">최근 학습</h3>
+<a class="font-label text-sm text-secondary font-bold flex items-center gap-1 hover:underline" href="#">VIEW ARCHIVE <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+<div class="flex overflow-x-auto gap-6 pb-6 no-scrollbar -mx-6 px-6">
+<!-- Card 1 -->
+<div class="flex-none w-72 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] group hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="bar_chart">bar_chart</span>
+</div>
+<span class="font-label text-[10px] bg-secondary-container/30 text-secondary font-bold px-2 py-1 rounded">85% COMPLETE</span>
+</div>
+<h4 class="font-headline font-bold text-xl text-primary mb-2">GDP</h4>
+<p class="text-sm text-on-surface-variant font-medium">국가 경제의 총체적인 성적표, 국내총생산의 이해</p>
+</div>
+<!-- Card 2 -->
+<div class="flex-none w-72 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] group hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="show_chart">show_chart</span>
+</div>
+<span class="font-label text-[10px] bg-secondary-container/30 text-secondary font-bold px-2 py-1 rounded">40% COMPLETE</span>
+</div>
+<h4 class="font-headline font-bold text-xl text-primary mb-2">인플레이션</h4>
+<p class="text-sm text-on-surface-variant font-medium">물가 상승의 원인과 경제에 미치는 파급 효과</p>
+</div>
+<!-- Card 3 -->
+<div class="flex-none w-72 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] group hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="insights">insights</span>
+</div>
+<span class="font-label text-[10px] bg-secondary-container/30 text-secondary font-bold px-2 py-1 rounded">12% COMPLETE</span>
+</div>
+<h4 class="font-headline font-bold text-xl text-primary mb-2">탄력성</h4>
+<p class="text-sm text-on-surface-variant font-medium">가격 변화에 대한 수요와 공급의 민감도 측정</p>
+</div>
+</div>
+</section>
+<!-- Popular Experiments Section (Asymmetric Bento-lite) -->
+<section class="space-y-10">
+<h3 class="font-headline font-bold text-3xl text-primary">인기 실험</h3>
+<div class="grid md:grid-cols-2 gap-8">
+<!-- Experiment Card 1 -->
+<div class="bg-primary-container text-on-primary rounded-lg overflow-hidden group flex flex-col md:flex-row shadow-xl">
+<div class="p-8 flex flex-col justify-between flex-1">
+<div>
+<span class="font-label text-[10px] text-on-primary-container font-bold tracking-widest mb-4 block uppercase">Simulation Alpha</span>
+<h4 class="font-headline font-bold text-2xl text-white mb-4">수요곡선 이동 실험</h4>
+</div>
+<button class="flex items-center gap-2 text-secondary-fixed-dim font-bold text-sm hover:translate-x-1 transition-transform">
+                            실험 시작하기 <span class="material-symbols-outlined text-sm" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</button>
+</div>
+<div class="md:w-1/3 bg-white/5 p-6 flex items-center justify-center">
+<div class="relative w-full h-full flex flex-col justify-around">
+<div class="h-1 w-full bg-secondary-container/20 rounded-full"></div>
+<div class="h-1 w-3/4 bg-secondary-container/60 rounded-full translate-x-4"></div>
+<div class="h-1 w-full bg-secondary-container/40 rounded-full -translate-x-2"></div>
+</div>
+</div>
+</div>
+<!-- Experiment Card 2 -->
+<div class="bg-surface-container-high rounded-lg overflow-hidden flex flex-col md:flex-row shadow-sm">
+<div class="p-8 flex flex-col justify-between flex-1">
+<div>
+<span class="font-label text-[10px] text-primary/40 font-bold tracking-widest mb-4 block uppercase">Decomposition Tool</span>
+<h4 class="font-headline font-bold text-2xl text-primary mb-4">GDP 구성요소 분해</h4>
+</div>
+<button class="flex items-center gap-2 text-secondary font-bold text-sm hover:translate-x-1 transition-transform">
+                            데이터 탐색 <span class="material-symbols-outlined text-sm" data-icon="arrow_forward_ios">arrow_forward_ios</span>
+</button>
+</div>
+<div class="md:w-1/3 bg-primary/5 p-6 flex flex-col justify-center gap-2">
+<div class="h-4 bg-primary/10 rounded w-full"></div>
+<div class="h-4 bg-primary/20 rounded w-5/6"></div>
+<div class="h-4 bg-primary/30 rounded w-4/6"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-[#fbf9f6]/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-[#040d1b]/5 shadow-[0_-4px_20px_rgba(27,28,26,0.04)] rounded-t-xl overflow-hidden">
+<div class="flex justify-around items-center px-4 pb-6 pt-3">
+<!-- Tab: 홈 (Active) -->
+<a class="flex flex-col items-center justify-center text-[#7e5703] dark:text-[#ffc971] font-bold active:scale-90 duration-150 transition-opacity hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Manrope'] text-[10px] font-medium tracking-tight mt-1">홈</span>
+</a>
+<!-- Tab: 용어 -->
+<a class="flex flex-col items-center justify-center text-[#040d1b]/40 dark:text-slate-500 active:scale-90 duration-150 transition-opacity hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-['Manrope'] text-[10px] font-medium tracking-tight mt-1">용어</span>
+</a>
+<!-- Tab: 실험실 -->
+<a class="flex flex-col items-center justify-center text-[#040d1b]/40 dark:text-slate-500 active:scale-90 duration-150 transition-opacity hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+<span class="font-['Manrope'] text-[10px] font-medium tracking-tight mt-1">실험실</span>
+</a>
+<!-- Tab: 진도 -->
+<a class="flex flex-col items-center justify-center text-[#040d1b]/40 dark:text-slate-500 active:scale-90 duration-150 transition-opacity hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="font-['Manrope'] text-[10px] font-medium tracking-tight mt-1">진도</span>
+</a>
+</div>
+</nav>
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-[0.02] bg-[radial-gradient(#1b1c1a_0.5px,transparent_0.5px)] [background-size:24px_24px]"></div>
+</body></html>

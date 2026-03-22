@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>경제 실험실</title>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800;900&family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#565f70",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#dae3f7",
+              "on-tertiary-fixed": "#261905",
+              "primary-fixed-dim": "#bec7db",
+              "surface-container-highest": "#e4e2df",
+              "on-secondary-container": "#795200",
+              "secondary-fixed-dim": "#f3be67",
+              "secondary": "#7e5703",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed": "#f9debe",
+              "background": "#fbf9f6",
+              "on-surface": "#1b1c1a",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#75777d",
+              "primary": "#040d1b",
+              "on-tertiary": "#ffffff",
+              "tertiary": "#150a00",
+              "inverse-surface": "#30312f",
+              "surface-dim": "#dbdad7",
+              "primary-container": "#1a2332",
+              "surface-container-high": "#eae8e5",
+              "outline-variant": "#c5c6cc",
+              "surface-container": "#efeeeb",
+              "on-background": "#1b1c1a",
+              "inverse-primary": "#bec7db",
+              "on-tertiary-container": "#9c866a",
+              "on-secondary-fixed-variant": "#604100",
+              "on-secondary-fixed": "#281900",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "surface-variant": "#e4e2df",
+              "secondary-container": "#ffc971",
+              "on-primary-fixed-variant": "#3e4758",
+              "on-tertiary-fixed-variant": "#55442c",
+              "on-primary-container": "#818a9d",
+              "surface-container-low": "#f5f3f0",
+              "error": "#ba1a1a",
+              "on-primary": "#ffffff",
+              "on-surface-variant": "#45474c",
+              "inverse-on-surface": "#f2f0ed",
+              "tertiary-fixed-dim": "#dcc3a3",
+              "surface": "#fbf9f6",
+              "secondary-fixed": "#ffdead",
+              "surface-bright": "#fbf9f6",
+              "tertiary-container": "#2e200b",
+              "on-primary-fixed": "#131c2a"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Manrope"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #fbf9f6;
+        color: #1b1c1a;
+      }
+      .font-headline { font-family: 'Epilogue', sans-serif; }
+      .font-label { font-family: 'Space Grotesk', sans-serif; }
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      /* Custom Slider Styling */
+      input[type=range] {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+      }
+      input[type=range]:focus { outline: none; }
+      input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 4px;
+        cursor: pointer;
+        background: #e4e2df;
+        border-radius: 2px;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #7e5703;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-BxTx8lCg.js"></script>
+  </head>
+  <body class="font-body selection:bg-secondary-container selection:text-on-secondary-container">
+    <div id="root"></div>
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-[0.02] bg-[radial-gradient(#1b1c1a_0.5px,transparent_0.5px)] [background-size:24px_24px]"></div>
+  </body>
+</html>
