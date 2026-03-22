@@ -91,6 +91,13 @@ claude plugins add ./plugins/ait-team
 - 앱마다 고유한 색상/폰트/네비게이션/애니메이션 필수
 - 체크리스트 13항목으로 출시 전 검증
 
+## 세션 이어가기
+토큰 소모 후 새 세션에서 작업을 이어가는 방법:
+- **상태 저장**: `bash scripts/save-state.sh "작업 설명" "완료 항목" "남은 항목" "참고 파일" "추가 컨텍스트"`
+- **이어가기**: `./scripts/resume.sh --auto` (자동) 또는 `./scripts/resume.sh` (프롬프트 확인)
+- **상태 확인**: `./scripts/resume.sh --status`
+- 토큰이 부족해지면 Claude에게 "상태 저장해" 라고 말하면 save-state.sh로 현재 진행 상황을 저장함
+
 ## 프로덕트 루프 (필독)
 **앱을 만들 때 `PRODUCT_LOOP.md`의 v2 루프를 따를 것.**
 - 8단계 파이프라인: 시장 조사 → 기획 → 디자인 시스템 → 개발 → PM 검증 → QA → **Ralph 반복 루프** → 룰 업데이트

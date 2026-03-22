@@ -1,0 +1,25 @@
+{
+  "iteration": 6,
+  "phase": "expert-fixes",
+  "remaining_tasks": [
+    "fix-supply-demand-scenario",
+    "fix-gdp-nominal-real",
+    "fix-inflation-short-long",
+    "fix-multiplier-crowding-out",
+    "add-model-ad-as",
+    "add-model-gdp-gap",
+    "add-model-crowding-out",
+    "add-model-liquidity-trap",
+    "add-model-sunk-cost"
+  ],
+  "expert_score": 65,
+  "last_updated": "2026-03-23T15:30:00Z",
+  "completed_tasks": [
+    "initial-8-models",
+    "scenarios-16",
+    "quizzes-24",
+    "hypothesis-flow",
+    "visionary-feedback",
+    "expert-review-round1"
+  ]
+}
