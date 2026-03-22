@@ -17,25 +17,27 @@ export function TabBar({ activeTab, onTabChange }: Props) {
       {tabs.map(tab => {
         const isActive = activeTab === tab.key;
         return (
-          <button
+          <a
             key={tab.key}
-            onClick={() => onTabChange(tab.key)}
-            className={`flex flex-col items-center justify-center transition-colors ${
+            onClick={(e) => { e.preventDefault(); onTabChange(tab.key); }}
+            href="#"
+            className={`flex flex-col items-center justify-center tap-highlight-transparent ${
               isActive
-                ? 'text-primary border-b-2 border-primary pb-1'
-                : 'text-on-surface-variant opacity-60 hover:text-primary'
+                ? 'text-[#855048] border-b-2 border-[#855048] pb-1'
+                : 'text-[#524341] opacity-60 hover:text-[#855048] transition-colors'
             }`}
           >
             <span
               className="material-symbols-outlined"
               style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
+              data-icon={tab.icon}
             >
               {tab.icon}
             </span>
             <span className="font-manrope text-[11px] font-medium tracking-wide">
               {tab.label}
             </span>
-          </button>
+          </a>
         );
       })}
     </nav>

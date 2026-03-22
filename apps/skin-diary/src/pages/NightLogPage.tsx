@@ -114,15 +114,15 @@ export function NightLogPage({
     <div className="fixed inset-0 z-50 bg-surface flex justify-center">
       <main className="w-full max-w-[430px] bg-surface min-h-screen flex flex-col relative overflow-hidden">
         {/* Header */}
-        <header className="w-full top-0 sticky z-50 bg-background">
-          <div className="flex items-center justify-between px-6 py-4">
+        <header className="w-full top-0 sticky z-50 bg-[#fdf8f4]">
+          <div className="flex items-center justify-between px-6 py-4 w-full max-w-2xl mx-auto">
             <button
               onClick={onClose}
               className="active:scale-95 duration-200 hover:opacity-80 transition-opacity"
             >
-              <span className="material-symbols-outlined text-primary text-2xl">arrow_back</span>
+              <span className="material-symbols-outlined text-[#855048] text-2xl">arrow_back</span>
             </button>
-            <h1 className="font-noto-serif text-2xl font-medium tracking-tight text-primary">
+            <h1 className="font-noto-serif text-2xl font-medium tracking-tight text-[#855048]">
               밤 기록
             </h1>
             <div className="w-8" />
@@ -187,7 +187,7 @@ export function NightLogPage({
           <div className="w-full flex flex-col items-center gap-3 pointer-events-auto">
             <button
               onClick={handleSave}
-              className="flex items-center justify-center w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-white shadow-lg active:scale-[0.98] transition-transform"
+              className="flex items-center justify-center w-full py-4 rounded-full bg-gradient-to-r from-[#855048] to-[#c2847a] text-white shadow-lg active:scale-[0.98] transition-transform hover:brightness-110"
             >
               <span className="material-symbols-outlined mr-2" style={{ fontVariationSettings: "'FILL' 1" }}>
                 check_circle

@@ -45,11 +45,11 @@ export function SettingsPage({
     <div className="fixed inset-0 z-50 bg-surface flex justify-center">
       <div className="w-full max-w-[430px] bg-surface min-h-screen overflow-y-auto">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 sticky top-0 bg-background z-10">
-          <button onClick={onBack} className="active:scale-95 transition-transform text-primary">
+        <header className="flex items-center justify-between px-6 py-4 sticky top-0 bg-[#fdf8f4] z-10">
+          <button onClick={onBack} className="active:scale-95 transition-transform text-[#855048]">
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          <h1 className="font-headline text-lg font-semibold text-primary">설정</h1>
+          <h1 className="font-headline text-lg font-semibold text-[#855048]">설정</h1>
           <div className="w-8" />
         </header>
 

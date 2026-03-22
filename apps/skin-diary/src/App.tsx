@@ -221,7 +221,7 @@ export default function App() {
   const showTabBar = overlay === null;
 
   return (
-    <div className="max-w-[430px] mx-auto min-h-screen bg-background">
+    <div className="max-w-[430px] mx-auto min-h-screen bg-background font-body">
       <div className="px-6 pt-2">
         {activeTab === 'home' && overlay === null && (
           <HomePage

@@ -79,11 +79,11 @@ export function CalendarPage({ records, onEditMorning, onEditNight }: Props) {
   return (
     <div className="pb-24">
       {/* Header */}
-      <header className="pt-6 pb-4">
+      <header className="w-full top-0 sticky z-50 pt-6 pb-4 bg-[#fdf8f4]">
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={prevMonth}
-            className="text-on-surface-variant hover:text-primary active:scale-95 transition-all"
+            className="text-[#524341] hover:text-[#855048] active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined">chevron_left</span>
           </button>
@@ -92,7 +92,7 @@ export function CalendarPage({ records, onEditMorning, onEditNight }: Props) {
           </h1>
           <button
             onClick={nextMonth}
-            className="text-on-surface-variant hover:text-primary active:scale-95 transition-all"
+            className="text-[#524341] hover:text-[#855048] active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined">chevron_right</span>
           </button>

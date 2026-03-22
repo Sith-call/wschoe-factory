@@ -92,12 +92,14 @@ export function InsightPage({ records, products }: Props) {
   return (
     <div className="pb-24">
       {/* Header */}
-      <header className="pt-8 pb-4 space-y-4">
-        <div className="flex items-center justify-center">
-          <h1 className="font-headline text-xl font-medium text-primary">인사이트</h1>
+      <header className="w-full top-0 sticky z-50 flex flex-col pt-8 pb-4 gap-4 bg-[#fdf8f4]">
+        <div className="flex items-center justify-between w-full">
+          <span className="material-symbols-outlined text-[#855048]">menu</span>
+          <h1 className="font-headline text-xl font-medium text-[#855048]">인사이트</h1>
+          <span className="material-symbols-outlined text-[#855048]">account_circle</span>
         </div>
 
-        {/* Tabs */}
+        {/* Segmented Control Tabs */}
         <nav className="flex gap-8 mt-4 overflow-x-auto no-scrollbar">
           {tabs.map(tab => (
             <button
@@ -105,18 +107,18 @@ export function InsightPage({ records, products }: Props) {
               onClick={() => setActiveTab(tab.key)}
               className={`pb-2 font-headline font-light tracking-tight whitespace-nowrap transition-colors ${
                 activeTab === tab.key
-                  ? 'text-primary border-b-2 border-primary'
-                  : 'text-on-surface-variant hover:bg-surface-container-highest/30'
+                  ? 'text-[#855048] border-b-2 border-[#855048]'
+                  : 'text-[#524341] hover:bg-[#e6e2de]/30'
               }`}
             >
               {tab.label}
             </button>
           ))}
         </nav>
-        <div className="bg-surface-container-low h-px w-full opacity-50" />
+        <div className="bg-[#f8f3ef] h-px w-full opacity-50" />
       </header>
 
-      <main className="space-y-12 mt-8">
+      <main className="space-y-12 max-w-2xl mx-auto mt-8">
         {/* Key Insights Summary (top 3) -- shown above all tabs when enough data */}
         {hasEnoughData && keyInsights.length > 0 && (
           <section className="space-y-4">

@@ -25,7 +25,7 @@ export function WeeklyChart({ records, onDayTap }: Props) {
       <div className="flex justify-between items-end mb-6">
         <div>
           <h3 className="text-sm font-semibold text-on-surface-variant mb-1">피부 컨디션</h3>
-          <p className="serif-numbers text-3xl text-primary leading-none">
+          <p className="font-thin-serif-num text-3xl text-primary leading-none">
             이번 주 평균 {avgScore}점
           </p>
         </div>

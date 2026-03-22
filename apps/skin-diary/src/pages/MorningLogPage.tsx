@@ -105,16 +105,16 @@ export function MorningLogPage({ records, onSave, onClose, editDate }: Props) {
     <div className="fixed inset-0 z-50 bg-surface flex justify-center">
       <div className="w-full max-w-[430px] bg-surface min-h-screen relative pb-32">
         {/* Header */}
-        <header className="w-full top-0 sticky z-50 bg-background flex items-center px-6 py-4">
+        <header className="w-full top-0 sticky z-50 bg-[#fdf8f4] flex items-center px-6 py-4 w-full">
           <div className="flex items-center gap-4 w-full">
             <button
               onClick={onClose}
-              className="active:scale-95 transition-transform text-primary"
+              className="active:scale-95 transition-transform text-[#855048]"
             >
-              <span className="material-symbols-outlined">arrow_back</span>
+              <span className="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
             </button>
             <div className="flex flex-col">
-              <h1 className="font-headline text-lg tracking-tight font-semibold text-primary">
+              <h1 className="font-headline text-lg tracking-tight font-semibold text-[#855048]">
                 아침 기록
               </h1>
               <span className="text-[10px] font-body text-on-surface-variant tracking-wider uppercase opacity-70">

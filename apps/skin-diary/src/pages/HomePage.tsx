@@ -87,19 +87,19 @@ export function HomePage({
   return (
     <div className="pb-24">
       {/* TopAppBar */}
-      <header className="w-full pt-6 pb-2 bg-background">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2 text-primary">
-            <span className="material-symbols-outlined">spa</span>
-            <h1 className="font-noto-serif text-2xl font-light italic text-on-surface">
+      <header className="w-full pt-6 pb-2 bg-[#fdf8f4]">
+        <div className="flex justify-between items-center w-full max-w-2xl mx-auto">
+          <div className="flex items-center gap-2 text-[#855048]">
+            <span className="material-symbols-outlined" data-icon="spa">spa</span>
+            <h1 className="font-noto-serif text-2xl font-light italic text-[#1d1b19]">
               {greeting}{userName ? `, ${userName}님` : ''}
             </h1>
           </div>
           <button
             onClick={onOpenSettings}
-            className="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95"
+            className="text-[#524341] hover:opacity-80 transition-opacity active:scale-95"
           >
-            <span className="material-symbols-outlined">settings</span>
+            <span className="material-symbols-outlined" data-icon="settings">settings</span>
           </button>
         </div>
       </header>
@@ -387,7 +387,7 @@ export function HomePage({
                   {' '}다음날{' '}
                   <span className="font-medium">{KEYWORD_LABELS[c.keyword as SkinKeyword]}</span>
                   {' '}등장 확률{' '}
-                  <span className="serif-numbers font-bold text-primary text-lg">{c.probability}%</span>
+                  <span className="font-thin-serif-num font-bold text-primary text-lg">{c.probability}%</span>
                 </p>
               );
             })()}
@@ -413,7 +413,7 @@ export function HomePage({
                 <span className="text-primary font-semibold">{bestProduct.productName}</span>를 사용한 날,{' '}
                 <br />
                 평소보다 피부 점수가{' '}
-                <span className="serif-numbers font-bold text-lg">{Math.abs(bestProduct.impact).toFixed(1)}</span>
+                <span className="font-thin-serif-num font-bold text-lg">{Math.abs(bestProduct.impact).toFixed(1)}</span>
                 점 높았어요.
               </p>
             )}
@@ -425,7 +425,7 @@ export function HomePage({
                 이 있는 날,{' '}
                 <br />
                 피부 점수가{' '}
-                <span className="serif-numbers font-bold text-lg">{Math.abs(worstVariable.impact).toFixed(1)}</span>
+                <span className="font-thin-serif-num font-bold text-lg">{Math.abs(worstVariable.impact).toFixed(1)}</span>
                 점 낮았어요.
               </p>
             )}
