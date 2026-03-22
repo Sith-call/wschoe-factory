@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/auto-save-state.sh 2>/dev/null || true",
+            "timeout": 10,
+            "statusMessage": "작업 상태 저장 중..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/auto-save-state.sh 2>/dev/null || true",
+            "timeout": 10,
+            "statusMessage": "컨텍스트 압축 전 상태 저장..."
+          }
+        ]
+      }
+    ]
+  }
+}
