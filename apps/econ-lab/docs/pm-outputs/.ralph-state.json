@@ -1,13 +1,10 @@
 {
-  "iteration": 7,
-  "phase": "expert-fixes-applied",
-  "remaining_tasks": [
-    "add-model-gdp-gap",
-    "add-model-liquidity-trap",
-    "add-model-sunk-cost"
-  ],
+  "iteration": 8,
+  "phase": "all-13-models-complete",
+  "remaining_tasks": [],
   "expert_score": 82,
-  "last_updated": "2026-03-23T16:00:00Z",
+  "total_models": 13,
+  "last_updated": "2026-03-23T18:00:00Z",
   "completed_tasks": [
     "initial-8-models",
     "scenarios-16",
@@ -20,6 +17,9 @@
     "fix-inflation-short-long",
     "fix-multiplier-crowding-out",
     "add-model-ad-as",
-    "add-model-crowding-out"
+    "add-model-crowding-out",
+    "add-model-gdp-gap",
+    "add-model-liquidity-trap",
+    "add-model-sunk-cost"
   ]
 }
