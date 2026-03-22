@@ -153,16 +153,26 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
             const lastPoint = curve.points[curve.points.length - 1];
             const lastSVG = toSVG(lastPoint, xRange, yRange, svgW, svgH, pad);
 
+            // If label would overflow right edge, place it to the left of the curve end
+            const labelX = lastSVG.sx + 8;
+            const isNearRightEdge = labelX > svgW - 80;
+            const adjustedX = isNearRightEdge ? lastSVG.sx - 8 : labelX;
+            const textAnchor = isNearRightEdge ? 'end' as const : 'start' as const;
+
+            // If label would overflow top/bottom, adjust Y
+            const adjustedY = Math.max(pad + 14, Math.min(lastSVG.sy, svgH - pad - 4));
+
             return (
               <g key={curve.id}>
                 <path d={pathData} stroke={curve.color} strokeLinecap="round" strokeWidth="3" />
                 <text
                   className="font-headline text-xl font-black"
                   fill={curve.color}
-                  x={Math.min(lastSVG.sx + 8, svgW - 20)}
-                  y={lastSVG.sy}
+                  x={adjustedX}
+                  y={adjustedY}
                   fontSize="14"
                   fontWeight="800"
+                  textAnchor={textAnchor}
                 >
                   {curve.label}
                 </text>

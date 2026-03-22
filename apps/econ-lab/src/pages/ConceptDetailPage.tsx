@@ -58,7 +58,7 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
           </p>
         </section>
 
-        {/* Visual Section: Supply/Demand Curve (static preview) */}
+        {/* Visual Section: Concept-specific static diagram */}
         <section className="space-y-4">
           <div className="bg-white rounded-lg p-8 border border-outline-variant/15 flex flex-col items-center justify-center relative aspect-square overflow-hidden shadow-sm">
             {/* Grid Lines Background */}
@@ -69,37 +69,84 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
                 backgroundSize: '20px 20px',
               }}
             />
-            <div className="relative w-full h-full border-l-2 border-b-2 border-primary-container/20">
-              {/* Price Axis Label */}
-              <span className="absolute -left-8 top-0 font-label text-xs font-bold text-on-surface-variant">가격(P)</span>
-              {/* Quantity Axis Label */}
-              <span className="absolute -right-2 -bottom-6 font-label text-xs font-bold text-on-surface-variant">수량(Q)</span>
-              {/* Supply Curve (S) */}
-              <svg className="absolute inset-0 w-full h-full overflow-visible">
-                <line stroke="#040d1b" strokeWidth="2.5" x1="10%" x2="90%" y1="90%" y2="10%" />
-                <text className="font-label text-[10px] font-bold" fill="#040d1b" x="85%" y="5%">
-                  공급곡선(S)
-                </text>
-              </svg>
-              {/* Demand Curve (D) */}
-              <svg className="absolute inset-0 w-full h-full overflow-visible">
-                <line stroke="#040d1b" strokeWidth="2.5" x1="10%" x2="90%" y1="10%" y2="90%" />
-                <text className="font-label text-[10px] font-bold" fill="#040d1b" x="85%" y="95%">
-                  수요곡선(D)
-                </text>
-              </svg>
-              {/* Equilibrium Point (E) */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-                <div className="w-3 h-3 bg-secondary rounded-full border-2 border-white ring-4 ring-secondary/10"></div>
-                <span className="font-label text-[11px] font-bold text-secondary mt-1">균형점(E)</span>
+
+            {concept.modelConfig.id === 'supply-demand' && (
+              <div className="relative w-full h-full border-l-2 border-b-2 border-primary-container/20">
+                <span className="absolute -left-8 top-0 font-label text-xs font-bold text-on-surface-variant">가격(P)</span>
+                <span className="absolute -right-2 -bottom-6 font-label text-xs font-bold text-on-surface-variant">수량(Q)</span>
+                <svg className="absolute inset-0 w-full h-full overflow-visible">
+                  <line stroke="#040d1b" strokeWidth="2.5" x1="10%" x2="90%" y1="90%" y2="10%" />
+                  <text className="font-label text-[10px] font-bold" fill="#040d1b" x="85%" y="5%">S</text>
+                </svg>
+                <svg className="absolute inset-0 w-full h-full overflow-visible">
+                  <line stroke="#ba1a1a" strokeWidth="2.5" x1="10%" x2="90%" y1="10%" y2="90%" />
+                  <text className="font-label text-[10px] font-bold" fill="#ba1a1a" x="85%" y="95%">D</text>
+                </svg>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                  <div className="w-3 h-3 bg-secondary rounded-full border-2 border-white ring-4 ring-secondary/10"></div>
+                  <span className="font-label text-[11px] font-bold text-secondary mt-1">균형점(E)</span>
+                </div>
+                <div className="absolute top-1/2 left-0 right-1/2 h-[1px] border-t border-dashed border-outline-variant"></div>
+                <div className="absolute top-1/2 left-1/2 bottom-0 w-[1px] border-l border-dashed border-outline-variant"></div>
               </div>
-              {/* Dashed Lines to Axes */}
-              <div className="absolute top-1/2 left-0 right-1/2 h-[1px] border-t border-dashed border-outline-variant"></div>
-              <div className="absolute top-1/2 left-1/2 bottom-0 w-[1px] border-l border-dashed border-outline-variant"></div>
-            </div>
+            )}
+
+            {concept.modelConfig.id === 'elasticity' && (
+              <div className="relative w-full h-full border-l-2 border-b-2 border-primary-container/20">
+                <span className="absolute -left-8 top-0 font-label text-xs font-bold text-on-surface-variant">가격(P)</span>
+                <span className="absolute -right-2 -bottom-6 font-label text-xs font-bold text-on-surface-variant">수량(Q)</span>
+                <svg className="absolute inset-0 w-full h-full overflow-visible">
+                  {/* Inelastic demand - steep */}
+                  <line stroke="#ba1a1a" strokeWidth="2.5" x1="40%" x2="55%" y1="10%" y2="90%" />
+                  <text className="font-label text-[10px] font-bold" fill="#ba1a1a" x="56%" y="92%">비탄력적</text>
+                  {/* Elastic demand - flat */}
+                  <line stroke="#1a6b50" strokeWidth="2.5" x1="10%" x2="90%" y1="25%" y2="75%" />
+                  <text className="font-label text-[10px] font-bold" fill="#1a6b50" x="75%" y="78%">탄력적</text>
+                </svg>
+                <div className="absolute top-[35%] left-[45%] flex flex-col items-center">
+                  <div className="w-3 h-3 bg-secondary rounded-full border-2 border-white ring-4 ring-secondary/10"></div>
+                </div>
+              </div>
+            )}
+
+            {concept.modelConfig.id === 'gdp' && (
+              <div className="relative w-full h-full flex flex-col items-center justify-center gap-3">
+                <h3 className="font-headline font-bold text-sm text-primary mb-2">{concept.title}</h3>
+                <svg viewBox="0 0 300 200" className="w-full max-w-[280px]">
+                  {/* GDP = C + I + G + NX stacked bar */}
+                  <rect x="20" y="30" width="160" height="35" rx="4" fill="#ba1a1a" opacity="0.8" />
+                  <text x="30" y="53" fill="white" fontSize="12" fontWeight="bold">C (소비) 55%</text>
+                  <rect x="20" y="75" width="60" height="35" rx="4" fill="#1a2332" opacity="0.8" />
+                  <text x="30" y="98" fill="white" fontSize="12" fontWeight="bold">I 20%</text>
+                  <rect x="20" y="120" width="60" height="35" rx="4" fill="#d4a24e" opacity="0.8" />
+                  <text x="30" y="143" fill="white" fontSize="12" fontWeight="bold">G 20%</text>
+                  <rect x="20" y="165" width="15" height="25" rx="4" fill="#1a6b50" opacity="0.8" />
+                  <text x="42" y="183" fill="#1a6b50" fontSize="11" fontWeight="bold">NX 5%</text>
+                </svg>
+                <p className="font-label text-xs text-on-surface-variant font-bold">GDP = C + I + G + NX</p>
+              </div>
+            )}
+
+            {concept.modelConfig.id === 'inflation' && (
+              <div className="relative w-full h-full border-l-2 border-b-2 border-primary-container/20">
+                <span className="absolute -left-8 top-0 font-label text-xs font-bold text-on-surface-variant">물가(P)</span>
+                <span className="absolute -right-2 -bottom-6 font-label text-xs font-bold text-on-surface-variant">통화량(M)</span>
+                <svg className="absolute inset-0 w-full h-full overflow-visible">
+                  {/* MV = PY curve - linear relationship */}
+                  <line stroke="#ba1a1a" strokeWidth="2.5" x1="10%" x2="90%" y1="85%" y2="15%" />
+                  <text className="font-label text-[10px] font-bold" fill="#ba1a1a" x="70%" y="12%">P = MV/Y</text>
+                </svg>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                  <div className="w-3 h-3 bg-secondary rounded-full border-2 border-white ring-4 ring-secondary/10"></div>
+                  <span className="font-label text-[11px] font-bold text-secondary mt-1">현재</span>
+                </div>
+                <div className="absolute top-1/2 left-0 right-1/2 h-[1px] border-t border-dashed border-outline-variant"></div>
+                <div className="absolute top-1/2 left-1/2 bottom-0 w-[1px] border-l border-dashed border-outline-variant"></div>
+              </div>
+            )}
           </div>
           <p className="text-center font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60">
-            Static Curator Diagram Model 1.0
+            {concept.title}
           </p>
         </section>
 
