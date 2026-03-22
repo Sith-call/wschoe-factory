@@ -74,6 +74,11 @@ claude plugins add ./plugins/agent-maker
 claude plugins add ./plugins/ait-team
 ```
 
+## 절대 규칙: 스크린샷 없는 QA/평가는 무효
+**QA, Ralph Loop, 페르소나 평가, 디자인 리뷰 등 앱 품질을 판단하는 모든 작업에서 반드시 gstack browse로 실제 브라우저 테스트를 수행하고, 스크린샷을 첨부해야 한다. 코드만 읽고 점수를 매기는 것은 금지.**
+- 에이전트에게 QA를 위임할 때 "gstack browse로 실제 테스트하고 스크린샷 첨부"를 명시적으로 지시할 것
+- 스크린샷 없는 피드백 리포트는 거부할 것
+
 ## 컨벤션
 - 앱 이름은 kebab-case (예: `form-coach`, `toss-fortune`)
 - PM 산출물은 항상 `docs/pm-outputs/`에 저장

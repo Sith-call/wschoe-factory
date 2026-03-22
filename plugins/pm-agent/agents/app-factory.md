@@ -143,13 +143,21 @@ apps/{app-name}/src/main.tsx 존재?
 
 **스킬**: `pm-agent:ralph-persona-loop`
 
-빌드 완료된 앱에 대해 Ralph Persona Loop 실행:
+빌드 완료된 앱에 대해 Ralph Persona Loop 실행.
 
+**에이전트 위임 시 반드시 포함할 지시문**:
+```
+gstack browse ($B)로 실제 브라우저에서 앱을 열고 테스트하세요.
+모든 평가에 $B screenshot으로 스크린샷을 찍고 Read 도구로 확인 후 점수를 매기세요.
+코드만 읽고 점수를 매기면 안 됩니다. 스크린샷 없는 피드백 리포트는 무효입니다.
+```
+
+**프로세스**:
 1. Phase 0: 플로우 그래프 검증 (dead-end 체크)
 2. Phase 1: 페르소나 생성
-3. Phase 1.5: gstack /qa (Health Score)
-4. Phase 1.7: 라이브 워크스루
-5. Phase 2~2.7: 4명의 평가자 (페르소나, 디자이너, UX, 비저너리)
+3. Phase 1.5: gstack /qa (Health Score) — `$B goto` + `$B console --errors` 필수
+4. Phase 1.7: 라이브 워크스루 — 모든 화면 `$B screenshot` + `Read` 필수
+5. Phase 2~2.7: 4명의 평가자 — **스크린샷 기반 평가만 유효**
 6. Phase 3: 분기 판단 → 통과 시 Phase 5
 7. Phase 4: 개선 → Phase 1.5 복귀
 8. Phase 5: 커밋
@@ -163,7 +171,9 @@ AI Slop Score ≥ B?
 유저 만족도 ≥ 80%?
 UX 점수 ≥ 75%?
 비저너리 점수 ≥ 70%?
+각 점수에 대응하는 브라우저 스크린샷이 피드백 리포트에 첨부되어 있는가?
 → 모두 충족하면 Stage 5로 자동 전환
+→ 스크린샷 미첨부 시 → 해당 이터레이션 무효 → 재실행
 ```
 
 **사용자 의사결정 포인트**: 없음 (완전 자동)
