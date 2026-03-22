@@ -17,6 +17,136 @@ export interface QuizQuestion {
   explanation: string;
 }
 
+export interface HypothesisQuestion {
+  id: string;
+  scenario: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  correctExplanation: string;
+  sideEffect: string;
+  presetValues: Record<string, number>;
+}
+
+export const conceptHypotheses: Record<string, HypothesisQuestion[]> = {
+  'supply-demand': [
+    {
+      id: 'sd-hyp-1',
+      scenario: '한국은행이 기준금리를 0.5%p 인상했습니다.',
+      question: '어떤 변화가 생길까요?',
+      options: ['물가 하락', '소비 증가', '수요 증가'],
+      correctIndex: 0,
+      correctExplanation: '금리 인상 → 대출 비용 증가 → 소비 위축 → 수요 감소 → 물가 하락',
+      sideEffect: '하지만 예상 못한 부작용도 있어요: 경기 위축 가능성이 높아집니다.',
+      presetValues: { income: 3, cost: 4, tax: 5 },
+    },
+    {
+      id: 'sd-hyp-2',
+      scenario: '국제 유가가 2배로 급등했습니다.',
+      question: '시장에 어떤 일이 벌어질까요?',
+      options: ['균형가격 하락', '균형가격 상승', '변화 없음'],
+      correctIndex: 1,
+      correctExplanation: '원자재 가격 급등 → 생산 비용 증가 → 공급 감소 → 균형가격 상승',
+      sideEffect: '동시에 거래량도 줄어들어 경제 전체가 위축됩니다.',
+      presetValues: { income: 5, cost: 8, tax: 5 },
+    },
+  ],
+  'gdp': [
+    {
+      id: 'gdp-hyp-1',
+      scenario: '팬데믹으로 사회적 거리두기가 시행됩니다.',
+      question: 'GDP에 가장 큰 영향을 주는 변화는?',
+      options: ['소비(C) 급감', '정부지출(G) 급감', '투자(I) 급증'],
+      correctIndex: 0,
+      correctExplanation: '봉쇄 → 소비 급감(GDP의 50%+). 정부는 오히려 G를 늘려 대응합니다.',
+      sideEffect: '실제 2020년 한국 GDP 성장률은 -0.7%였습니다.',
+      presetValues: { consumption: 38, investment: 15, government: 30, netExports: -5 },
+    },
+    {
+      id: 'gdp-hyp-2',
+      scenario: '반도체 슈퍼사이클이 시작되었습니다.',
+      question: 'GDP 구성요소 중 가장 크게 변하는 것은?',
+      options: ['순수출(NX) 급증', '소비(C) 급감', '정부지출(G) 급증'],
+      correctIndex: 0,
+      correctExplanation: '수출 호황 → NX 대폭 증가 + 투자 확대 → GDP 성장 가속',
+      sideEffect: '하지만 특정 산업 편중은 경제 리스크를 높입니다.',
+      presetValues: { consumption: 55, investment: 30, government: 20, netExports: 25 },
+    },
+  ],
+  'inflation': [
+    {
+      id: 'inf-hyp-1',
+      scenario: '중앙은행이 대규모 양적완화로 통화량을 2배로 늘렸습니다.',
+      question: '물가는 어떻게 될까요?',
+      options: ['물가 2배 상승', '물가 변화 없음', '물가 하락'],
+      correctIndex: 0,
+      correctExplanation: 'MV=PY에서 V,Y 불변 시 M 2배 → P도 2배. 화폐수량설의 핵심입니다.',
+      sideEffect: '실제로는 유통속도(V) 감소로 즉각적 인플레이션은 완화되지만, 장기적으로 물가 상승 압력이 누적됩니다.',
+      presetValues: { moneySupply: 100, velocity: 5 },
+    },
+  ],
+  'elasticity': [
+    {
+      id: 'el-hyp-1',
+      scenario: '생수 가격이 20% 올랐습니다.',
+      question: '생수 수요량은 어떻게 될까요?',
+      options: ['거의 변하지 않음', '20% 이상 감소', '수요가 오히려 증가'],
+      correctIndex: 0,
+      correctExplanation: '생수는 필수재(대체재 거의 없음) → 비탄력적 수요 → 가격이 올라도 수요 변화가 적습니다.',
+      sideEffect: '이런 재화에 세금을 부과하면 세수는 늘지만, 저소득층 부담이 커집니다.',
+      presetValues: { priceChangeRate: 20, substitutes: 1 },
+    },
+  ],
+  'ppf': [
+    {
+      id: 'ppf-hyp-1',
+      scenario: 'AI 기술이 모든 산업에 도입되었습니다.',
+      question: '생산가능곡선(PPF)은 어떻게 변할까요?',
+      options: ['바깥으로 이동', '안쪽으로 이동', '변화 없음'],
+      correctIndex: 0,
+      correctExplanation: '기술 혁신 → 같은 자원으로 더 많이 생산 가능 → PPF 바깥 이동',
+      sideEffect: '이것이 경제 성장의 본질입니다. 기술이 인류를 더 풍요롭게 만드는 이유.',
+      presetValues: { technology: 9, allocation: 50 },
+    },
+  ],
+  'comparative-advantage': [
+    {
+      id: 'ca-hyp-1',
+      scenario: '한국은 반도체, 베트남은 농산물 생산에 특화합니다.',
+      question: '두 나라가 서로 교역하면?',
+      options: ['양국 모두 이득', '한국만 이득', '베트남만 이득'],
+      correctIndex: 0,
+      correctExplanation: '비교우위에 따라 특화하고 교역하면 양국 모두 소비가능 영역이 확대됩니다.',
+      sideEffect: '이것이 리카르도의 비교우위론이며, 자유무역의 경제학적 근거입니다.',
+      presetValues: { productivityA: 8, productivityB: 3, tradeRatio: 50 },
+    },
+  ],
+  'multiplier': [
+    {
+      id: 'mult-hyp-1',
+      scenario: '정부가 50조원의 재정지출을 단행합니다. 국민의 소비성향(MPC)은 0.8입니다.',
+      question: 'GDP는 얼마나 증가할까요?',
+      options: ['50조원', '100조원', '250조원'],
+      correctIndex: 2,
+      correctExplanation: '승수 = 1/(1-0.8) = 5. 50조 x 5 = 250조원. 돈이 돌고 돌며 5배의 효과를 냅니다.',
+      sideEffect: '이것이 케인스가 불황기 적극적 재정지출을 주장한 근거입니다.',
+      presetValues: { mpc: 80, deltaG: 50 },
+    },
+  ],
+  'is-lm': [
+    {
+      id: 'islm-hyp-1',
+      scenario: '정부가 대규모 재정지출을 시행합니다.',
+      question: '이자율과 국민소득은 어떻게 변할까요?',
+      options: ['Y 증가 + r 상승', 'Y 증가 + r 하락', 'Y 감소 + r 상승'],
+      correctIndex: 0,
+      correctExplanation: '정부지출 증가 → IS 우측 이동 → 국민소득 증가 + 이자율 상승',
+      sideEffect: '이자율 상승으로 민간 투자가 줄어드는 구축효과(crowding out)가 발생합니다.',
+      presetValues: { govSpending: 80, moneySupply: 50 },
+    },
+  ],
+};
+
 export const conceptScenarios: Record<string, ScenarioPreset[]> = {
   'supply-demand': [
     {

@@ -72,16 +72,16 @@ function App() {
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[#040d1b] dark:text-slate-100">science</span>
             <h1 className="font-['Epilogue'] font-extrabold text-[#040d1b] dark:text-slate-100 text-xl tracking-tight">
-              경제 실험실
+              경제 연구소
             </h1>
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex flex-col items-end">
               <span className="font-['Space_Grotesk'] text-[10px] font-bold text-secondary uppercase tracking-widest">
-                Progress
+                Research
               </span>
               <span className="font-['Space_Grotesk'] text-xs font-medium text-primary">
-                {conceptsViewedCount}/{concepts.length} 개념 학습 완료
+                {conceptsViewedCount}/{concepts.length} 파일 열람
               </span>
             </div>
             <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/20">
@@ -103,34 +103,36 @@ function App() {
         <main className="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-10">
           <header className="space-y-2">
             <span className="font-['Space_Grotesk'] text-sm font-bold text-secondary tracking-[0.2em] uppercase">
-              Interactive Lab
+              Lab Wing
             </span>
-            <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight">
-              실험실
+            <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight text-left">
+              실험동
             </h2>
-            <p className="text-on-surface-variant text-lg leading-relaxed max-w-xl">
+            <p className="text-on-surface-variant text-base leading-relaxed max-w-xl text-left">
               경제 모델을 직접 조작하고 결과를 실시간으로 관찰하세요.
             </p>
           </header>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {concepts.map(concept => (
+          <div className="space-y-4">
+            {concepts.map((concept, i) => (
               <div
                 key={concept.id}
                 onClick={() => handleNavigateLab(concept.id)}
-                className="bg-primary-container text-on-primary rounded-lg overflow-hidden group cursor-pointer shadow-xl hover:shadow-2xl transition-shadow"
+                className={`bg-primary-container text-on-primary overflow-hidden cursor-pointer shadow-lg hover:shadow-xl transition-shadow text-left ${
+                  i === 0 ? 'rounded-lg p-8' : 'rounded-lg p-6'
+                }`}
               >
-                <div className="p-8">
-                  <span className="font-label text-[10px] text-on-primary-container font-bold tracking-widest mb-4 block uppercase">
-                    {concept.titleEn}
-                  </span>
-                  <h4 className="font-headline font-bold text-2xl text-white mb-4">{concept.title}</h4>
-                  <p className="text-sm text-on-primary-container font-medium mb-6">
-                    {concept.description.slice(0, 50)}...
-                  </p>
-                  <span className="flex items-center gap-2 text-secondary-fixed-dim font-bold text-sm hover:translate-x-1 transition-transform">
-                    실험 시작하기 <span className="material-symbols-outlined text-sm">arrow_forward_ios</span>
-                  </span>
-                </div>
+                <span className="font-['Space_Grotesk'] text-[10px] text-on-primary-container font-bold tracking-widest mb-2 block uppercase">
+                  Experiment {String(i + 1).padStart(2, '0')} / {concept.titleEn}
+                </span>
+                <h4 className={`font-headline font-bold text-white mb-2 ${i === 0 ? 'text-2xl' : 'text-lg'}`}>
+                  {concept.title}
+                </h4>
+                <p className="text-sm text-on-primary-container font-medium mb-4">
+                  {concept.description.slice(0, i === 0 ? 80 : 50)}...
+                </p>
+                <span className="flex items-center gap-2 text-secondary-fixed-dim font-bold text-sm hover:translate-x-1 transition-transform">
+                  실험 시작하기 <span className="material-symbols-outlined text-sm">arrow_forward_ios</span>
+                </span>
               </div>
             ))}
           </div>

@@ -278,10 +278,8 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
           <h2 className="font-headline font-bold text-lg text-primary mb-6">실생활 예시</h2>
           <div className="space-y-4">
             {concept.realWorldExamples.map((example, i) => (
-              <div key={i} className="flex items-start gap-4 p-5 bg-surface-container-lowest rounded-lg border border-outline-variant/5">
-                <div className="w-12 h-12 rounded bg-primary-container flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-secondary-container">{example.icon}</span>
-                </div>
+              <div key={i} className="flex items-start gap-3 p-5 bg-surface-container-lowest rounded-lg border border-outline-variant/5">
+                <span className="material-symbols-outlined text-on-surface-variant/60 text-lg mt-0.5">{example.icon}</span>
                 <div>
                   <h3 className="font-bold text-primary font-body">{example.title}</h3>
                   <p className="text-sm text-on-surface-variant mt-1 leading-snug">{example.description}</p>

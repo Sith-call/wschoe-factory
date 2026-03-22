@@ -10,14 +10,13 @@ interface TabItem {
   id: TabId;
   icon: string;
   label: string;
-  filledIcon?: boolean;
 }
 
 const tabs: TabItem[] = [
-  { id: 'home', icon: 'home', label: '홈' },
-  { id: 'concepts', icon: 'menu_book', label: '용어' },
-  { id: 'lab', icon: 'biotech', label: '실험실' },
-  { id: 'progress', icon: 'query_stats', label: '진도' },
+  { id: 'home', icon: 'door_front', label: '로비' },
+  { id: 'concepts', icon: 'folder_open', label: '아카이브' },
+  { id: 'lab', icon: 'biotech', label: '실험동' },
+  { id: 'progress', icon: 'auto_stories', label: '연구 일지' },
 ];
 
 export const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabChange }) => {

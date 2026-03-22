@@ -8,13 +8,17 @@ const defaultProgress: ProgressData = {
   totalLearningSeconds: 0,
   lastVisit: new Date().toISOString(),
   sessionStartTime: null,
+  discoveries: [],
 };
 
 export function loadProgress(): ProgressData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...defaultProgress };
-    return JSON.parse(raw) as ProgressData;
+    const parsed = JSON.parse(raw) as ProgressData;
+    // Migration: add discoveries if missing
+    if (!parsed.discoveries) parsed.discoveries = [];
+    return parsed;
   } catch {
     return { ...defaultProgress };
   }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { ProgressData } from '../types';
+import { ProgressData, Discovery } from '../types';
 import { loadProgress, saveProgress } from '../utils/storage';
 
 export function useProgress() {
@@ -50,12 +50,30 @@ export function useProgress() {
     });
   }, []);
 
+  const addDiscovery = useCallback((discovery: Omit<Discovery, 'timestamp'>) => {
+    setProgress(prev => {
+      // Don't add duplicate discoveries
+      if (prev.discoveries.some(d => d.id === discovery.id)) return prev;
+      const updated = {
+        ...prev,
+        discoveries: [
+          ...prev.discoveries,
+          { ...discovery, timestamp: new Date().toISOString() },
+        ],
+      };
+      saveProgress(updated);
+      return updated;
+    });
+  }, []);
+
   return {
     progress,
     markViewed,
     markExperimented,
+    addDiscovery,
     conceptsViewedCount: progress.conceptsViewed.length,
     experimentsCount: progress.experimentsCompleted.length,
+    discoveriesCount: progress.discoveries.length,
     totalMinutes: Math.floor(progress.totalLearningSeconds / 60),
   };
 }

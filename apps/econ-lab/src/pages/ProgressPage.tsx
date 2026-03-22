@@ -1,63 +1,90 @@
 import React from 'react';
 import { useProgress } from '../hooks/useProgress';
-import { ProgressBadge } from '../components/ProgressBadge';
-import { concepts } from '../data/concepts';
+import { concepts, getConceptById } from '../data/concepts';
 
 export const ProgressPage: React.FC = () => {
-  const { progress, conceptsViewedCount, experimentsCount, totalMinutes } = useProgress();
+  const { progress, conceptsViewedCount, experimentsCount, discoveriesCount, totalMinutes } = useProgress();
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-10">
       <header className="space-y-2">
         <span className="font-['Space_Grotesk'] text-sm font-bold text-secondary tracking-[0.2em] uppercase">
-          Learning Progress
+          Research Journal
         </span>
-        <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight">
-          학습 진도
+        <h2 className="font-headline font-extrabold text-4xl text-primary tracking-tight text-left">
+          연구 일지
         </h2>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <ProgressBadge
-          label="개념 학습"
-          value={conceptsViewedCount}
-          total={concepts.length}
-          icon="menu_book"
-        />
-        <ProgressBadge
-          label="실험 완료"
-          value={experimentsCount}
-          total={concepts.length}
-          icon="science"
-        />
-        <ProgressBadge
-          label="학습 시간 (분)"
-          value={totalMinutes}
-          total={Math.max(totalMinutes, 60)}
-          icon="schedule"
-        />
-        <div className="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-surface-container rounded-lg flex items-center justify-center">
-              <span className="material-symbols-outlined text-primary text-lg">calendar_today</span>
-            </div>
-            <div>
-              <p className="font-headline font-bold text-lg text-primary">
-                {progress.lastVisit ? new Date(progress.lastVisit).toLocaleDateString('ko-KR') : '-'}
-              </p>
-              <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">마지막 학습</p>
-            </div>
-          </div>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+          <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{conceptsViewedCount}/{concepts.length}</p>
+          <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">연구 파일 열람</p>
+        </div>
+        <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+          <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{experimentsCount}/{concepts.length}</p>
+          <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">실험 완료</p>
+        </div>
+        <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+          <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{discoveriesCount}</p>
+          <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">발견 기록</p>
+        </div>
+        <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+          <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{totalMinutes}m</p>
+          <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">연구 시간</p>
         </div>
       </div>
 
+      {/* Discoveries List */}
+      <section className="space-y-4">
+        <h3 className="font-headline font-bold text-lg text-primary flex items-center gap-2 text-left">
+          <span className="w-1.5 h-6 bg-secondary"></span>
+          발견 목록
+        </h3>
+        {progress.discoveries.length > 0 ? (
+          <div className="space-y-3">
+            {progress.discoveries.map((discovery, i) => {
+              const concept = getConceptById(discovery.conceptId);
+              return (
+                <div
+                  key={discovery.id}
+                  className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/5 text-left"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-['Space_Grotesk'] text-[10px] font-bold text-secondary tracking-widest">
+                      #{i + 1}
+                    </span>
+                    <span className="font-label text-[10px] text-on-surface-variant/50">
+                      {concept?.title || discovery.conceptId}
+                    </span>
+                    <span className={`font-label text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                      discovery.result.startsWith('correct') ? 'bg-[#1a6b50]/10 text-[#1a6b50]' : 'bg-[#d4a24e]/10 text-[#d4a24e]'
+                    }`}>
+                      {discovery.result.startsWith('correct') ? 'CORRECT' : 'LEARNED'}
+                    </span>
+                  </div>
+                  <p className="font-body text-sm text-primary font-semibold">{discovery.hypothesis}</p>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="bg-surface-container-lowest p-8 rounded-lg border border-outline-variant/5 text-left">
+            <p className="font-body text-on-surface-variant text-sm">
+              아직 발견하지 못한 법칙이 있습니다. 실험동에서 가설을 세우고 시뮬레이션을 실행해보세요.
+            </p>
+          </div>
+        )}
+      </section>
+
       {/* Concept Progress List */}
       <section className="space-y-4">
-        <h3 className="font-headline font-bold text-lg text-primary flex items-center gap-2">
+        <h3 className="font-headline font-bold text-lg text-primary flex items-center gap-2 text-left">
           <span className="w-1.5 h-6 bg-secondary"></span>
-          개념별 진도
+          연구 파일 진도
         </h3>
-        {concepts.map(concept => {
+        {concepts.map((concept, i) => {
           const viewed = progress.conceptsViewed.includes(concept.id);
           const experimented = progress.experimentsCompleted.includes(concept.id);
           const status = experimented ? 'completed' : viewed ? 'viewed' : 'not-started';
@@ -65,14 +92,12 @@ export const ProgressPage: React.FC = () => {
           return (
             <div
               key={concept.id}
-              className="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/5"
+              className="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/5 text-left"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded bg-primary-container flex items-center justify-center">
-                  <span className="material-symbols-outlined text-secondary-container text-lg">
-                    {concept.icon}
-                  </span>
-                </div>
+                <span className="font-['Space_Grotesk'] text-[10px] font-bold text-on-surface-variant/30 tracking-widest w-12">
+                  FILE-{String(i + 1).padStart(3, '0')}
+                </span>
                 <div>
                   <p className="font-body font-bold text-primary text-sm">{concept.title}</p>
                   <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">

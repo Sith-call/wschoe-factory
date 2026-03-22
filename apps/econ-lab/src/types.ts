@@ -73,12 +73,21 @@ export interface SummaryItem {
   direction: 'up' | 'down' | 'neutral';
 }
 
+export interface Discovery {
+  id: string;
+  conceptId: string;
+  hypothesis: string;
+  result: string;
+  timestamp: string;
+}
+
 export interface ProgressData {
   conceptsViewed: string[];
   experimentsCompleted: string[];
   totalLearningSeconds: number;
   lastVisit: string;
   sessionStartTime: number | null;
+  discoveries: Discovery[];
 }
 
 export type TabId = 'home' | 'concepts' | 'lab' | 'progress';

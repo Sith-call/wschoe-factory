@@ -4,6 +4,7 @@ import { ModelOutput } from '../types';
 interface EconGraphProps {
   output: ModelOutput;
   modelId: string;
+  large?: boolean;
 }
 
 // Convert data coordinates to SVG coordinates within the graph area
@@ -128,11 +129,13 @@ const MultiplierBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
   );
 };
 
-export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
+export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) => {
+  const heightClass = large ? 'h-[60vh]' : 'h-[420px]';
+
   // For GDP, render a bar chart
   if (modelId === 'gdp') {
     return (
-      <section className="relative bg-primary-container h-[420px] w-full p-8 overflow-hidden">
+      <section className={`relative bg-primary-container ${heightClass} w-full p-8 overflow-hidden`}>
         <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 opacity-10 pointer-events-none">
           {Array.from({ length: 64 }).map((_, i) => (
             <div key={i} className="border-r border-b border-surface-variant" />
@@ -148,7 +151,7 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
   // For multiplier, render vertical bar chart
   if (modelId === 'multiplier') {
     return (
-      <section className="relative bg-primary-container h-[420px] w-full p-8 overflow-hidden">
+      <section className={`relative bg-primary-container ${heightClass} w-full p-8 overflow-hidden`}>
         <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 opacity-10 pointer-events-none">
           {Array.from({ length: 64 }).map((_, i) => (
             <div key={i} className="border-r border-b border-surface-variant" />
@@ -195,7 +198,7 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
     : null;
 
   return (
-    <section className="relative bg-primary-container h-[420px] w-full p-8 overflow-hidden">
+    <section className={`relative bg-primary-container ${heightClass} w-full p-8 overflow-hidden`}>
       {/* Grid Lines */}
       <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 opacity-10 pointer-events-none">
         {Array.from({ length: 64 }).map((_, i) => (
@@ -288,8 +291,8 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
           )}
         </svg>
 
-        {/* Equilibrium Label Toast */}
-        {output.equilibrium && (
+        {/* Equilibrium Label Toast — only in non-large mode */}
+        {!large && output.equilibrium && (
           <div className="absolute top-4 right-4 bg-primary/40 backdrop-blur-md px-4 py-2 border border-outline-variant/10 rounded-lg z-20">
             <p className="font-label text-secondary-fixed-dim text-xs font-bold">
               {output.equilibrium.label}

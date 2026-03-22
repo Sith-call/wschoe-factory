@@ -13,9 +13,7 @@ export const ProgressBadge: React.FC<ProgressBadgeProps> = ({ label, value, tota
   return (
     <div className="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/5 shadow-[0_4px_24px_rgba(0,0,0,0.02)]">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-surface-container rounded-lg flex items-center justify-center">
-          <span className="material-symbols-outlined text-primary text-lg">{icon}</span>
-        </div>
+        <span className="material-symbols-outlined text-primary text-xl">{icon}</span>
         <div>
           <p className="font-headline font-bold text-lg text-primary">{value}/{total}</p>
           <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">{label}</p>
