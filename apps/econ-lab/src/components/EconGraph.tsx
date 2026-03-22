@@ -141,6 +141,85 @@ const MultiplierBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
   );
 };
 
+const SunkCostBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
+  const bars = output.barData ?? [];
+  const maxVal = Math.max(...bars.map(b => Math.max(0, b.value)), 1);
+  const barHeight = 44;
+  const chartWidth = 300;
+  const chartPadding = 40;
+
+  // Determine rational decision
+  const additionalCost = bars.find(b => b.id === 'additional-cost')?.value ?? 0;
+  const additionalBenefit = bars.find(b => b.id === 'additional-benefit')?.value ?? 0;
+  const shouldContinue = additionalBenefit > additionalCost;
+
+  return (
+    <svg viewBox="0 0 400 360" className="w-full h-full">
+      <text x="200" y="28" textAnchor="middle" className="font-headline" fontSize="14" fontWeight="700" fill="#9ca3af">
+        매몰비용 의사결정
+      </text>
+
+      {bars.map((bar, i) => {
+        const val = Math.max(0, bar.value);
+        const barW = maxVal > 0 ? (val / maxVal) * chartWidth : 0;
+        const yPos = 60 + i * (barHeight + 28);
+        const isSunk = bar.id === 'sunk';
+
+        return (
+          <g key={bar.id}>
+            <text x={chartPadding} y={yPos - 6} fill={isSunk ? '#6b7280' : '#d1d5db'} className="font-body" fontSize="12" fontWeight="600">
+              {bar.label}
+            </text>
+            <rect x={chartPadding} y={yPos} width={chartWidth} height={barHeight} rx="6" fill="#374151" opacity="0.4" />
+            <rect
+              x={chartPadding}
+              y={yPos}
+              width={barW}
+              height={barHeight}
+              rx="6"
+              fill={bar.color}
+              opacity={isSunk ? 0.35 : 0.9}
+              strokeDasharray={isSunk ? '8 4' : undefined}
+              stroke={isSunk ? '#6b7280' : undefined}
+              strokeWidth={isSunk ? 2 : 0}
+            />
+            <text
+              x={chartPadding + barW + 8}
+              y={yPos + barHeight / 2 + 5}
+              fill={bar.color}
+              className="font-label"
+              fontSize="14"
+              fontWeight="700"
+            >
+              {val}
+            </text>
+            {isSunk && (
+              <text
+                x={chartPadding + chartWidth / 2}
+                y={yPos + barHeight / 2 + 5}
+                textAnchor="middle"
+                fill="#9ca3af"
+                className="font-label"
+                fontSize="11"
+                fontWeight="700"
+              >
+                IGNORE
+              </text>
+            )}
+          </g>
+        );
+      })}
+
+      <text x="200" y="320" textAnchor="middle" fill={shouldContinue ? '#2ecc71' : '#e74c3c'} className="font-headline" fontSize="16" fontWeight="800">
+        {shouldContinue ? '계속 투자 (추가이득 > 추가비용)' : '중단 (추가이득 < 추가비용)'}
+      </text>
+      <text x="200" y="345" textAnchor="middle" fill="#9ca3af" className="font-body" fontSize="11">
+        매몰비용({bars.find(b => b.id === 'sunk')?.value ?? 0})은 의사결정에서 제외
+      </text>
+    </svg>
+  );
+};
+
 export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) => {
   const heightClass = large ? 'h-[60vh]' : 'h-[420px]';
   const [tooltip, setTooltip] = useState<{ x: number; y: number; dataX: number; dataY: number; curveLabel: string } | null>(null);
@@ -161,6 +240,22 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
       prevEqRef.current = { price: output.equilibrium.price, quantity: output.equilibrium.quantity };
     }
   }, [output.equilibrium?.price, output.equilibrium?.quantity]);
+
+  // For sunk-cost, render a bar chart (similar to GDP)
+  if (modelId === 'sunk-cost') {
+    return (
+      <section className={`relative bg-primary-container ${heightClass} w-full p-8 overflow-hidden`}>
+        <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 opacity-10 pointer-events-none">
+          {Array.from({ length: 64 }).map((_, i) => (
+            <div key={i} className="border-r border-b border-surface-variant" />
+          ))}
+        </div>
+        <div className="relative w-full h-full">
+          <SunkCostBarChart output={output} />
+        </div>
+      </section>
+    );
+  }
 
   // For GDP, render a bar chart
   if (modelId === 'gdp') {
@@ -480,7 +575,10 @@ function getAxisLabels(modelId: string): { x: string; y: string } {
     case 'comparative-advantage':
       return { x: '재화1 (전자제품)', y: '재화2 (농산물)' };
     case 'is-lm':
+    case 'liquidity-trap':
       return { x: '국민소득 (Y)', y: '이자율 (r)' };
+    case 'gdp-gap':
+      return { x: 'GDP', y: '물가 (P)' };
     case 'inflation':
       return { x: '통화량 (M)', y: '물가 (P)' };
     default:

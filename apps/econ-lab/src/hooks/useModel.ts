@@ -10,6 +10,9 @@ import { computeMultiplier } from '../models/multiplier';
 import { computeISLM } from '../models/islm';
 import { computeAdAs } from '../models/adAs';
 import { computeCrowdingOut } from '../models/crowdingOut';
+import { computeGdpGap } from '../models/gdpGap';
+import { computeLiquidityTrap } from '../models/liquidityTrap';
+import { computeSunkCost } from '../models/sunkCost';
 
 const modelFunctions: Record<string, (vars: Record<string, number>) => ModelOutput> = {
   'supply-demand': computeSupplyDemand,
@@ -22,6 +25,9 @@ const modelFunctions: Record<string, (vars: Record<string, number>) => ModelOutp
   'is-lm': computeISLM,
   'ad-as': computeAdAs,
   'crowding-out': computeCrowdingOut,
+  'gdp-gap': computeGdpGap,
+  'liquidity-trap': computeLiquidityTrap,
+  'sunk-cost': computeSunkCost,
 };
 
 export function useModel(modelId: string, variables: Variable[]) {
