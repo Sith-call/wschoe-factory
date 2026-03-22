@@ -67,7 +67,12 @@ Phase 2.6: UX 전문가 평가 (정량 측정 기반)
     ↓
 Phase 2.7: 비저너리 평가 (실제 화면 기반)
     ↓
-Phase 3: 분기 판단 (정량 + 정성 통합)
+Phase 2.8: 도메인 전문가 컨설팅 (NotebookLM 기반, 교육/정보 앱만)
+    ├─ 소스 기반 팩트 체크 → 오류 자동 수정
+    ├─ 위험한 단순화 → 주의사항 추가
+    └─ 확장 제안 → 리포트 기록
+    ↓
+Phase 3: 분기 판단 (정량 + 정성 + 전문가 통합)
     ├─ 전원 통과 → Phase 5 (커밋)
     └─ 미충족 → Phase 4 (가설 기반 개선) → Phase 1.5 복귀
     ↓
@@ -86,6 +91,7 @@ gstack browse 셋업은 `references/gstack-browse-setup.md`를 참조.
 | Phase 1.5 QA | `/qa` (Standard tier) | Health Score 계산, 자동 버그 수정 |
 | Phase 1.7 워크스루 | `/browse` | 주석 스크린샷, 저니 캡처 |
 | Phase 2.5 디자인 | `/design-review` | 80항목 체크리스트, AI Slop Detection |
+| Phase 2.8 전문가 | `domain-expert-consultant` + NotebookLM | 소스 기반 팩트 체크, 오류 수정 |
 | Phase 4 디버깅 | `/investigate` | Root cause 기반 수정 |
 
 ## 전제 조건
@@ -122,7 +128,8 @@ PM이 타겟 세그먼트 내에서 유저 페르소나를 정의한다.
 ├─ AI Slop Score ≥ B (gstack /design-review)
 ├─ 유저 만족도 ≥ 80% (페르소나 평가)
 ├─ UX 점수 ≥ 75% (UX 전문가)
-└─ 비저너리 점수 ≥ 70% (디자인 비저너리)
+├─ 비저너리 점수 ≥ 70% (디자인 비저너리)
+└─ 전문가 점수 ≥ 80% (도메인 전문가, 교육/정보 앱만)
 → Phase 5 (커밋)
 
 미충족 → Phase 4 (개선) → Phase 1.5 복귀
