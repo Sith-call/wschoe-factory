@@ -1,42 +1,44 @@
 import React from 'react';
 import { SCORE_LABELS } from '../types';
 
-interface ScoreSelectorProps {
+interface Props {
   value: number | null;
   onChange: (score: 1 | 2 | 3 | 4 | 5) => void;
 }
 
-const SCORE_COLORS: Record<number, string> = {
-  1: '#e8a0a0',
-  2: '#e8c4a0',
-  3: '#e8dca0',
-  4: '#a0d4a0',
-  5: '#7ac27a',
-};
-
-export function ScoreSelector({ value, onChange }: ScoreSelectorProps) {
+export function ScoreSelector({ value, onChange }: Props) {
   return (
-    <div className="flex justify-between gap-2">
-      {([1, 2, 3, 4, 5] as const).map(score => {
+    <div className="flex justify-between items-end px-2">
+      {[1, 2, 3, 4, 5].map(score => {
         const isSelected = value === score;
         return (
           <button
             key={score}
-            onClick={() => onChange(score)}
-            className="flex flex-col items-center gap-1"
-            aria-label={`${score}점 ${SCORE_LABELS[score]}`}
+            onClick={() => onChange(score as 1 | 2 | 3 | 4 | 5)}
+            className={`flex flex-col items-center ${isSelected ? 'gap-3' : 'gap-2 group'}`}
           >
+            {isSelected && (
+              <span className="text-[10px] font-bold text-primary tracking-tighter">
+                {SCORE_LABELS[score]}
+              </span>
+            )}
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center font-number text-xl transition-transform duration-100 ${
-                isSelected ? 'text-white scale-105' : 'border border-sd-border bg-white text-sd-text-secondary'
+              className={`rounded-full flex items-center justify-center transition-all ${
+                isSelected
+                  ? 'w-16 h-16 bg-primary-container shadow-lg shadow-primary-container/20 scale-110'
+                  : 'w-12 h-12 bg-surface-container-low border border-outline-variant/15 group-active:scale-90'
               }`}
-              style={isSelected ? { backgroundColor: SCORE_COLORS[score] } : undefined}
             >
-              {score}
+              <span
+                className={`font-headline ${
+                  isSelected
+                    ? 'text-2xl text-white'
+                    : 'text-lg text-on-surface-variant'
+                }`}
+              >
+                {score}
+              </span>
             </div>
-            <span className="font-body text-[0.8125rem] text-sd-text-secondary">
-              {SCORE_LABELS[score]}
-            </span>
           </button>
         );
       })}

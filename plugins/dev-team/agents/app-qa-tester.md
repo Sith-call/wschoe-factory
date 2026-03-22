@@ -132,7 +132,7 @@ $B snapshot -i  # 빈 상태에서의 화면
 
 **Phase 0의 flow-graph-validator가 "구조적" 닫힘을 검증한다면, 이 단계는 "실제 런타임"에서 저니가 완주 가능한지 확인한다.**
 
-`docs/pm-outputs/screen-flow-graph.md`의 주요 유저 저니를 실제로 따라가며 테스트:
+`docs/pm-outputs/screen-flows.md`의 주요 유저 저니를 실제로 따라가며 테스트:
 
 ```
 저니 1: 첫 방문 유저

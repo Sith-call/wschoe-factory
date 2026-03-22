@@ -46,7 +46,7 @@ $B goto http://localhost:{port}
 
 ### 2단계: 전체 스크린 캡처
 
-PM 산출물(`screen-flow-graph.md`, `user-stories.md`)을 읽고, 정의된 모든 스크린을 순서대로 방문한다.
+PM 산출물(`screen-flows.md`, `user-stories.md`)을 읽고, 정의된 모든 스크린을 순서대로 방문한다.
 
 **각 스크린에서 수행할 작업:**
 

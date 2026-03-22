@@ -2,37 +2,35 @@ import React from 'react';
 import type { SkinKeyword } from '../types';
 import { ALL_KEYWORDS, KEYWORD_LABELS } from '../types';
 
-interface KeywordChipsProps {
+interface Props {
   selected: SkinKeyword[];
   onChange: (keywords: SkinKeyword[]) => void;
 }
 
-export function KeywordChips({ selected, onChange }: KeywordChipsProps) {
-  const toggle = (keyword: SkinKeyword) => {
-    if (selected.includes(keyword)) {
-      onChange(selected.filter(k => k !== keyword));
+export function KeywordChips({ selected, onChange }: Props) {
+  const toggle = (kw: SkinKeyword) => {
+    if (selected.includes(kw)) {
+      onChange(selected.filter(k => k !== kw));
     } else {
-      onChange([...selected, keyword]);
+      onChange([...selected, kw]);
     }
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {ALL_KEYWORDS.map(keyword => {
-        const isSelected = selected.includes(keyword);
+    <div className="flex flex-wrap gap-2.5">
+      {ALL_KEYWORDS.map(kw => {
+        const isSelected = selected.includes(kw);
         return (
           <button
-            key={keyword}
-            onClick={() => toggle(keyword)}
-            className={`rounded-full px-3.5 py-1.5 text-sm font-body ${
+            key={kw}
+            onClick={() => toggle(kw)}
+            className={`px-5 py-2 rounded-full text-sm font-body transition-all active:scale-95 ${
               isSelected
-                ? 'border border-sd-primary text-white bg-sd-primary'
-                : 'border border-sd-border text-sd-text-secondary bg-white'
+                ? 'bg-primary text-white'
+                : 'bg-surface-container-highest/50 text-on-surface-variant'
             }`}
-            aria-label={KEYWORD_LABELS[keyword]}
-            aria-pressed={isSelected}
           >
-            {KEYWORD_LABELS[keyword]}
+            {KEYWORD_LABELS[kw]}
           </button>
         );
       })}

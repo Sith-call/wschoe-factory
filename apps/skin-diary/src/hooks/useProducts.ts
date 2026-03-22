@@ -12,33 +12,37 @@ export function useProducts() {
       category,
       addedAt: new Date().toISOString(),
     };
-    const updated = [...products, newProduct];
-    setProducts(updated);
-    saveProducts(updated);
+    setProducts(prev => {
+      const updated = [...prev, newProduct];
+      saveProducts(updated);
+      return updated;
+    });
     return newProduct;
-  }, [products]);
+  }, []);
 
   const removeProduct = useCallback((id: string) => {
-    const updated = products.filter(p => p.id !== id);
-    setProducts(updated);
-    saveProducts(updated);
-  }, [products]);
+    setProducts(prev => {
+      const updated = prev.filter(p => p.id !== id);
+      saveProducts(updated);
+      return updated;
+    });
+  }, []);
 
   const archiveProduct = useCallback((id: string) => {
-    const updated = products.map(p =>
-      p.id === id ? { ...p, archived: true } : p
-    );
-    setProducts(updated);
-    saveProducts(updated);
-  }, [products]);
+    setProducts(prev => {
+      const updated = prev.map(p => p.id === id ? { ...p, archived: true } : p);
+      saveProducts(updated);
+      return updated;
+    });
+  }, []);
 
   const unarchiveProduct = useCallback((id: string) => {
-    const updated = products.map(p =>
-      p.id === id ? { ...p, archived: false } : p
-    );
-    setProducts(updated);
-    saveProducts(updated);
-  }, [products]);
+    setProducts(prev => {
+      const updated = prev.map(p => p.id === id ? { ...p, archived: false } : p);
+      saveProducts(updated);
+      return updated;
+    });
+  }, []);
 
   const loadProducts = useCallback((newProducts: Product[]) => {
     setProducts(newProducts);

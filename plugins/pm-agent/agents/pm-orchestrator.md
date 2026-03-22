@@ -111,3 +111,24 @@ After each major activity, provide:
 2. **Key Decisions**: What was decided and why
 3. **Next Step**: What comes next in the lifecycle
 4. **Quality Gate**: gstack 정량 지표 현황 (해당 시)
+
+## Pipeline Handoff — 완료 신호
+
+PM 기획이 완료되면 (Phase 5 Execution까지) 반드시 다음 3개 파일이 존재해야 한다:
+- `apps/{app-name}/docs/pm-outputs/prd.md`
+- `apps/{app-name}/docs/pm-outputs/user-stories.md`
+- `apps/{app-name}/docs/pm-outputs/screen-flows.md`
+
+**완료 메시지 형식** (app-factory 오케스트레이터가 파싱):
+```
+## PM_STAGE_COMPLETE
+- app_name: {app-name}
+- prd: apps/{app-name}/docs/pm-outputs/prd.md
+- user_stories: apps/{app-name}/docs/pm-outputs/user-stories.md
+- screen_flow: apps/{app-name}/docs/pm-outputs/screen-flows.md
+- target_segment: {한 줄 요약}
+- tech_stack_recommendation: {추천 스택}
+→ NEXT: Design 팀 (stitch-workflow → design-sync-lead)
+```
+
+이 완료 신호를 출력하면 app-factory가 자동으로 다음 Stage로 전환한다.

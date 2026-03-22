@@ -1,80 +1,91 @@
 import React from 'react';
 import type { SkinRecord } from '../types';
-import { getDaysInMonth, getFirstDayOfMonth, getToday } from '../utils/date';
+import { getDaysInMonth, getFirstDayOfMonth, getToday, toDateString } from '../utils/date';
 
-interface CalendarGridProps {
+interface Props {
   year: number;
   month: number;
   records: Record<string, SkinRecord>;
-  onDateSelect: (date: string) => void;
+  onDateClick: (date: string) => void;
 }
 
-const SCORE_BG: Record<number, string> = {
-  1: 'rgba(232, 160, 160, 0.2)',
-  2: 'rgba(232, 196, 160, 0.2)',
-  3: 'rgba(232, 220, 160, 0.2)',
-  4: 'rgba(160, 212, 160, 0.2)',
-  5: 'rgba(122, 194, 122, 0.2)',
-};
+const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
-const SCORE_DOT: Record<number, string> = {
-  1: '#e8a0a0',
-  2: '#e8c4a0',
-  3: '#e8dca0',
-  4: '#a0d4a0',
-  5: '#7ac27a',
-};
+function getScoreColor(score: number): string {
+  switch (score) {
+    case 1: return 'bg-error-container';
+    case 2: return 'bg-tertiary-fixed';
+    case 3: return 'bg-surface-container-highest';
+    case 4: return 'bg-primary-fixed';
+    case 5: return 'bg-primary-container';
+    default: return '';
+  }
+}
 
-const DAY_HEADERS = ['일', '월', '화', '수', '목', '금', '토'];
-
-export function CalendarGrid({ year, month, records, onDateSelect }: CalendarGridProps) {
+export function CalendarGrid({ year, month, records, onDateClick }: Props) {
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
   const today = getToday();
 
-  const cells: (number | null)[] = [];
+  const cells: (string | null)[] = [];
   for (let i = 0; i < firstDay; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    cells.push(dateStr);
+  }
 
   return (
     <div>
+      {/* Day headers */}
       <div className="grid grid-cols-7 mb-2">
-        {DAY_HEADERS.map(d => (
-          <div key={d} className="text-center font-body text-[0.8125rem] text-sd-text-secondary py-1">
-            {d}
+        {DAYS.map(day => (
+          <div key={day} className="text-center text-[10px] font-label text-on-surface-variant/60 uppercase tracking-wider py-1">
+            {day}
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-1">
-        {cells.map((day, i) => {
-          if (day === null) return <div key={`e-${i}`} />;
 
-          const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      {/* Date cells */}
+      <div className="grid grid-cols-7 gap-y-1">
+        {cells.map((dateStr, idx) => {
+          if (!dateStr) {
+            return <div key={`empty-${idx}`} />;
+          }
+
           const record = records[dateStr];
-          const score = record?.morningLog?.score;
           const isToday = dateStr === today;
-          const hasRecord = !!record?.morningLog || !!record?.nightLog;
+          const hasRecord = record && (record.morningLog || record.nightLog);
+          const score = record?.morningLog?.score;
+          const hasBothLogs = record?.morningLog && record?.nightLog;
 
           return (
             <button
               key={dateStr}
-              onClick={() => onDateSelect(dateStr)}
-              className={`aspect-square rounded-lg flex flex-col items-center justify-center relative ${
-                isToday ? 'border-2 border-sd-primary' : ''
-              } cursor-pointer`}
-              style={score ? { backgroundColor: SCORE_BG[score] } : undefined}
-              aria-label={`${month + 1}월 ${day}일${score ? ` ${score}점` : ''}`}
+              onClick={() => onDateClick(dateStr)}
+              className={`relative flex flex-col items-center justify-center py-2 rounded-xl transition-colors ${
+                isToday ? 'ring-1 ring-primary/30' : ''
+              } ${hasRecord ? 'hover:bg-surface-container' : 'hover:bg-surface-container-low'}`}
             >
-              <span className={`font-number text-[0.9375rem] ${
-                isToday ? 'text-sd-primary font-medium' : 'text-sd-text'
-              }`}>
-                {day}
+              <span
+                className={`text-sm font-body ${
+                  isToday
+                    ? 'text-primary font-bold'
+                    : hasRecord
+                      ? 'text-on-surface'
+                      : 'text-on-surface-variant/40'
+                }`}
+              >
+                {parseInt(dateStr.split('-')[2])}
               </span>
+
+              {/* Score indicator dot */}
               {score && (
-                <span
-                  className="w-1.5 h-1.5 rounded-full absolute bottom-1"
-                  style={{ backgroundColor: SCORE_DOT[score] }}
-                />
+                <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${getScoreColor(score)}`} />
+              )}
+
+              {/* Both logs indicator */}
+              {hasBothLogs && (
+                <div className="absolute top-1 right-1 w-1 h-1 rounded-full bg-primary" />
               )}
             </button>
           );

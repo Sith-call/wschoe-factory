@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#3f261d",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "surface-dim": "#ded9d5",
+              "surface-container-high": "#ece7e3",
+              "on-primary-fixed-variant": "#6a3932",
+              "secondary-container": "#ffcbc1",
+              "primary-fixed-dim": "#fbb6aa",
+              "on-tertiary-fixed-variant": "#5d4035",
+              "on-secondary-fixed-variant": "#613e36",
+              "surface-container-low": "#f8f3ef",
+              "secondary-fixed": "#ffdad3",
+              "outline-variant": "#d7c2bf",
+              "outline": "#847370",
+              "tertiary-fixed": "#ffdbcf",
+              "surface": "#fdf8f4",
+              "primary-fixed": "#ffdad4",
+              "surface-bright": "#fdf8f4",
+              "inverse-on-surface": "#f5f0ec",
+              "on-background": "#1d1b19",
+              "surface-variant": "#e6e2de",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#2c160d",
+              "primary-container": "#c2847a",
+              "inverse-primary": "#fbb6aa",
+              "surface-container-highest": "#e6e2de",
+              "tertiary": "#77574c",
+              "background": "#fdf8f4",
+              "on-surface-variant": "#524341",
+              "tertiary-container": "#b08b7e",
+              "surface-container": "#f2ede9",
+              "on-secondary-fixed": "#2f140e",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1d1b19",
+              "primary": "#855048",
+              "on-primary-container": "#4a2019",
+              "secondary": "#7c554d",
+              "error-container": "#ffdad6",
+              "inverse-surface": "#32302e",
+              "on-primary-fixed": "#350f0a",
+              "on-error-container": "#93000a",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#e7bdaf",
+              "on-secondary-container": "#7b544c",
+              "secondary-fixed-dim": "#edbbb1",
+              "surface-tint": "#855048"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif KR", "serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #fdf8f4;
+            color: #1d1b19;
+            -webkit-font-smoothing: antialiased;
+        }
+        .noto-serif { font-family: 'Noto Serif KR', serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface max-w-[430px] mx-auto min-h-screen relative pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#fdf8f4] dark:bg-[#1d1b19] flex items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4 w-full">
+<button class="active:scale-95 transition-transform text-[#855048] dark:text-[#c2847a]">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline text-lg tracking-tight font-semibold text-[#855048] dark:text-[#c2847a]">아침 기록</h1>
+<span class="text-[10px] font-body text-on-surface-variant tracking-wider uppercase opacity-70">3월 23일 일요일</span>
+</div>
+</div>
+</header>
+<main class="px-6 space-y-12 mt-6">
+<!-- Section 1: Today's Skin Score -->
+<section class="space-y-6">
+<div class="flex items-baseline justify-between">
+<h2 class="font-headline text-xl text-on-surface">오늘 피부 점수</h2>
+<span class="font-body text-xs text-primary font-medium tracking-widest">STEP 01</span>
+</div>
+<div class="flex justify-between items-end px-2">
+<!-- Score 1 -->
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/15 flex items-center justify-center transition-all group-active:scale-90">
+<span class="font-headline text-lg text-on-surface-variant">1</span>
+</div>
+</button>
+<!-- Score 2 -->
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/15 flex items-center justify-center transition-all group-active:scale-90">
+<span class="font-headline text-lg text-on-surface-variant">2</span>
+</div>
+</button>
+<!-- Score 3 -->
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/15 flex items-center justify-center transition-all group-active:scale-90">
+<span class="font-headline text-lg text-on-surface-variant">3</span>
+</div>
+</button>
+<!-- Score 4 (Selected) -->
+<button class="flex flex-col items-center gap-3">
+<span class="text-[10px] font-bold text-primary tracking-tighter">좋아요</span>
+<div class="w-16 h-16 rounded-full bg-primary-container shadow-lg shadow-primary-container/20 flex items-center justify-center scale-110 transition-transform">
+<span class="font-headline text-2xl text-white">4</span>
+</div>
+</button>
+<!-- Score 5 -->
+<button class="flex flex-col items-center gap-2 group">
+<div class="w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/15 flex items-center justify-center transition-all group-active:scale-90">
+<span class="font-headline text-lg text-on-surface-variant">5</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Section 2: Skin Keywords -->
+<section class="space-y-4">
+<div class="flex items-baseline justify-between">
+<h2 class="font-headline text-xl text-on-surface">피부 키워드</h2>
+<span class="font-body text-xs text-primary font-medium tracking-widest">STEP 02</span>
+</div>
+<div class="flex flex-wrap gap-2.5">
+<!-- Selected Chips -->
+<span class="px-5 py-2 rounded-full bg-primary text-white text-sm font-body transition-all active:scale-95">촉촉</span>
+<span class="px-5 py-2 rounded-full bg-primary text-white text-sm font-body transition-all active:scale-95">매끈</span>
+<span class="px-5 py-2 rounded-full bg-primary text-white text-sm font-body transition-all active:scale-95">화사</span>
+<!-- Inactive Chips -->
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">건조</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">트러블</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">뾰루지</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">각질</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">번들</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">칙칙</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">붉음</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">당김</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">모공</span>
+<span class="px-5 py-2 rounded-full bg-surface-container-highest/50 text-on-surface-variant text-sm font-body">피지</span>
+</div>
+</section>
+<!-- Section 3: Trouble Areas -->
+<section class="space-y-6">
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline justify-between">
+<h2 class="font-headline text-xl text-on-surface">트러블 부위</h2>
+<span class="font-body text-xs text-primary font-medium tracking-widest">STEP 03</span>
+</div>
+<p class="text-xs text-on-surface-variant/60 font-body">트러블이 있는 부위를 선택하세요 (선택사항)</p>
+</div>
+<div class="relative bg-surface-container-low rounded-[2.5rem] p-8 flex justify-center overflow-hidden">
+<!-- Morning Sun Ray Decoration -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-[#f9f2e3] rounded-full blur-3xl opacity-60 translate-x-10 -translate-y-10"></div>
+<!-- Minimal Face Diagram (SVG Based for interactivity simulation) -->
+<div class="relative w-48 h-64 border-[1.5px] border-outline-variant/40 rounded-full flex flex-col items-center">
+<!-- Forehead -->
+<button class="absolute top-6 w-20 h-10 rounded-full flex items-center justify-center text-[10px] text-on-surface-variant/40 border border-outline-variant/20 hover:bg-white transition-colors">이마</button>
+<!-- Nose -->
+<button class="absolute top-24 w-8 h-16 rounded-full flex items-center justify-center text-[10px] text-on-surface-variant/40 border border-outline-variant/20 hover:bg-white transition-colors">코</button>
+<!-- Left Cheek (Selected) -->
+<button class="absolute top-24 left-4 w-14 h-14 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-[10px] text-primary font-bold">볼(좌)</button>
+<!-- Right Cheek -->
+<button class="absolute top-24 right-4 w-14 h-14 rounded-full flex items-center justify-center text-[10px] text-on-surface-variant/40 border border-outline-variant/20 hover:bg-white transition-colors">볼(우)</button>
+<!-- Jawline -->
+<button class="absolute bottom-8 w-24 h-10 rounded-full flex items-center justify-center text-[10px] text-on-surface-variant/40 border border-outline-variant/20 hover:bg-white transition-colors">턱선</button>
+</div>
+</div>
+</section>
+<!-- Section 4: Memo -->
+<section class="space-y-4">
+<div class="flex items-baseline justify-between">
+<h2 class="font-headline text-xl text-on-surface">한줄 메모</h2>
+<span class="font-body text-xs text-primary font-medium tracking-widest">FINAL</span>
+</div>
+<div class="relative">
+<textarea class="w-full h-24 bg-transparent border-2 border-dashed border-outline-variant/30 rounded-2xl p-4 font-body text-sm focus:ring-0 focus:border-primary-container transition-colors resize-none placeholder:text-on-surface-variant/40" placeholder="오늘 아침, 당신의 기분이나 특별한 점을 적어보세요."></textarea>
+<div class="absolute bottom-3 right-4">
+<span class="material-symbols-outlined text-primary/40 text-sm" data-icon="edit">edit</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Button Wrapper -->
+<div class="fixed bottom-0 left-0 w-full px-6 pb-10 pt-4 bg-gradient-to-t from-background via-background/95 to-transparent z-40 max-w-[430px] left-1/2 -translate-x-1/2">
+<button class="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-body font-semibold text-base shadow-xl shadow-primary/20 active:scale-[0.98] transition-all">
+            기록 완료
+        </button>
+</div>
+<!-- Hidden Bottom Nav for top-level flow context as per requirement (Suppressed but here's the structure if needed) -->
+<!-- Navigation is technically suppressed on this task-focused transactional page -->
+</body></html>

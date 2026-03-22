@@ -1,6 +1,9 @@
 ---
 name: story-screen-mapping
-description: PM의 유저 스토리보드와 Stitch MCP 스크린을 1:1 매핑. 누락 스크린 생성, 부적절한 스크린 수정 포함. "유저 스토리 매핑", "스크린 매핑", "스토리 맵" 시 사용.
+description: |
+  PM의 유저 스토리보드와 Stitch MCP 스크린을 1:1 매핑. 누락 스크린 생성, 부적절한 스크린 수정 포함.
+
+  Use when: "유저 스토리 매핑", "스크린 매핑", "스토리 맵", "story screen mapping", "스토리보드 스크린 연결", or when connecting PRD user stories to Stitch design screens. 디자인 싱크 워크플로우의 첫 단계로, Stitch 프로젝트가 생성된 후 실행한다.
 ---
 
 # Story-Screen Mapping
@@ -17,16 +20,9 @@ description: PM의 유저 스토리보드와 Stitch MCP 스크린을 1:1 매핑.
    - 스크린 내용 부적절 → `edit_screens`로 수정
    - 스크린 있지만 스토리 없음 → 무시 (추가 스크린)
 
-## Screen Generation Prompt Template
+## 누락 스크린 생성
 
-```
-Korean mobile {screen_purpose} for {app_name}.
-{top-to-bottom layout description in English}
-{Korean UI text in quotes}
-{color codes as #hex}
-{device width: 430px}
-Style: {reference app style, e.g., Toss, Kakao}
-```
+스크린 생성 시 `stitch-workflow.md`의 **프롬프트 작성 가이드 v2**를 따른다. hex 코드나 px 단위 대신 감정/분위기/메타포 중심으로 프롬프트를 작성해야 Stitch가 자체적으로 디자인 시스템을 생성한다.
 
 ## Output
 

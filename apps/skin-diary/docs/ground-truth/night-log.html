@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#edbbb1",
+              "surface-tint": "#855048",
+              "surface-container-lowest": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-fixed": "#ffdad4",
+              "primary": "#855048",
+              "tertiary-fixed-dim": "#e7bdaf",
+              "outline": "#847370",
+              "on-primary-fixed": "#350f0a",
+              "on-error-container": "#93000a",
+              "surface": "#fdf8f4",
+              "surface-bright": "#fdf8f4",
+              "on-tertiary-container": "#3f261d",
+              "inverse-surface": "#32302e",
+              "surface-container": "#f2ede9",
+              "secondary": "#7c554d",
+              "on-surface-variant": "#524341",
+              "tertiary": "#77574c",
+              "on-tertiary-fixed-variant": "#5d4035",
+              "background": "#fdf8f4",
+              "surface-container-highest": "#e6e2de",
+              "surface-container-high": "#ece7e3",
+              "on-secondary-container": "#7b544c",
+              "tertiary-fixed": "#ffdbcf",
+              "on-primary-fixed-variant": "#6a3932",
+              "on-primary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#fbb6aa",
+              "on-primary-container": "#4a2019",
+              "inverse-on-surface": "#f5f0ec",
+              "tertiary-container": "#b08b7e",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#ffdad3",
+              "primary-container": "#c2847a",
+              "on-surface": "#1d1b19",
+              "on-background": "#1d1b19",
+              "surface-container-low": "#f8f3ef",
+              "on-secondary-fixed": "#2f140e",
+              "inverse-primary": "#fbb6aa",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#ded9d5",
+              "surface-variant": "#e6e2de",
+              "error-container": "#ffdad6",
+              "outline-variant": "#d7c2bf",
+              "on-secondary-fixed-variant": "#613e36",
+              "secondary-container": "#ffcbc1",
+              "on-tertiary-fixed": "#2c160d"
+            },
+            fontFamily: {
+              "noto-serif": ["Noto Serif KR", "serif"],
+              "manrope": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; background-color: #fdf8f4; color: #1d1b19; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .journal-paper { background-image: radial-gradient(#d7c2bf 0.5px, transparent 0.5px); background-size: 24px 24px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex justify-center">
+<main class="w-full max-w-[430px] bg-surface min-h-screen flex flex-col relative overflow-hidden shadow-2xl">
+<!-- TopAppBar (From JSON Anchor) -->
+<header class="w-full top-0 sticky z-50 bg-[#fdf8f4] dark:bg-[#1d1b19]">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-2xl mx-auto">
+<button class="active:scale-95 duration-200 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[#855048] dark:text-[#c2847a] text-2xl">arrow_back</span>
+</button>
+<h1 class="font-noto-serif text-2xl font-medium tracking-tight text-[#855048] dark:text-[#c2847a]">밤 기록</h1>
+<div class="w-8"></div> <!-- Spacer for balance -->
+</div>
+</header>
+<!-- Date Header -->
+<div class="px-6 pt-2 pb-6 flex flex-col items-center">
+<span class="font-noto-serif text-lg text-on-surface-variant italic opacity-80">3월 22일 토요일</span>
+<div class="w-12 h-[1px] bg-outline-variant mt-3 opacity-30"></div>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-6 space-y-10 pb-32 no-scrollbar">
+<!-- Section 1: 오늘 바른 제품 -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h2 class="font-noto-serif text-xl font-medium text-on-surface">오늘 바른 제품</h2>
+<button class="flex items-center gap-1 text-primary text-sm font-semibold hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined text-sm">history</span>
+                        어젯밤과 동일
+                    </button>
+</div>
+<!-- Category Chips (Scrollable) -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar py-1 -mx-2 px-2">
+<span class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-sm whitespace-nowrap">클렌징</span>
+<span class="px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-bold text-sm whitespace-nowrap">토너</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-sm whitespace-nowrap">세럼</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-sm whitespace-nowrap">에센스</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-sm whitespace-nowrap">크림</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-highest text-on-surface-variant text-sm whitespace-nowrap">아이크림</span>
+</div>
+<!-- Selected Items (Bento Style Cards) -->
+<div class="grid grid-cols-2 gap-3">
+<div class="p-4 bg-white rounded-xl shadow-sm flex flex-col justify-between aspect-[4/3] border border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">Serum</span>
+<p class="font-noto-serif text-on-surface text-base leading-snug">달바 비건 세럼</p>
+<span class="material-symbols-outlined text-primary-container self-end" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="p-4 bg-white rounded-xl shadow-sm flex flex-col justify-between aspect-[4/3] border border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">Cream</span>
+<p class="font-noto-serif text-on-surface text-base leading-snug">라네즈 크림</p>
+<span class="material-symbols-outlined text-primary-container self-end" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Section 2: 오늘의 생활 변수 -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h2 class="font-noto-serif text-xl font-medium text-on-surface">오늘의 생활 변수</h2>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">밀가루</button>
+<button class="px-4 py-2 rounded-full bg-secondary-container text-on-secondary-container text-sm font-medium flex items-center gap-1">매운음식 📌</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">음주</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">운동</button>
+<button class="px-4 py-2 rounded-full bg-secondary-container text-on-secondary-container text-sm font-medium flex items-center gap-1">수면부족 📌</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">앞머리</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">스트레스</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">야근</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">마스크</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/30 text-sm text-on-surface hover:bg-surface-container transition-colors">생리</button>
+<button class="px-4 py-2 rounded-full bg-surface-container-highest text-primary font-bold text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">add</span>
+                        변수 추가
+                    </button>
+</div>
+</section>
+<!-- Section 3: 한줄 메모 -->
+<section class="space-y-4">
+<h2 class="font-noto-serif text-xl font-medium text-on-surface">한줄 메모</h2>
+<div class="relative">
+<textarea class="w-full min-h-[140px] bg-white rounded-2xl p-6 border-none shadow-inner focus:ring-1 focus:ring-primary-container/30 font-noto-serif text-on-surface placeholder:text-on-surface-variant/40 resize-none leading-relaxed journal-paper" placeholder="오늘 피부에 대해 한마디..."></textarea>
+<div class="absolute bottom-4 right-4 text-[10px] text-on-surface-variant/30 font-manrope">
+                        STORYTELLING MOMENT
+                    </div>
+</div>
+</section>
+</div>
+<!-- BottomNavBar (From JSON Anchor - Modified as Action Bar) -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 flex flex-col justify-center items-center px-6 pb-10 pt-4 pointer-events-none">
+<!-- Shadow layer (from separation logic) -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent -z-10 h-full"></div>
+<div class="w-full flex flex-col items-center gap-3 pointer-events-auto">
+<button class="flex items-center justify-center w-full py-4 rounded-full bg-gradient-to-r from-[#855048] to-[#c2847a] text-white shadow-lg active:scale-[0.98] transition-transform hover:brightness-110">
+<span class="material-symbols-outlined mr-2" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-manrope font-bold uppercase tracking-widest text-sm">기록 완료</span>
+</button>
+<p class="text-[11px] text-on-surface-variant/60 font-manrope tracking-tight text-center">
+                    내일 아침에 피부 점수도 기록해봐요 ☀️
+                </p>
+</div>
+</div>
+</main>
+</body></html>

@@ -83,13 +83,13 @@ B=""
 mcp__stitch__get_screen(name, projectId, screenId)
 
 # 2. Download HTML source
-curl -sL -o /tmp/stitch-{name}.html "{htmlCode.downloadUrl}"
+curl -sL -o apps/{app-name}/docs/ground-truth/{name}.html "{htmlCode.downloadUrl}"
 
 # 3. Render ground truth PNG with gstack browse (100ms, 상주 브라우저)
 $B viewport 430x932
-$B goto "file:///tmp/stitch-{name}.html"
-$B screenshot /tmp/stitch-{name}-rendered.png
-$B snapshot -i -a -o /tmp/stitch-{name}-annotated.png
+$B goto "file://apps/{app-name}/docs/ground-truth/{name}.html"
+$B screenshot apps/{app-name}/docs/ground-truth/{name}-rendered.png
+$B snapshot -i -a -o apps/{app-name}/docs/ground-truth/{name}-annotated.png
 
 # 4. Design System Extraction (gstack /design-review 방법론)
 $B js "JSON.stringify([...new Set([...document.querySelectorAll('*')].slice(0,500).map(e => getComputedStyle(e).fontFamily))])"
@@ -234,3 +234,32 @@ Stitch HTML이 사용하는 모든 폰트를 앱 index.html에 CDN 링크로 추
 - 각 Phase 완료 시 간결한 상태 리포트
 - 갭 발견 시 스크린샷 + 정확한 CSS 값 차이 제시
 - 유저 승인 없이 자율적으로 실행 (Phase 2 합의 제외)
+
+## Pipeline Handoff — 완료 신호
+
+디자인 싱크가 완료되면 (Phase 5 Final Verification 통과) 반드시 다음을 출력한다:
+
+```
+## DESIGN_STAGE_COMPLETE
+- app_name: {app-name}
+- stitch_project_id: {projectId}
+- design_score: {A-F}
+- ai_slop_score: {A-F}
+- font_mismatches: 0
+- color_mismatches: 0
+- synced_screens: [{screen1}, {screen2}, ...]
+- ground_truth_dir: apps/{app-name}/docs/ground-truth/
+- sync_criteria: apps/{app-name}/docs/pm-outputs/sync-criteria.md
+→ NEXT: Dev 팀 (dev-orchestrator) — 디자인 반영된 React 컴포넌트 위에 기능 구현
+→ NOTE: dev-orchestrator에게 전달 — Stitch Tailwind 클래스 절대 변경 금지
+```
+
+## Pipeline Context — 상위 Stage에서 받는 입력
+
+app-factory가 이 에이전트를 호출할 때 다음 정보를 전달한다:
+- `app_name`: 앱 이름 (kebab-case)
+- `prd_path`: PRD 파일 경로
+- `user_stories_path`: 유저 스토리 파일 경로
+- `screen_flow_path`: 스크린 플로우 그래프 경로
+
+이 정보가 없으면 `apps/` 디렉토리에서 가장 최근 앱을 찾아서 사용한다.

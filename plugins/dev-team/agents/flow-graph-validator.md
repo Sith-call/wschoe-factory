@@ -29,7 +29,7 @@ PM 산출물 읽기:
 ```
 docs/pm-outputs/user-stories.md
 docs/pm-outputs/prd.md
-docs/pm-outputs/screen-flow-graph.md  (있으면)
+docs/pm-outputs/screen-flows.md
 ```
 
 각 유저 스토리에서 **화면 전환(edge)**을 추출:

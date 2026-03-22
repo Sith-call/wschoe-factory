@@ -23,30 +23,43 @@ plz-survive-jay/
 └── CLAUDE.md                   # 이 파일
 ```
 
-## 새 앱 만들기 워크플로우
+## 새 앱 만들기 — 완전 자동화
 
-### 1단계: PM 팀으로 기획
+### 원커맨드 실행
 ```
-"[앱 아이디어]를 기획해줘"
-→ pm-agent 팀 실행 (전략/디스커버리/실행/GTM)
-→ 산출물: apps/{app-name}/docs/pm-outputs/
-```
-
-### 1.5단계: 디자인 팀으로 UI 생성
-```
-"유저 스토리 기반으로 디자인 만들어줘"
-→ design-team 실행 (Stitch MCP → 스크린 이미지 생성)
-→ 산출물: Stitch 프로젝트 (스크린 이미지 + HTML) + docs/pm-outputs/design-spec.md
+"[앱 아이디어] 만들어줘"
+→ app-factory 마스터 오케스트레이터가 전체 파이프라인 자동 실행
 ```
 
-### 2단계: 개발 팀으로 구현
+### 파이프라인 (자동 연결)
 ```
-"PRD 기반으로 개발해줘"
-→ dev-team 팀 실행 (TRD→아키텍처→백엔드+프론트엔드→QA)
-→ 산출물: apps/{app-name}/src/, __tests__/
+Stage 1: PM 기획 (pm-orchestrator)
+  → PRD + 유저스토리 + 스크린 플로우
+  → 완료 신호: PM_STAGE_COMPLETE
+     │ 자동 전환
+Stage 2: 디자인 (stitch-workflow → design-sync-lead)
+  → Stitch 스크린 → React 앱 시각 동기화
+  → 완료 신호: DESIGN_STAGE_COMPLETE
+     │ 자동 전환
+Stage 3: 개발 (dev-orchestrator)
+  → 기능 구현 + 데모 모드
+  → 완료 신호: DEV_STAGE_COMPLETE
+     │ 자동 전환
+Stage 4: 품질 루프 (ralph-persona-loop)
+  → 유저 만족도 80%+ 달성까지 반복
+  → 완료 신호: QUALITY_STAGE_COMPLETE
+     │ 자동 전환
+Stage 5: 출시 준비
 ```
 
-### 3단계: (앱인토스인 경우) AIT 팀으로 토스 통합
+### 수동 실행 (개별 Stage)
+각 Stage를 독립적으로 실행할 수도 있다:
+- `pm-orchestrator`: PM 기획만
+- `design-sync-lead`: 디자인 싱크만
+- `dev-orchestrator`: 개발만
+- `ralph-persona-loop`: 품질 루프만
+
+### 앱인토스 배포 (선택)
 ```
 "앱인토스로 배포해줘"
 → ait-team 실행 (scaffold→모듈 통합→granite 빌드→배포)

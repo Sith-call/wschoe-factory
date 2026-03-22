@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=430, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#c2847a",
+              "surface-container": "#f2ede9",
+              "on-primary-fixed-variant": "#6a3932",
+              "on-tertiary-fixed": "#2c160d",
+              "tertiary-fixed": "#ffdbcf",
+              "surface-container-highest": "#e6e2de",
+              "on-secondary": "#ffffff",
+              "surface-container-high": "#ece7e3",
+              "error-container": "#ffdad6",
+              "on-tertiary": "#ffffff",
+              "on-primary": "#ffffff",
+              "on-secondary-container": "#7b544c",
+              "primary-fixed-dim": "#fbb6aa",
+              "background": "#fdf8f4",
+              "tertiary-container": "#b08b7e",
+              "inverse-primary": "#fbb6aa",
+              "surface-container-low": "#f8f3ef",
+              "tertiary": "#77574c",
+              "on-primary-fixed": "#350f0a",
+              "inverse-surface": "#32302e",
+              "on-secondary-fixed-variant": "#613e36",
+              "on-error": "#ffffff",
+              "on-surface": "#1d1b19",
+              "on-primary-container": "#4a2019",
+              "surface-dim": "#ded9d5",
+              "surface-variant": "#e6e2de",
+              "on-surface-variant": "#524341",
+              "secondary-fixed-dim": "#edbbb1",
+              "surface-bright": "#fdf8f4",
+              "secondary-fixed": "#ffdad3",
+              "surface-tint": "#855048",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-background": "#1d1b19",
+              "inverse-on-surface": "#f5f0ec",
+              "primary-fixed": "#ffdad4",
+              "error": "#ba1a1a",
+              "secondary-container": "#ffcbc1",
+              "on-secondary-fixed": "#2f140e",
+              "on-tertiary-fixed-variant": "#5d4035",
+              "surface": "#fdf8f4",
+              "secondary": "#7c554d",
+              "primary": "#855048",
+              "outline-variant": "#d7c2bf",
+              "outline": "#847370",
+              "tertiary-fixed-dim": "#e7bdaf",
+              "on-tertiary-container": "#3f261d"
+            },
+            fontFamily: {
+              "noto-serif": ["Noto Serif KR", "serif"],
+              "manrope": ["Manrope", "sans-serif"],
+              "headline": ["Noto Serif KR"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-thin-serif-num {
+        font-family: 'Noto Serif KR', serif;
+        font-weight: 200;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-manrope min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full pt-6 pb-2 px-6 bg-[#fdf8f4] dark:bg-[#1d1b19]">
+<div class="flex justify-between items-center w-full max-w-2xl mx-auto">
+<div class="flex items-center gap-2 text-[#855048] dark:text-[#c2847a]">
+<span class="material-symbols-outlined" data-icon="spa">spa</span>
+<h1 class="font-noto-serif text-2xl font-light italic text-[#1d1b19] dark:text-[#fdf8f4]">좋은 아침이에요, 지은님</h1>
+</div>
+<button class="text-[#524341] dark:text-[#e6e2de] hover:opacity-80 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<main class="max-w-[430px] mx-auto px-6 space-y-8 mt-4">
+<!-- Milestone Badge -->
+<section class="flex justify-center">
+<div class="bg-surface-container-low px-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-outline-variant/10">
+<span class="text-sm">🏅</span>
+<span class="text-xs font-medium text-on-surface-variant tracking-tight">14일 연속 기록 중!</span>
+</div>
+</section>
+<!-- Today's Recording Status (Side by Side) -->
+<section class="grid grid-cols-2 gap-4">
+<!-- Night Record (Completed) -->
+<div class="bg-surface-container-lowest p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] border border-outline-variant/5">
+<div>
+<div class="flex justify-between items-start mb-2">
+<span class="text-[11px] font-semibold text-primary uppercase tracking-wider">밤 기록</span>
+<span class="material-symbols-outlined text-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="text-[13px] text-on-surface-variant leading-relaxed">수분 크림 외 3개<br/>제품 사용 완료</p>
+</div>
+<div class="mt-4 flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-white flex items-center justify-center overflow-hidden">
+<img alt="" class="w-full h-full object-cover" data-alt="Skincare bottle closeup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0ssjGaeIm1SJGMh2E00E2Qs-HAlRzrg7bVGVj8XgyRbjVzFpvJ-NOimRgBGj9cYo6QVqaMKYPlGgIqzTu2SR5GfZ_5bMFl4wJezdS2RE6lrL8PgpBrmVIrhEgckYVPUI_roztrbRprMjZiY553yNZtRWXHJMd3slmkTunkJ3ptNUQ48xLXmBnV5mebz2gMcf_imSxbHS3KhSsOYSrSwPFfmWrxlvx7C8iwzvoISVe0B9-2tCsHF1Xau1Bt5QkPx1iLkVC2xrp0Gk"/>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-white flex items-center justify-center overflow-hidden">
+<img alt="" class="w-full h-full object-cover" data-alt="Toner bottle aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhjafCHNlT5uswDCX9Bp41nBa4AbrYH4T-bViYGUxjOdqZZpsIK_WXuf1Y4hRmkavR4DXcQaFrE74a1RQYeKWywSFwzGkjsrHv113LBBJBfmECXQAhf-jHhzmIlrSMs9F5JnZ3H_Muw9ciMeukLv-G6262uoCD-ojrmv-zha2DiSWfaAnb_SALfiCLZmqquZw_Hytch7Q6IOrAz16RFIAbmw6OyUS8WS-Y3EuWVRsvLiRJAdSkHbC2OBa0AHbsZlor0tSFQ5w9zTE"/>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-white flex items-center justify-center text-[10px] text-on-surface-variant font-medium">
+                        +2
+                    </div>
+</div>
+</div>
+<!-- Morning Record (Pending) -->
+<div class="bg-surface-container-low p-5 rounded-[24px] flex flex-col justify-between min-h-[160px]">
+<div>
+<span class="text-[11px] font-semibold text-on-surface-variant/60 uppercase tracking-wider">아침 기록</span>
+<p class="text-[13px] text-on-surface-variant mt-2 leading-tight">아직 기록 전이에요</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-white py-2.5 px-4 rounded-full text-xs font-semibold shadow-md active:scale-95 transition-transform">
+                    기록하기
+                </button>
+</div>
+</section>
+<!-- Skin Score Chart & Summary -->
+<section class="bg-surface-container-low rounded-[32px] p-6">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="text-sm font-semibold text-on-surface-variant mb-1">피부 컨디션</h3>
+<p class="font-thin-serif-num text-3xl text-primary leading-none">이번 주 평균 3.8점</p>
+</div>
+<span class="text-[11px] text-on-surface-variant/60">지난 7일간</span>
+</div>
+<!-- Sparkline Visual -->
+<div class="relative h-24 flex items-end justify-between px-2">
+<!-- Grid Lines (Subtle) -->
+<div class="absolute inset-x-0 top-0 h-px bg-outline-variant/10"></div>
+<div class="absolute inset-x-0 top-1/2 h-px bg-outline-variant/10"></div>
+<!-- Chart Dots and Path Simulation -->
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-2 h-2 rounded-full bg-primary-container opacity-40"></div>
+<span class="text-[10px] text-on-surface-variant/40">월</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span class="text-[10px] text-on-surface-variant/40">화</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(133,80,72,0.4)]"></div>
+<span class="text-[10px] text-on-surface-variant/40">수</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span class="text-[10px] text-on-surface-variant/40">목</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_10px_rgba(133,80,72,0.5)] -mb-0.5"></div>
+<span class="text-[10px] text-on-surface-variant font-bold">오늘</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-2 h-2 rounded-full bg-outline-variant/30"></div>
+<span class="text-[10px] text-on-surface-variant/40">토</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-2 h-2 rounded-full bg-outline-variant/30"></div>
+<span class="text-[10px] text-on-surface-variant/40">일</span>
+</div>
+</div>
+</section>
+<!-- Insight Preview Card -->
+<section class="relative overflow-hidden bg-surface-container-highest rounded-[28px] p-6">
+<!-- Decorative Element -->
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary-container/10 rounded-full blur-2xl"></div>
+<div class="flex items-center gap-3 mb-3">
+<div class="bg-primary/10 p-2 rounded-xl">
+<span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+</div>
+<h3 class="text-sm font-bold text-on-surface">이번 주 발견</h3>
+</div>
+<p class="text-[15px] text-on-surface-variant leading-relaxed">
+<span class="text-primary font-semibold">세럼A</span>를 사용한 날, <br/>
+                평소보다 피부 점수가 <span class="font-thin-serif-num font-bold text-lg">0.5</span>점 높았어요.
+            </p>
+<button class="mt-4 text-[13px] font-semibold text-primary flex items-center gap-1 group">
+                자세히 보기
+                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 h-20 bg-[#fdf8f4]/80 dark:bg-[#1d1b19]/80 backdrop-blur-xl shadow-[0_-4px_30px_rgba(82,67,65,0.08)] rounded-t-[32px]">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-[#855048] dark:text-[#c2847a] border-b-2 border-[#855048] dark:border-[#c2847a] pb-1 tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined" data-icon="home_max" style="font-variation-settings: 'FILL' 1;">home_max</span>
+<span class="font-manrope text-[11px] font-medium tracking-wide">홈</span>
+</a>
+<!-- Calendar -->
+<a class="flex flex-col items-center justify-center text-[#524341] dark:text-[#e6e2de] opacity-60 hover:text-[#855048] transition-colors tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-manrope text-[11px] font-medium tracking-wide">캘린더</span>
+</a>
+<!-- Insights -->
+<a class="flex flex-col items-center justify-center text-[#524341] dark:text-[#e6e2de] opacity-60 hover:text-[#855048] transition-colors tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-manrope text-[11px] font-medium tracking-wide">인사이트</span>
+</a>
+</nav>
+</body></html>

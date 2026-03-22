@@ -1,97 +1,109 @@
 import React, { useState } from 'react';
 import type { ProductCategory } from '../types';
 import { CATEGORY_LABELS, CATEGORY_ORDER } from '../types';
-import { PlusIcon } from '../components/Icons';
 
-interface OnboardingPageProps {
+interface Props {
   onComplete: (profile: { name: string; skinTypes: string[] }, products: { name: string; category: ProductCategory }[]) => void;
   onLoadDemo: () => void;
 }
 
-const SKIN_TYPES = ['건성', '복합성', '지성', '민감성'];
+const SKIN_TYPES = ['건성', '복합성', '지성', '민감성', '중성'];
 
-export function OnboardingPage({ onComplete, onLoadDemo }: OnboardingPageProps) {
-  const [step, setStep] = useState(1);
+export function OnboardingPage({ onComplete, onLoadDemo }: Props) {
+  const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [skinTypes, setSkinTypes] = useState<string[]>([]);
   const [products, setProducts] = useState<{ name: string; category: ProductCategory }[]>([]);
-  const [newName, setNewName] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('toner');
+  const [newProductName, setNewProductName] = useState('');
+  const [newProductCategory, setNewProductCategory] = useState<ProductCategory>('serum');
 
-  const toggleSkinType = (t: string) => {
+  const toggleSkinType = (type: string) => {
     setSkinTypes(prev =>
-      prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
   };
 
   const addProduct = () => {
-    if (newName.trim()) {
-      setProducts([...products, { name: newName.trim(), category: selectedCategory }]);
-      setNewName('');
+    if (newProductName.trim()) {
+      setProducts(prev => [...prev, { name: newProductName.trim(), category: newProductCategory }]);
+      setNewProductName('');
     }
   };
 
   const removeProduct = (idx: number) => {
-    setProducts(products.filter((_, i) => i !== idx));
+    setProducts(prev => prev.filter((_, i) => i !== idx));
   };
 
   return (
-    <div className="min-h-screen bg-sd-bg flex flex-col">
-      {/* Progress */}
-      <div className="px-5 pt-6 pb-2">
-        <p className="font-body text-sm text-sd-text-secondary mb-2">{step}단계 / 3단계</p>
-        <div className="h-1 bg-sd-border rounded-full overflow-hidden">
-          <div
-            className="h-full bg-sd-primary rounded-full transition-all duration-200"
-            style={{ width: `${(step / 3) * 100}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="flex-1 px-5 pt-8">
-        {step === 1 && (
-          <div>
-            <h1 className="font-heading text-2xl text-sd-text font-bold mb-4">
-              피부는 어제의 결과예요
-            </h1>
-            <div className="space-y-3 font-body text-[0.9375rem] text-sd-text-secondary leading-relaxed">
-              <p>어젯밤 바른 것 + 오늘 한 것</p>
-              <p>그 결과가 내일 아침 피부 상태.</p>
-              <p className="pt-2">매일 30초씩 기록하면<br/>나에게 맞는 루틴을<br/>데이터로 찾을 수 있어요.</p>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Content */}
+      <div className="flex-1 px-6 pt-16 pb-10">
+        {step === 0 && (
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <span className="material-symbols-outlined text-primary text-4xl">spa</span>
+              <h1 className="font-headline text-3xl font-light text-on-surface leading-tight">
+                피부 일지에<br />오신 것을 환영해요
+              </h1>
+              <p className="text-sm text-on-surface-variant leading-relaxed">
+                매일 스킨케어 루틴과 피부 상태를 기록하고,<br />
+                나에게 맞는 제품과 습관을 데이터로 발견하세요.
+              </p>
             </div>
 
-            <div className="mt-8">
-              <label className="font-body text-sm text-sd-text-secondary block mb-2">이름</label>
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="이름을 알려주세요"
-                className="w-full rounded-lg border border-sd-border px-4 py-3 font-body text-sm text-sd-text bg-white focus:outline-none focus:border-sd-primary"
-              />
+            <div className="space-y-3">
+              <button
+                onClick={() => setStep(1)}
+                className="w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-body font-semibold text-base shadow-lg active:scale-[0.98] transition-transform"
+              >
+                시작하기
+              </button>
+              <button
+                onClick={onLoadDemo}
+                className="w-full py-3 rounded-full border border-outline-variant/30 text-on-surface-variant font-body text-sm active:scale-[0.98] transition-transform"
+              >
+                데모로 먼저 살펴보기
+              </button>
             </div>
           </div>
         )}
 
-        {step === 2 && (
-          <div>
-            <h1 className="font-heading text-2xl text-sd-text font-bold mb-2">
-              피부 타입을 알려주세요
-            </h1>
-            <p className="font-body text-sm text-sd-text-secondary mb-6">복수 선택 가능</p>
+        {step === 1 && (
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <span className="font-body text-xs text-primary font-medium tracking-widest">STEP 01</span>
+              <h2 className="font-headline text-2xl text-on-surface">이름을 알려주세요</h2>
+            </div>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="예: 지은"
+              className="w-full px-0 py-3 border-0 border-b-2 border-outline-variant/30 bg-transparent font-headline text-xl text-on-surface focus:ring-0 focus:border-primary placeholder:text-on-surface-variant/30"
+              autoFocus
+            />
+          </div>
+        )}
 
-            <div className="grid grid-cols-2 gap-3">
-              {SKIN_TYPES.map(t => (
+        {step === 2 && (
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <span className="font-body text-xs text-primary font-medium tracking-widest">STEP 02</span>
+              <h2 className="font-headline text-2xl text-on-surface">피부 타입은요?</h2>
+              <p className="text-xs text-on-surface-variant/60">복수 선택 가능</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {SKIN_TYPES.map(type => (
                 <button
-                  key={t}
-                  onClick={() => toggleSkinType(t)}
-                  className={`rounded-xl px-4 py-3 font-body text-sm text-center ${
-                    skinTypes.includes(t)
-                      ? 'bg-sd-primary text-white'
-                      : 'bg-white border border-sd-border text-sd-text'
+                  key={type}
+                  onClick={() => toggleSkinType(type)}
+                  className={`px-6 py-3 rounded-full text-sm font-medium transition-colors ${
+                    skinTypes.includes(type)
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-container-low text-on-surface-variant border border-outline-variant/20'
                   }`}
                 >
-                  {t}
+                  {type}
                 </button>
               ))}
             </div>
@@ -99,106 +111,116 @@ export function OnboardingPage({ onComplete, onLoadDemo }: OnboardingPageProps) 
         )}
 
         {step === 3 && (
-          <div>
-            <h1 className="font-heading text-2xl text-sd-text font-bold mb-2">
-              지금 쓰고 있는 제품을<br/>등록해볼까요?
-            </h1>
-            <p className="font-body text-sm text-sd-text-secondary mb-6">나중에 추가할 수도 있어요</p>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <span className="font-body text-xs text-primary font-medium tracking-widest">STEP 03</span>
+              <h2 className="font-headline text-2xl text-on-surface">사용 중인 제품</h2>
+              <p className="text-xs text-on-surface-variant/60">나중에 추가할 수도 있어요</p>
+            </div>
 
-            <div className="mb-4">
-              <div className="flex flex-wrap gap-1.5 mb-3">
+            {/* Added products */}
+            {products.length > 0 && (
+              <div className="space-y-2">
+                {products.map((p, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between bg-surface-container-lowest rounded-xl p-4"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-on-surface">{p.name}</p>
+                      <p className="text-[10px] text-on-surface-variant/60 uppercase">{CATEGORY_LABELS[p.category]}</p>
+                    </div>
+                    <button
+                      onClick={() => removeProduct(i)}
+                      className="text-on-surface-variant/40"
+                    >
+                      <span className="material-symbols-outlined text-sm">close</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add form */}
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={newProductName}
+                onChange={e => setNewProductName(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && addProduct()}
+                placeholder="제품 이름"
+                className="w-full px-4 py-3 rounded-xl border border-outline-variant/30 bg-white text-sm font-body focus:ring-1 focus:ring-primary-container/30 focus:outline-none"
+              />
+              <div className="flex gap-2 flex-wrap">
                 {CATEGORY_ORDER.map(cat => (
                   <button
                     key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`rounded-full px-3 py-1 text-[0.8125rem] font-body ${
-                      selectedCategory === cat
-                        ? 'bg-sd-primary text-white'
-                        : 'bg-white text-sd-text-secondary border border-sd-border'
+                    onClick={() => setNewProductCategory(cat)}
+                    className={`px-3 py-1 rounded-full text-xs transition-colors ${
+                      newProductCategory === cat
+                        ? 'bg-primary text-white'
+                        : 'bg-surface-container-highest text-on-surface-variant'
                     }`}
                   >
                     {CATEGORY_LABELS[cat]}
                   </button>
                 ))}
               </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={e => setNewName(e.target.value)}
-                  placeholder="제품명을 입력하세요"
-                  className="flex-1 rounded-lg border border-sd-border px-3 py-2 text-sm font-body text-sd-text bg-white focus:outline-none focus:border-sd-primary"
-                  onKeyDown={e => e.key === 'Enter' && addProduct()}
-                />
+              {newProductName.trim() && (
                 <button
                   onClick={addProduct}
-                  disabled={!newName.trim()}
-                  className="border border-sd-primary text-sd-primary rounded-xl px-3 py-2 disabled:opacity-50 flex items-center gap-1"
+                  className="text-sm font-semibold text-primary"
                 >
-                  <PlusIcon size={16} />
-                  <span className="font-body text-sm">추가</span>
+                  + 추가
                 </button>
-              </div>
+              )}
             </div>
-
-            {products.length > 0 && (
-              <div className="space-y-2">
-                <p className="font-body text-sm text-sd-text-secondary">등록된 제품:</p>
-                {products.map((p, i) => (
-                  <div key={i} className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-sd-border">
-                    <span className="font-body text-sm text-sd-text">
-                      <span className="text-sd-text-secondary">{CATEGORY_LABELS[p.category]}</span> — {p.name}
-                    </span>
-                    <button
-                      onClick={() => removeProduct(i)}
-                      className="text-sd-danger text-sm font-body"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         )}
       </div>
 
-      <div className="px-5 pb-8 pt-4 space-y-2">
-        {step < 3 ? (
-          <>
+      {/* Bottom navigation */}
+      {step > 0 && (
+        <div className="px-6 pb-10 pt-4 bg-gradient-to-t from-background to-transparent">
+          <div className="flex gap-3">
             <button
-              onClick={() => setStep(step + 1)}
+              onClick={() => setStep(s => s - 1)}
+              className="px-6 py-3 rounded-full border border-outline-variant/30 text-on-surface-variant font-body text-sm"
+            >
+              이전
+            </button>
+            <button
+              onClick={() => {
+                if (step === 3) {
+                  onComplete({ name: name || '사용자', skinTypes }, products);
+                } else {
+                  setStep(s => s + 1);
+                }
+              }}
               disabled={step === 1 && !name.trim()}
-              className="w-full bg-sd-primary text-white rounded-xl px-5 py-3 font-body font-medium disabled:opacity-50"
+              className={`flex-1 py-3 rounded-full font-body font-semibold text-sm transition-all ${
+                (step === 1 && !name.trim())
+                  ? 'bg-surface-container-highest text-on-surface-variant/40'
+                  : 'bg-primary text-white active:scale-[0.98]'
+              }`}
             >
-              다음
+              {step === 3 ? '완료' : '다음'}
             </button>
-            {step === 2 && (
-              <button
-                onClick={() => setStep(3)}
-                className="w-full text-sd-primary underline text-sm font-body"
-              >
-                건너뛰기
-              </button>
-            )}
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => onComplete({ name, skinTypes }, products)}
-              className="w-full bg-sd-primary text-white rounded-xl px-5 py-3 font-body font-medium"
-            >
-              시작하기
-            </button>
-            <button
-              onClick={onLoadDemo}
-              className="w-full text-sd-primary underline text-sm font-body"
-            >
-              데모 데이터로 체험하기
-            </button>
-          </>
-        )}
-      </div>
+          </div>
+
+          {/* Progress dots */}
+          <div className="flex justify-center gap-2 mt-4">
+            {[1, 2, 3].map(s => (
+              <div
+                key={s}
+                className={`w-2 h-2 rounded-full ${
+                  s === step ? 'bg-primary' : 'bg-outline-variant/30'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

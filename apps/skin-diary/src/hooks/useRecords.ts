@@ -11,26 +11,38 @@ export function useRecords() {
   }, []);
 
   const saveNightLog = useCallback((date: string, nightLog: NightLog) => {
-    const updated = { ...records };
-    if (!updated[date]) {
-      updated[date] = { date };
-    }
-    updated[date] = { ...updated[date], nightLog };
-    updateRecords(updated);
-  }, [records, updateRecords]);
+    setRecords(prev => {
+      const updated = {
+        ...prev,
+        [date]: {
+          ...prev[date],
+          date,
+          nightLog,
+        },
+      };
+      saveRecords(updated);
+      return updated;
+    });
+  }, []);
 
   const saveMorningLog = useCallback((date: string, morningLog: MorningLog) => {
-    const updated = { ...records };
-    if (!updated[date]) {
-      updated[date] = { date };
-    }
-    updated[date] = { ...updated[date], morningLog };
-    updateRecords(updated);
-  }, [records, updateRecords]);
+    setRecords(prev => {
+      const updated = {
+        ...prev,
+        [date]: {
+          ...prev[date],
+          date,
+          morningLog,
+        },
+      };
+      saveRecords(updated);
+      return updated;
+    });
+  }, []);
 
   const loadRecords = useCallback((newRecords: Record<string, SkinRecord>) => {
     updateRecords(newRecords);
   }, [updateRecords]);
 
-  return { records, saveNightLog, saveMorningLog, loadRecords, updateRecords };
+  return { records, saveNightLog, saveMorningLog, loadRecords };
 }
