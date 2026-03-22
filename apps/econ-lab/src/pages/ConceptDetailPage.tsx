@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Concept } from '../types';
 import { TermChip } from '../components/TermChip';
 import { QuizSection } from '../components/QuizSection';
-import { concepts, conceptQuizzes } from '../data/concepts';
+import { concepts, conceptQuizzes, conceptDifficulty, conceptOneLiner, conceptNewsConnections } from '../data/concepts';
 import { useProgress } from '../hooks/useProgress';
 
 interface ConceptDetailPageProps {
@@ -186,6 +186,15 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
 }) => {
   const { markViewed } = useProgress();
   const quizzes = conceptQuizzes[concept.id] || [];
+  const difficulty = conceptDifficulty[concept.id] || '입문';
+  const oneLiner = conceptOneLiner[concept.id] || '';
+  const newsItems = conceptNewsConnections[concept.id] || [];
+
+  const difficultyColor = difficulty === '입문'
+    ? 'bg-[#1a6b50]/10 text-[#1a6b50] border-[#1a6b50]/20'
+    : difficulty === '중급'
+    ? 'bg-[#d4a24e]/10 text-[#d4a24e] border-[#d4a24e]/20'
+    : 'bg-[#ba1a1a]/10 text-[#ba1a1a] border-[#ba1a1a]/20';
 
   useEffect(() => {
     markViewed(concept.id);
@@ -208,13 +217,33 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
               {concept.title}
             </h1>
           </div>
-          <span className="font-['Manrope'] font-semibold text-[11px] px-3 py-1 border border-secondary text-secondary rounded-full">
-            {concept.category}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={`font-['Manrope'] font-bold text-[11px] px-3 py-1 border rounded-full ${difficultyColor}`}>
+              {difficulty}
+            </span>
+            <span className="font-['Manrope'] font-semibold text-[11px] px-3 py-1 border border-secondary text-secondary rounded-full">
+              {concept.category}
+            </span>
+          </div>
         </div>
       </header>
 
       <main className="max-w-[430px] mx-auto pb-32 px-6 pt-4 space-y-10">
+        {/* One-liner Summary */}
+        {oneLiner && (
+          <section className="bg-[#d4a24e]/8 border border-[#d4a24e]/15 rounded-lg p-5">
+            <div className="flex items-start gap-3">
+              <span className="font-headline font-extrabold text-[#d4a24e] text-lg leading-none mt-0.5">''</span>
+              <div>
+                <span className="font-label text-[11px] font-bold text-[#d4a24e] tracking-wider uppercase">한마디로</span>
+                <p className="font-body font-semibold text-primary text-[15px] leading-relaxed mt-1">
+                  {oneLiner}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Card 1: Core Concept */}
         <section className="bg-surface-container-lowest rounded-lg p-6 shadow-[0_20px_40px_rgba(27,28,26,0.03)] border border-outline-variant/10">
           <h2 className="font-headline font-bold text-lg text-primary mb-4 flex items-center gap-2">
@@ -261,6 +290,37 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
             ))}
           </div>
         </section>
+
+        {/* News Connection Section */}
+        {newsItems.length > 0 && (
+          <section>
+            <h2 className="font-headline font-bold text-lg text-primary mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-secondary text-xl">newspaper</span>
+              뉴스에서 보면
+            </h2>
+            <div className="space-y-4">
+              {newsItems.map((news, i) => (
+                <div key={i} className="bg-surface-container-lowest rounded-lg border border-outline-variant/10 overflow-hidden">
+                  <div className="px-5 pt-4 pb-3 border-b border-outline-variant/5">
+                    <p className="font-body font-bold text-primary text-[14px] leading-snug">
+                      {news.headline}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="font-label text-[10px] text-on-surface-variant/60 font-medium">{news.source}</span>
+                      <span className="w-1 h-1 rounded-full bg-on-surface-variant/30"></span>
+                      <span className="font-label text-[10px] text-on-surface-variant/60 font-medium">{news.date}</span>
+                    </div>
+                  </div>
+                  <div className="px-5 py-3 bg-primary-container/5">
+                    <p className="font-body text-sm text-on-surface-variant leading-relaxed">
+                      {news.explanation}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* CTA */}
         <button

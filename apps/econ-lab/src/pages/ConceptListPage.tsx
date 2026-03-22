@@ -1,5 +1,5 @@
 import React from 'react';
-import { concepts } from '../data/concepts';
+import { concepts, conceptDifficulty } from '../data/concepts';
 import { useProgress } from '../hooks/useProgress';
 import { ConceptCategory } from '../types';
 
@@ -40,6 +40,12 @@ export const ConceptListPage: React.FC<ConceptListPageProps> = ({ onNavigateConc
             {group.items.map(concept => {
               const isViewed = progress.conceptsViewed.includes(concept.id);
               const isExperimented = progress.experimentsCompleted.includes(concept.id);
+              const difficulty = conceptDifficulty[concept.id] || '입문';
+              const diffBadgeClass = difficulty === '입문'
+                ? 'bg-[#1a6b50]/10 text-[#1a6b50]'
+                : difficulty === '중급'
+                ? 'bg-[#d4a24e]/10 text-[#d4a24e]'
+                : 'bg-[#ba1a1a]/10 text-[#ba1a1a]';
 
               return (
                 <div
@@ -54,7 +60,12 @@ export const ConceptListPage: React.FC<ConceptListPageProps> = ({ onNavigateConc
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-primary font-body">{concept.title}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-primary font-body">{concept.title}</h3>
+                        <span className={`font-label text-[10px] font-bold px-2 py-0.5 rounded ${diffBadgeClass}`}>
+                          {difficulty}
+                        </span>
+                      </div>
                       {isExperimented ? (
                         <span className="font-label text-[10px] bg-secondary-container/30 text-secondary font-bold px-2 py-1 rounded">
                           COMPLETED

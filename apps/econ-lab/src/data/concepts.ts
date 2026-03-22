@@ -852,3 +852,127 @@ export const concepts: Concept[] = [
 export function getConceptById(id: string): Concept | undefined {
   return concepts.find(c => c.id === id);
 }
+
+// === Iteration 3: 정훈 타겟 데이터 ===
+
+export type DifficultyLevel = '입문' | '중급' | '심화';
+
+export interface NewsConnection {
+  headline: string;
+  source: string;
+  date: string;
+  explanation: string;
+}
+
+export const conceptDifficulty: Record<string, DifficultyLevel> = {
+  'supply-demand': '입문',
+  'gdp': '입문',
+  'inflation': '입문',
+  'ppf': '중급',
+  'elasticity': '중급',
+  'multiplier': '중급',
+  'comparative-advantage': '중급',
+  'is-lm': '심화',
+};
+
+export const conceptOneLiner: Record<string, string> = {
+  'supply-demand': '가격이 오르면 사려는 사람은 줄고, 팔려는 사람은 늘어난다',
+  'gdp': '나라 경제의 크기 = 소비 + 투자 + 정부지출 + 수출 - 수입',
+  'inflation': '돈이 많아지면 물건값이 오른다',
+  'elasticity': '가격이 올랐을 때, 사람들이 얼마나 민감하게 반응하는지를 숫자로 표현한 것',
+  'ppf': '자원이 한정되어 있으니, 하나를 더 만들려면 다른 걸 포기해야 한다',
+  'comparative-advantage': '각자 잘하는 걸 만들고 교환하면 모두가 이득이다',
+  'multiplier': '정부가 1원을 쓰면, 돈이 돌고 돌아 경제 전체에 몇 배의 효과가 난다',
+  'is-lm': '금리와 GDP가 재정정책, 통화정책에 따라 어떻게 움직이는지 보여주는 모델',
+};
+
+export const conceptNewsConnections: Record<string, NewsConnection[]> = {
+  'supply-demand': [
+    {
+      headline: '"삼겹살 가격 또 올랐다" — 돼지 공급 감소가 원인',
+      source: '한국경제',
+      date: '2025.12',
+      explanation: '돼지 사육 두수 감소(공급 감소) → 공급곡선 좌측 이동 → 균형가격 상승. 수요는 그대로인데 공급만 줄어서 가격이 오른 전형적 사례.',
+    },
+    {
+      headline: '"여름 에어컨 판매 역대 최고" — 폭염에 수요 폭증',
+      source: 'MBC 뉴스',
+      date: '2025.08',
+      explanation: '폭염(외부 요인) → 에어컨 수요 급증 → 수요곡선 우측 이동 → 균형가격 상승 + 거래량 증가.',
+    },
+  ],
+  'gdp': [
+    {
+      headline: '"올해 경제성장률 2.5% 전망" — IMF 보고서',
+      source: '연합뉴스',
+      date: '2026.01',
+      explanation: '경제성장률 2.5% = GDP가 작년보다 2.5% 커졌다는 뜻. 소비, 투자, 수출이 골고루 늘어났다는 의미.',
+    },
+    {
+      headline: '"정부, 추경 59조원 편성" — 경기 부양 목적',
+      source: 'KBS 뉴스',
+      date: '2025.09',
+      explanation: 'G(정부지출) 59조 증가 → GDP 공식에서 G가 커지니 GDP도 증가. 승수 효과까지 합치면 실제 GDP 영향은 59조 이상.',
+    },
+  ],
+  'inflation': [
+    {
+      headline: '"소비자물가 3.5% 상승" — 16개월째 고물가',
+      source: '한국은행',
+      date: '2025.11',
+      explanation: '소비자물가지수(CPI)가 전년 대비 3.5% 올랐다 = 인플레이션 3.5%. 통화량 증가 + 공급 부족이 복합 원인.',
+    },
+    {
+      headline: '"한국은행, 기준금리 3.5% 동결"',
+      source: '매일경제',
+      date: '2026.01',
+      explanation: '기준금리를 유지 = 통화량 조절을 현 수준으로 유지. 물가가 아직 높아서 금리를 못 내리고, 경기도 약해서 못 올리는 상황.',
+    },
+  ],
+  'elasticity': [
+    {
+      headline: '"유가 20% 올랐는데 주유소 매출 그대로"',
+      source: '조선일보',
+      date: '2025.10',
+      explanation: '석유는 대체재가 거의 없는 필수재 → 비탄력적 수요(|Ed|<1). 가격이 올라도 수요가 크게 안 줄어든다.',
+    },
+    {
+      headline: '"넷플릭스 가격 인상에 해지 급증"',
+      source: 'IT조선',
+      date: '2025.07',
+      explanation: 'OTT는 대체재가 많음(웨이브, 티빙, 쿠팡플레이) → 탄력적 수요(|Ed|>1). 가격 올리면 소비자가 바로 이탈.',
+    },
+  ],
+  'ppf': [
+    {
+      headline: '"반도체에 올인하는 한국, 다른 산업은 괜찮을까"',
+      source: '중앙일보',
+      date: '2025.06',
+      explanation: '반도체(재화A)에 자원을 집중하면 다른 산업(재화B)에 쓸 자원이 줄어든다 = 기회비용. PPF 위에서 한쪽으로 이동하는 것.',
+    },
+  ],
+  'comparative-advantage': [
+    {
+      headline: '"한-베트남 FTA 효과, 교역액 역대 최고"',
+      source: '무역협회',
+      date: '2025.12',
+      explanation: '한국은 반도체/자동차(기술집약), 베트남은 의류/농산물(노동집약)에 비교우위. 각자 잘하는 걸 교역해서 양국 모두 이득.',
+    },
+  ],
+  'multiplier': [
+    {
+      headline: '"재난지원금 10조 투입 → 소비 효과 25조" — KDI 분석',
+      source: 'KDI',
+      date: '2025.04',
+      explanation: '승수 약 2.5. 10조원이 가계에 들어가면 소비→매출→소득→소비... 연쇄 반응으로 GDP에 25조원 효과.',
+    },
+  ],
+  'is-lm': [
+    {
+      headline: '"금리 올렸더니 경기 둔화" — 통화정책 딜레마',
+      source: '서울경제',
+      date: '2025.11',
+      explanation: '금리 인상 = LM곡선 좌측 이동 → 이자율 상승 + 국민소득 감소. 물가 잡으려고 금리 올렸는데 경기도 같이 식은 것.',
+    },
+  ],
+};

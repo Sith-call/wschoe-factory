@@ -62,6 +62,33 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateConcept, onNavigat
         </div>
       </section>
 
+      {/* Today's Economy News Card */}
+      <section>
+        <div
+          onClick={() => onNavigateConcept('inflation')}
+          className="bg-[#1a2332] rounded-lg p-6 cursor-pointer hover:bg-[#1a2332]/90 transition-colors"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <span className="material-symbols-outlined text-[#d4a24e] text-lg">newspaper</span>
+            <span className="font-label text-[11px] font-bold text-[#d4a24e] tracking-wider uppercase">
+              오늘의 경제 뉴스 한줄
+            </span>
+          </div>
+          <p className="font-body font-bold text-white text-[15px] leading-relaxed mb-3">
+            "한국은행, 기준금리 3.5% 동결" — 물가는 아직 높고, 경기는 약하고
+          </p>
+          <div className="flex items-center justify-between">
+            <span className="font-label text-[11px] text-white/50">
+              이게 무슨 뜻일까?
+            </span>
+            <span className="font-label text-[12px] text-[#d4a24e] font-bold flex items-center gap-1">
+              인플레이션 개념 보기
+              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* Recent Learning Section */}
       <section className="space-y-10">
         <div className="flex items-end justify-between">
