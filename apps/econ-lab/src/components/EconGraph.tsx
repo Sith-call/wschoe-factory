@@ -41,50 +41,47 @@ function fromSVG(
 }
 
 const GDPBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
-  // Calculate actual component values (end - start of each curve's points)
-  const values = output.curves.map(c => Math.max(0, (c.points[1]?.x ?? 0) - (c.points[0]?.x ?? 0)));
-  const total = values.reduce((sum, v) => sum + v, 0);
-  const maxVal = Math.max(...values, 1);
+  const bars = output.barData ?? [];
+  const total = bars.reduce((sum, b) => sum + Math.max(0, b.value), 0);
+  const maxVal = Math.max(...bars.map(b => Math.max(0, b.value)), 1);
   const barHeight = 36;
-  const chartWidth = 320;
-  const chartPadding = 30;
+  const chartWidth = 300;
+  const chartPadding = 40;
 
   return (
     <svg viewBox="0 0 400 360" className="w-full h-full">
-      {/* Title */}
       <text x="200" y="28" textAnchor="middle" className="font-headline" fontSize="14" fontWeight="700" fill="#9ca3af">
         GDP 구성요소
       </text>
 
-      {/* Individual horizontal bars — absolute value, not ratio */}
-      {output.curves.map((curve, i) => {
-        const value = values[i];
-        const barW = maxVal > 0 ? (value / maxVal) * chartWidth : 0;
+      {bars.map((bar, i) => {
+        const val = Math.max(0, bar.value);
+        const barW = maxVal > 0 ? (val / maxVal) * chartWidth : 0;
         const yPos = 60 + i * (barHeight + 24);
 
         return (
-          <g key={curve.id}>
-            {/* Label */}
+          <g key={bar.id}>
             <text x={chartPadding} y={yPos - 6} fill="#d1d5db" className="font-body" fontSize="12" fontWeight="600">
-              {curve.label}
+              {bar.label}
             </text>
-            {/* Bar background */}
             <rect x={chartPadding} y={yPos} width={chartWidth} height={barHeight} rx="6" fill="#374151" opacity="0.4" />
-            {/* Bar fill */}
-            <rect x={chartPadding} y={yPos} width={barW} height={barHeight} rx="6" fill={curve.color} opacity="0.9">
-              <animate attributeName="width" from="0" to={barW} dur="0.5s" fill="freeze" />
-            </rect>
-            {/* Value inside bar */}
-            <text x={chartPadding + Math.max(barW - 8, 30)} y={yPos + barHeight / 2 + 5} textAnchor="end" fill="#ffffff" className="font-label" fontSize="13" fontWeight="700">
-              {value.toFixed(0)}
+            <rect x={chartPadding} y={yPos} width={barW} height={barHeight} rx="6" fill={bar.color} opacity="0.9" />
+            <text
+              x={chartPadding + barW + 8}
+              y={yPos + barHeight / 2 + 5}
+              fill={bar.color}
+              className="font-label"
+              fontSize="14"
+              fontWeight="700"
+            >
+              {val}
             </text>
           </g>
         );
       })}
 
-      {/* Total GDP */}
       <text x="200" y="340" textAnchor="middle" fill="#ffc971" className="font-headline" fontSize="18" fontWeight="800">
-        GDP = {total.toFixed(0)}
+        GDP = {total}
       </text>
     </svg>
   );

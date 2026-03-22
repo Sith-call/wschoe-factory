@@ -69,5 +69,11 @@ export function computeGDP(vars: Record<string, number>): ModelOutput {
       label: `GDP = ${currentGDP}`,
     },
     summary,
+    barData: components.map(comp => ({
+      id: comp.id,
+      label: comp.label,
+      color: comp.color,
+      value: comp.value,
+    })),
   };
 }

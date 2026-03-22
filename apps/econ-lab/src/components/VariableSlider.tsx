@@ -34,6 +34,7 @@ export const VariableSlider: React.FC<VariableSliderProps> = ({ variable, value,
         step={variable.step}
         value={value}
         onChange={e => onChange(Number(e.target.value))}
+        onInput={e => onChange(Number((e.target as HTMLInputElement).value))}
       />
       <p className="mt-3 text-[11px] text-on-surface-variant leading-relaxed">
         {variable.description}

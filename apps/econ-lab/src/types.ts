@@ -59,10 +59,18 @@ export interface CurveData {
   points: CurvePoint[];
 }
 
+export interface BarDataItem {
+  id: string;
+  label: string;
+  color: string;
+  value: number;
+}
+
 export interface ModelOutput {
   curves: CurveData[];
   equilibrium: EquilibriumResult | null;
   summary: SummaryItem[];
+  barData?: BarDataItem[];
 }
 
 export interface SummaryItem {
