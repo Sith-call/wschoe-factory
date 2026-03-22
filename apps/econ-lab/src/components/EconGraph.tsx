@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { ModelOutput } from '../types';
 
 interface EconGraphProps {
@@ -21,6 +21,23 @@ function toSVG(
   const sx = padding + ((point.x - xRange[0]) / (xRange[1] - xRange[0])) * graphW;
   const sy = padding + graphH - ((point.y - yRange[0]) / (yRange[1] - yRange[0])) * graphH;
   return { sx, sy };
+}
+
+// Inverse: SVG coords back to data coords
+function fromSVG(
+  sx: number,
+  sy: number,
+  xRange: [number, number],
+  yRange: [number, number],
+  width: number,
+  height: number,
+  padding: number
+): { x: number; y: number } {
+  const graphW = width - padding * 2;
+  const graphH = height - padding * 2;
+  const x = xRange[0] + ((sx - padding) / graphW) * (xRange[1] - xRange[0]);
+  const y = yRange[0] + ((padding + graphH - sy) / graphH) * (yRange[1] - yRange[0]);
+  return { x, y };
 }
 
 const GDPBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
@@ -131,6 +148,24 @@ const MultiplierBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
 
 export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) => {
   const heightClass = large ? 'h-[60vh]' : 'h-[420px]';
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; dataX: number; dataY: number; curveLabel: string } | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Track previous equilibrium for ghost dot
+  const prevEqRef = useRef<{ price: number; quantity: number } | null>(null);
+  const [ghostEq, setGhostEq] = useState<{ price: number; quantity: number } | null>(null);
+
+  useEffect(() => {
+    if (output.equilibrium) {
+      const prev = prevEqRef.current;
+      if (prev && (prev.price !== output.equilibrium.price || prev.quantity !== output.equilibrium.quantity)) {
+        setGhostEq({ ...prev });
+        const timer = setTimeout(() => setGhostEq(null), 2000);
+        return () => clearTimeout(timer);
+      }
+      prevEqRef.current = { price: output.equilibrium.price, quantity: output.equilibrium.quantity };
+    }
+  }, [output.equilibrium?.price, output.equilibrium?.quantity]);
 
   // For GDP, render a bar chart
   if (modelId === 'gdp') {
@@ -165,7 +200,6 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
   }
 
   // For all other models (line/curve graphs)
-  // Calculate ranges from all curve points
   const { xRange, yRange } = useMemo(() => {
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     output.curves.forEach(curve => {
@@ -176,7 +210,6 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
         if (p.y > maxY) maxY = p.y;
       });
     });
-    // Add some padding
     const xPad = (maxX - minX) * 0.1 || 10;
     const yPad = (maxY - minY) * 0.1 || 10;
     return {
@@ -189,13 +222,56 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
   const svgH = 350;
   const pad = 40;
 
-  // Custom axis labels based on model
   const axisLabels = getAxisLabels(modelId);
 
   // Convert equilibrium point
   const eqSVG = output.equilibrium
     ? toSVG({ x: output.equilibrium.quantity, y: output.equilibrium.price }, xRange, yRange, svgW, svgH, pad)
     : null;
+
+  // Ghost equilibrium
+  const ghostSVG = ghostEq
+    ? toSVG({ x: ghostEq.quantity, y: ghostEq.price }, xRange, yRange, svgW, svgH, pad)
+    : null;
+
+  // Handle mouse/touch move on SVG for tooltip
+  const handlePointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
+    if (!svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const svgX = ((e.clientX - rect.left) / rect.width) * svgW;
+    const svgY = ((e.clientY - rect.top) / rect.height) * svgH;
+
+    // Find the nearest curve point
+    let nearestDist = Infinity;
+    let nearestPoint: { x: number; y: number; curveLabel: string; sx: number; sy: number } | null = null;
+
+    output.curves.forEach(curve => {
+      curve.points.forEach(p => {
+        const { sx, sy } = toSVG(p, xRange, yRange, svgW, svgH, pad);
+        const dist = Math.sqrt((sx - svgX) ** 2 + (sy - svgY) ** 2);
+        if (dist < nearestDist && dist < 40) {
+          nearestDist = dist;
+          nearestPoint = { x: p.x, y: p.y, curveLabel: curve.label, sx, sy };
+        }
+      });
+    });
+
+    if (nearestPoint) {
+      setTooltip({
+        x: (nearestPoint as any).sx,
+        y: (nearestPoint as any).sy,
+        dataX: (nearestPoint as any).x,
+        dataY: (nearestPoint as any).y,
+        curveLabel: (nearestPoint as any).curveLabel,
+      });
+    } else {
+      setTooltip(null);
+    }
+  }, [output.curves, xRange, yRange]);
+
+  const handlePointerLeave = useCallback(() => {
+    setTooltip(null);
+  }, []);
 
   return (
     <section className={`relative bg-primary-container ${heightClass} w-full p-8 overflow-hidden`}>
@@ -216,7 +292,15 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
         </span>
 
         {/* Graph Curves SVG */}
-        <svg className="absolute inset-0 w-full h-full" fill="none" viewBox={`0 0 ${svgW} ${svgH}`}>
+        <svg
+          ref={svgRef}
+          className="absolute inset-0 w-full h-full"
+          fill="none"
+          viewBox={`0 0 ${svgW} ${svgH}`}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          style={{ touchAction: 'none' }}
+        >
           {output.curves.map(curve => {
             if (curve.points.length < 2) return null;
             const pathData = curve.points
@@ -229,18 +313,21 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
             const lastPoint = curve.points[curve.points.length - 1];
             const lastSVG = toSVG(lastPoint, xRange, yRange, svgW, svgH, pad);
 
-            // If label would overflow right edge, place it to the left of the curve end
             const labelX = lastSVG.sx + 8;
             const isNearRightEdge = labelX > svgW - 80;
             const adjustedX = isNearRightEdge ? lastSVG.sx - 8 : labelX;
             const textAnchor = isNearRightEdge ? 'end' as const : 'start' as const;
-
-            // If label would overflow top/bottom, adjust Y
             const adjustedY = Math.max(pad + 14, Math.min(lastSVG.sy, svgH - pad - 4));
 
             return (
               <g key={curve.id}>
-                <path d={pathData} stroke={curve.color} strokeLinecap="round" strokeWidth="3" />
+                <path
+                  d={pathData}
+                  stroke={curve.color}
+                  strokeLinecap="round"
+                  strokeWidth="3"
+                  style={{ transition: 'all 300ms ease-out' }}
+                />
                 <text
                   className="font-headline text-xl font-black"
                   fill={curve.color}
@@ -256,15 +343,39 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
             );
           })}
 
-          {/* Equilibrium point */}
+          {/* Ghost equilibrium dot (previous position) */}
+          {ghostSVG && (
+            <circle
+              cx={ghostSVG.sx}
+              cy={ghostSVG.sy}
+              r="5"
+              fill="#ffc971"
+              opacity="0.25"
+              style={{ transition: 'opacity 1.5s ease-out' }}
+            />
+          )}
+
+          {/* Equilibrium point with pulse */}
           {eqSVG && (
             <>
+              {/* Outer pulse ring */}
+              <circle
+                cx={eqSVG.sx}
+                cy={eqSVG.sy}
+                r="12"
+                fill="none"
+                stroke="#ffc971"
+                strokeWidth="1"
+                opacity="0.3"
+                className="eq-pulse"
+              />
               <circle
                 cx={eqSVG.sx}
                 cy={eqSVG.sy}
                 r="6"
                 fill="#ffc971"
                 className="drop-shadow-[0_0_8px_rgba(255,201,113,0.8)]"
+                style={{ transition: 'cx 300ms ease-out, cy 300ms ease-out' }}
               />
               {/* Guidelines to axes */}
               <line
@@ -276,6 +387,7 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
                 strokeDasharray="4 4"
                 strokeWidth="1"
                 opacity="0.5"
+                style={{ transition: 'all 300ms ease-out' }}
               />
               <line
                 x1={pad}
@@ -286,12 +398,66 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId, large }) 
                 strokeDasharray="4 4"
                 strokeWidth="1"
                 opacity="0.5"
+                style={{ transition: 'all 300ms ease-out' }}
               />
+              {/* Axis value labels */}
+              <text
+                x={eqSVG.sx}
+                y={svgH - pad + 14}
+                textAnchor="middle"
+                fill="#ffc971"
+                fontSize="10"
+                fontWeight="700"
+                className="font-label"
+                style={{ transition: 'all 300ms ease-out' }}
+              >
+                Q={output.equilibrium!.quantity.toFixed(1)}
+              </text>
+              <text
+                x={pad - 4}
+                y={eqSVG.sy + 4}
+                textAnchor="end"
+                fill="#ffc971"
+                fontSize="10"
+                fontWeight="700"
+                className="font-label"
+                style={{ transition: 'all 300ms ease-out' }}
+              >
+                P={output.equilibrium!.price.toFixed(1)}
+              </text>
             </>
+          )}
+
+          {/* Tooltip */}
+          {tooltip && (
+            <g className="graph-tooltip">
+              <rect
+                x={tooltip.x - 40}
+                y={tooltip.y - 36}
+                width="80"
+                height="28"
+                rx="4"
+                fill="#040d1b"
+                opacity="0.85"
+              />
+              <text
+                x={tooltip.x}
+                y={tooltip.y - 18}
+                textAnchor="middle"
+                fill="#ffc971"
+                fontSize="11"
+                fontWeight="700"
+                className="font-label"
+              >
+                ({tooltip.dataX.toFixed(1)}, {tooltip.dataY.toFixed(1)})
+              </text>
+              {/* Crosshair */}
+              <circle cx={tooltip.x} cy={tooltip.y} r="4" fill="white" opacity="0.8" />
+            </g>
           )}
         </svg>
 
-        {/* Equilibrium Label Toast — only in non-large mode */}
+        {/* Equilibrium Label Toast -- only in non-large mode */}
         {!large && output.equilibrium && (
           <div className="absolute top-4 right-4 bg-primary/40 backdrop-blur-md px-4 py-2 border border-outline-variant/10 rounded-lg z-20">
             <p className="font-label text-secondary-fixed-dim text-xs font-bold">

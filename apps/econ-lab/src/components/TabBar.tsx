@@ -13,10 +13,10 @@ interface TabItem {
 }
 
 const tabs: TabItem[] = [
-  { id: 'home', icon: 'door_front', label: '로비' },
-  { id: 'concepts', icon: 'folder_open', label: '아카이브' },
+  { id: 'home', icon: 'meeting_room', label: '로비' },
+  { id: 'concepts', icon: 'inventory_2', label: '아카이브' },
   { id: 'lab', icon: 'biotech', label: '실험동' },
-  { id: 'progress', icon: 'auto_stories', label: '연구 일지' },
+  { id: 'progress', icon: 'menu_book', label: '연구 일지' },
 ];
 
 export const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabChange }) => {

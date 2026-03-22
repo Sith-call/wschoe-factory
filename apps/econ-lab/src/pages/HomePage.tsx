@@ -15,7 +15,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateConcept, onNavigat
   const nextConcept = concepts.find(c => !progress.experimentsCompleted.includes(c.id)) || concepts[0];
 
   return (
-    <main className="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-14">
+    <main className="pt-24 pb-32 px-6 max-w-7xl mx-auto space-y-16">
       {/* Hero Section: Research Lab Bulletin */}
       <section className="relative">
         <div className="grid lg:grid-cols-12 gap-10 items-start">
@@ -90,18 +90,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateConcept, onNavigat
       {/* Research Status */}
       <section className="space-y-6">
         <h3 className="font-headline font-bold text-2xl text-primary text-left">연구 현황</h3>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/5">
-            <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{conceptsViewedCount}/{concepts.length}</p>
-            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">연구 파일</p>
+        <div className="grid grid-cols-3 gap-5">
+          <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+            <p className="font-['Space_Grotesk'] font-bold text-3xl text-primary tracking-tight">{conceptsViewedCount}<span className="text-base text-on-surface-variant/40">/{concepts.length}</span></p>
+            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-2">연구 파일</p>
           </div>
-          <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/5">
-            <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{progress.experimentsCompleted.length}</p>
-            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">실험 완료</p>
+          <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+            <p className="font-['Space_Grotesk'] font-bold text-3xl text-primary tracking-tight">{progress.experimentsCompleted.length}</p>
+            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-2">실험 완료</p>
           </div>
-          <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/5">
-            <p className="font-['Space_Grotesk'] font-bold text-2xl text-primary">{discoveriesCount}</p>
-            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-1">발견 기록</p>
+          <div className="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/5">
+            <p className="font-['Space_Grotesk'] font-bold text-3xl text-primary tracking-tight">{discoveriesCount}</p>
+            <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mt-2">발견 기록</p>
           </div>
         </div>
       </section>

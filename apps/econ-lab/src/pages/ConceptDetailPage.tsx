@@ -228,7 +228,7 @@ export const ConceptDetailPage: React.FC<ConceptDetailPageProps> = ({
         </div>
       </header>
 
-      <main className="max-w-[430px] mx-auto pb-32 px-6 pt-4 space-y-10">
+      <main className="max-w-[430px] mx-auto pb-32 px-6 pt-6 space-y-12">
         {/* One-liner Summary */}
         {oneLiner && (
           <section className="bg-[#d4a24e]/8 border border-[#d4a24e]/15 rounded-lg p-5">

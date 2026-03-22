@@ -109,8 +109,49 @@
         margin-top: -8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
+
+      /* Discovery animations */
+      @keyframes goldenRipple {
+        0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(212,162,78,0.5); }
+        50% { transform: scale(1.02); opacity: 1; box-shadow: 0 0 0 12px rgba(212,162,78,0); }
+        100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(212,162,78,0); }
+      }
+      @keyframes discoveryReveal {
+        0% { opacity: 0; transform: translateY(12px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes eqPulse {
+        0%, 100% { r: 6; opacity: 0.9; }
+        50% { r: 9; opacity: 1; }
+      }
+      @keyframes graphFadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      .discovery-ripple {
+        animation: goldenRipple 0.6s ease-out forwards;
+      }
+      .discovery-reveal {
+        animation: discoveryReveal 0.4s ease-out forwards;
+      }
+      .discovery-reveal-delay {
+        animation: discoveryReveal 0.4s ease-out 0.15s forwards;
+        opacity: 0;
+      }
+      .eq-pulse {
+        animation: eqPulse 2s ease-in-out infinite;
+      }
+      .graph-curve-transition {
+        transition: d 300ms ease-out, cx 300ms ease-out, cy 300ms ease-out;
+      }
+
+      /* Tooltip for graph points */
+      .graph-tooltip {
+        pointer-events: none;
+        animation: graphFadeIn 0.15s ease-out;
+      }
     </style>
-    <script type="module" crossorigin src="/assets/index-Dm8hAWhL.js"></script>
+    <script type="module" crossorigin src="/assets/index-Dzrwp6FL.js"></script>
   </head>
   <body class="font-body selection:bg-secondary-container selection:text-on-secondary-container">
     <div id="root"></div>

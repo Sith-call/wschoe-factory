@@ -223,30 +223,54 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({ concept,
 
           {/* DISCOVERY STEP */}
           {labMode === 'discovery' && showResult && currentHypothesis && (
-            <section className="px-6 py-6 space-y-4">
-              <div className={`rounded-lg p-5 border-2 ${
+            <section className="px-6 py-8 space-y-5">
+              {/* Discovery label */}
+              <div className="discovery-reveal">
+                <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-headline font-bold text-sm ${
+                  selectedOption === currentHypothesis.correctIndex
+                    ? 'bg-[#1a6b50]/12 text-[#1a6b50]'
+                    : 'bg-[#d4a24e]/12 text-[#d4a24e]'
+                }`}>
+                  <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    {selectedOption === currentHypothesis.correctIndex ? 'auto_awesome' : 'psychology_alt'}
+                  </span>
+                  {selectedOption === currentHypothesis.correctIndex ? '발견!' : '의외의 결과!'}
+                </span>
+              </div>
+
+              <div className={`discovery-ripple rounded-lg p-5 border-2 ${
                 selectedOption === currentHypothesis.correctIndex
                   ? 'bg-[#1a6b50]/8 border-[#1a6b50]/30'
-                  : 'bg-[#ba1a1a]/8 border-[#ba1a1a]/30'
+                  : 'bg-[#d4a24e]/8 border-[#d4a24e]/30'
               }`}>
                 <div className="flex items-start gap-3 mb-3">
                   <span className={`material-symbols-outlined text-xl mt-0.5 ${
-                    selectedOption === currentHypothesis.correctIndex ? 'text-[#1a6b50]' : 'text-[#ba1a1a]'
-                  }`}>
-                    {selectedOption === currentHypothesis.correctIndex ? 'check_circle' : 'cancel'}
+                    selectedOption === currentHypothesis.correctIndex ? 'text-[#1a6b50]' : 'text-[#d4a24e]'
+                  }`} style={{ fontVariationSettings: "'FILL' 1" }}>
+                    {selectedOption === currentHypothesis.correctIndex ? 'verified' : 'lightbulb'}
                   </span>
                   <div>
                     <p className="font-headline font-bold text-primary text-base mb-1">
                       {selectedOption === currentHypothesis.correctIndex
-                        ? '정답입니다!'
-                        : `오답 — 정답: ${currentHypothesis.options[currentHypothesis.correctIndex]}`}
+                        ? '예측이 맞았습니다'
+                        : `예상과 달랐네요 -- ${currentHypothesis.options[currentHypothesis.correctIndex]}`}
                     </p>
                     <p className="font-body text-on-surface-variant text-sm leading-relaxed">
                       {currentHypothesis.correctExplanation}
                     </p>
                   </div>
                 </div>
+                {/* Visual annotation explaining WHY */}
+                {selectedOption !== currentHypothesis.correctIndex && (
+                  <div className="bg-[#040d1b]/5 rounded-lg p-3 mt-3 border-l-2 border-[#d4a24e]">
+                    <p className="font-label text-[11px] font-bold text-[#d4a24e] uppercase tracking-wider mb-1">왜 다를까?</p>
+                    <p className="font-body text-sm text-on-surface-variant leading-relaxed">
+                      그래프의 균형점 이동을 확인해보세요. 변수 변화가 곡선을 어떻게 이동시켰는지 관찰할 수 있습니다.
+                    </p>
+                  </div>
+                )}
                 <div className="bg-[#d4a24e]/10 rounded-lg p-3 mt-3">
+                  <p className="font-label text-[10px] font-bold text-[#7e5703] uppercase tracking-wider mb-1">부작용 주의</p>
                   <p className="font-body text-sm text-[#7e5703] leading-relaxed">
                     {currentHypothesis.sideEffect}
                   </p>
@@ -254,9 +278,9 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({ concept,
               </div>
 
               {/* Discovery journal entry */}
-              <div className="bg-surface-container-lowest border border-outline-variant/10 rounded-lg p-4">
+              <div className="discovery-reveal-delay bg-surface-container-lowest border border-outline-variant/10 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="material-symbols-outlined text-secondary text-base">auto_stories</span>
+                  <span className="material-symbols-outlined text-secondary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>auto_stories</span>
                   <span className="font-['Space_Grotesk'] text-[10px] font-bold text-secondary tracking-widest uppercase">
                     Discovery Logged
                   </span>
@@ -288,9 +312,16 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({ concept,
 
           {/* SIMULATION waiting state */}
           {labMode === 'simulation' && !showResult && (
-            <section className="px-6 py-8 flex flex-col items-center gap-4">
-              <div className="w-10 h-10 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
-              <p className="font-headline font-bold text-primary text-lg">시뮬레이션 실행 중...</p>
+            <section className="px-6 py-10 flex flex-col items-center gap-5">
+              <div className="relative w-14 h-14 flex items-center justify-center">
+                <div className="absolute inset-0 border-2 border-secondary/20 rounded-full"></div>
+                <div className="absolute inset-0 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
+                <span className="material-symbols-outlined text-secondary text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>biotech</span>
+              </div>
+              <div className="text-center space-y-1">
+                <p className="font-headline font-bold text-primary text-lg">시뮬레이션 실행 중</p>
+                <p className="font-label text-[11px] text-on-surface-variant/60 tracking-wider uppercase">Calculating equilibrium...</p>
+              </div>
             </section>
           )}
 
