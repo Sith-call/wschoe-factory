@@ -41,51 +41,49 @@ function fromSVG(
 }
 
 const GDPBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
-  const total = output.curves.reduce((sum, c) => sum + Math.max(0, c.points[1]?.x ?? 0), 0);
-  const barHeight = 40;
-  const chartWidth = 360;
-  const chartPadding = 20;
+  // Calculate actual component values (end - start of each curve's points)
+  const values = output.curves.map(c => Math.max(0, (c.points[1]?.x ?? 0) - (c.points[0]?.x ?? 0)));
+  const total = values.reduce((sum, v) => sum + v, 0);
+  const maxVal = Math.max(...values, 1);
+  const barHeight = 36;
+  const chartWidth = 320;
+  const chartPadding = 30;
 
   return (
-    <svg viewBox={`0 0 400 350`} className="w-full h-full">
-      {/* Background label */}
-      <text x="200" y="30" textAnchor="middle" className="font-headline text-sm font-bold" fill="#818a9d">
+    <svg viewBox="0 0 400 360" className="w-full h-full">
+      {/* Title */}
+      <text x="200" y="28" textAnchor="middle" className="font-headline" fontSize="14" fontWeight="700" fill="#9ca3af">
         GDP 구성요소
       </text>
 
-      {/* Stacked horizontal bars */}
-      {(() => {
-        let cumX = chartPadding;
-        return output.curves.map((curve, i) => {
-          const value = Math.max(0, (curve.points[1]?.x ?? 0) - (curve.points[0]?.x ?? 0));
-          const barW = total > 0 ? (value / total) * chartWidth : 0;
-          const x = cumX;
-          cumX += barW;
-          const yPos = 80 + i * (barHeight + 30);
+      {/* Individual horizontal bars — absolute value, not ratio */}
+      {output.curves.map((curve, i) => {
+        const value = values[i];
+        const barW = maxVal > 0 ? (value / maxVal) * chartWidth : 0;
+        const yPos = 60 + i * (barHeight + 24);
 
-          return (
-            <g key={curve.id}>
-              {/* Label */}
-              <text x={chartPadding} y={yPos - 8} fill="#45474c" className="font-body" fontSize="12" fontWeight="600">
-                {curve.label}
-              </text>
-              {/* Bar background */}
-              <rect x={chartPadding} y={yPos} width={chartWidth} height={barHeight} rx="4" fill="#e4e2df" opacity="0.3" />
-              {/* Bar fill */}
-              <rect x={chartPadding} y={yPos} width={barW > 0 ? (value / (total || 1)) * chartWidth : 0} height={barHeight} rx="4" fill={curve.color}>
-                <animate attributeName="width" from="0" to={(value / (total || 1)) * chartWidth} dur="0.5s" fill="freeze" />
-              </rect>
-              {/* Value */}
-              <text x={chartPadding + (value / (total || 1)) * chartWidth + 8} y={yPos + barHeight / 2 + 4} fill="#45474c" className="font-label" fontSize="11" fontWeight="700">
-                {value.toFixed(0)}
-              </text>
-            </g>
-          );
-        });
-      })()}
+        return (
+          <g key={curve.id}>
+            {/* Label */}
+            <text x={chartPadding} y={yPos - 6} fill="#d1d5db" className="font-body" fontSize="12" fontWeight="600">
+              {curve.label}
+            </text>
+            {/* Bar background */}
+            <rect x={chartPadding} y={yPos} width={chartWidth} height={barHeight} rx="6" fill="#374151" opacity="0.4" />
+            {/* Bar fill */}
+            <rect x={chartPadding} y={yPos} width={barW} height={barHeight} rx="6" fill={curve.color} opacity="0.9">
+              <animate attributeName="width" from="0" to={barW} dur="0.5s" fill="freeze" />
+            </rect>
+            {/* Value inside bar */}
+            <text x={chartPadding + Math.max(barW - 8, 30)} y={yPos + barHeight / 2 + 5} textAnchor="end" fill="#ffffff" className="font-label" fontSize="13" fontWeight="700">
+              {value.toFixed(0)}
+            </text>
+          </g>
+        );
+      })}
 
-      {/* Total */}
-      <text x="200" y="340" textAnchor="middle" fill="#040d1b" className="font-headline text-lg font-bold" fontSize="16">
+      {/* Total GDP */}
+      <text x="200" y="340" textAnchor="middle" fill="#ffc971" className="font-headline" fontSize="18" fontWeight="800">
         GDP = {total.toFixed(0)}
       </text>
     </svg>

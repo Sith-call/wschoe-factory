@@ -22,10 +22,10 @@ export function computeGDP(vars: Record<string, number>): ModelOutput {
 
   // For GDP we show stacked bar data as curves (bars represented as horizontal lines)
   const components = [
-    { id: 'consumption', label: 'C (소비)', color: '#ba1a1a', value: c },
-    { id: 'investment', label: 'I (투자)', color: '#dae3f7', value: i },
-    { id: 'government', label: 'G (정부지출)', color: '#7e5703', value: g },
-    { id: 'netExports', label: 'NX (순수출)', color: '#ffc971', value: nx },
+    { id: 'consumption', label: 'C (소비)', color: '#e74c3c', value: c },
+    { id: 'investment', label: 'I (투자)', color: '#3498db', value: i },
+    { id: 'government', label: 'G (정부지출)', color: '#f39c12', value: g },
+    { id: 'netExports', label: 'NX (순수출)', color: '#2ecc71', value: nx },
   ];
 
   // Create "curves" as horizontal bars for the stacked chart
