@@ -1,11 +1,25 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import type { ProductCategory } from './types';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import type { ProductCategory, WeeklyReport } from './types';
 import { getToday } from './utils/date';
 import { useRecords } from './hooks/useRecords';
 import { useProducts } from './hooks/useProducts';
-import { isOnboarded, setOnboarded, getProfile, saveProfile, isDemoMode as checkDemoMode, setDemoMode, clearAllData } from './utils/storage';
-import { loadDemoData } from './data/demo';
 import { useInsights } from './hooks/useInsights';
+import { useMilestones } from './hooks/useMilestones';
+import { usePresets } from './hooks/usePresets';
+import {
+  isOnboarded,
+  setOnboarded,
+  getProfile,
+  saveProfile,
+  isDemoMode as checkDemoMode,
+  setDemoMode,
+  clearAllData,
+  migrateV1ToV2,
+  getWeeklyReports,
+  saveWeeklyReports,
+} from './utils/storage';
+import { loadDemoData } from './data/demo';
+import { generateWeeklyReport, calculateRecordingRate } from './utils/insights';
 import { TabBar } from './components/TabBar';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { HomePage } from './pages/HomePage';
@@ -15,10 +29,16 @@ import { NightLogPage } from './pages/NightLogPage';
 import { MorningLogPage } from './pages/MorningLogPage';
 import { ProductListPage } from './pages/ProductListPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { WeeklyReportPage } from './pages/WeeklyReportPage';
 
-type Screen = 'home' | 'calendar' | 'insight' | 'nightLog' | 'morningLog' | 'products' | 'settings';
+type Screen = 'home' | 'calendar' | 'insight' | 'nightLog' | 'morningLog' | 'products' | 'settings' | 'weeklyReport';
 
 export default function App() {
+  // Run migration on mount
+  useEffect(() => {
+    migrateV1ToV2();
+  }, []);
+
   const [hasOnboarded, setHasOnboarded] = useState(isOnboarded());
   const [activeTab, setActiveTab] = useState<'home' | 'calendar' | 'insight'>('home');
   const [overlay, setOverlay] = useState<Screen | null>(null);
@@ -26,29 +46,61 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [profile, setProfile] = useState(getProfile());
   const [demoMode, setDemoModeState] = useState(checkDemoMode());
+  const [weeklyReports, setWeeklyReports] = useState<WeeklyReport[]>(getWeeklyReports());
 
   const { records, saveNightLog, saveMorningLog, loadRecords } = useRecords();
+  const { products, activeProducts, archivedProducts, addProduct, removeProduct, archiveProduct, unarchiveProduct, loadProducts } = useProducts();
+  const { pinnedVariables, activeCustomVariables, customVariables, togglePinned, isPinned, addCustomVariable, removeCustomVariable, loadPresets } = usePresets();
+  const { milestones, streak, latestMilestone, unseenMilestone, checkAndAwardMilestones, markMilestoneSeen, loadMilestones } = useMilestones(records);
+  const { productInsights, variableInsights } = useInsights(records, activeProducts);
 
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 2000);
   }, []);
-  const { products, activeProducts, archivedProducts, addProduct, removeProduct, archiveProduct, unarchiveProduct, loadProducts } = useProducts();
 
-  // Auto-load demo data on app start if demo mode is ON but records are empty
+  // Auto-load demo data
   useEffect(() => {
     if (demoMode && Object.keys(records).length === 0) {
       const demo = loadDemoData();
       loadRecords(demo.records);
       loadProducts(demo.products);
+      loadPresets(demo.pinnedVariables, demo.customVariables);
+      loadMilestones(demo.milestones);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { productInsights, variableInsights } = useInsights(records, activeProducts);
 
-  // Best product and worst variable for home insight summary
-  const bestProduct = productInsights.filter(p => p.usedDays >= 3 && p.impact > 0)[0] || null;
-  const worstVariable = variableInsights.filter(v => v.impact < -0.1)[0] || null;
+  // Check milestones whenever records change
+  useEffect(() => {
+    if (Object.keys(records).length > 0) {
+      checkAndAwardMilestones();
+    }
+  }, [records]);
+
+  // Generate weekly report if needed
+  useEffect(() => {
+    const report = generateWeeklyReport(records);
+    if (report && !weeklyReports.find(r => r.weekStart === report.weekStart)) {
+      const updated = [report, ...weeklyReports].slice(0, 12); // Keep last 12 weeks
+      setWeeklyReports(updated);
+      saveWeeklyReports(updated);
+    }
+  }, [records]);
+
+  const bestProduct = useMemo(() =>
+    productInsights.filter(p => p.usedDays >= 3 && p.impact > 0)[0] || null,
+    [productInsights]
+  );
+
+  const worstVariable = useMemo(() =>
+    variableInsights.filter(v => v.impact < -0.1)[0] || null,
+    [variableInsights]
+  );
+
+  const recordingRate = useMemo(() =>
+    calculateRecordingRate(records, 30).rate,
+    [records]
+  );
 
   const handleOnboardingComplete = useCallback((prof: { name: string; skinTypes: string[] }, prods: { name: string; category: ProductCategory }[]) => {
     saveProfile(prof);
@@ -64,43 +116,56 @@ export default function App() {
     const demo = loadDemoData();
     loadRecords(demo.records);
     loadProducts(demo.products);
+    loadPresets(demo.pinnedVariables, demo.customVariables);
+    loadMilestones(demo.milestones);
     setDemoMode(true);
     setDemoModeState(true);
     saveProfile({ name: '유진', skinTypes: ['복합성'] });
     setProfile({ name: '유진', skinTypes: ['복합성'] });
     setOnboarded(true);
     setHasOnboarded(true);
-  }, [loadRecords, loadProducts]);
+  }, [loadRecords, loadProducts, loadPresets, loadMilestones]);
 
   const handleToggleDemo = useCallback(() => {
     if (!demoMode) {
       const demo = loadDemoData();
       loadRecords(demo.records);
       loadProducts(demo.products);
+      loadPresets(demo.pinnedVariables, demo.customVariables);
+      loadMilestones(demo.milestones);
       setDemoMode(true);
       setDemoModeState(true);
     } else {
       loadRecords({});
       loadProducts([]);
+      loadPresets([], []);
+      loadMilestones([]);
       setDemoMode(false);
       setDemoModeState(false);
     }
-  }, [demoMode, loadRecords, loadProducts]);
+  }, [demoMode, loadRecords, loadProducts, loadPresets, loadMilestones]);
 
   const handleResetData = useCallback(() => {
     clearAllData();
     loadRecords({});
     loadProducts([]);
+    loadPresets([], []);
+    loadMilestones([]);
     setProfile(null);
     setDemoModeState(false);
     setHasOnboarded(false);
-  }, [loadRecords, loadProducts]);
+    setWeeklyReports([]);
+  }, [loadRecords, loadProducts, loadPresets, loadMilestones]);
 
   const handleExportData = useCallback(() => {
     const data = {
       records,
       products,
       profile,
+      pinnedVariables,
+      customVariables,
+      milestones,
+      weeklyReports,
       exportedAt: new Date().toISOString(),
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -110,7 +175,7 @@ export default function App() {
     a.download = `skin-diary-export-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [records, products, profile]);
+  }, [records, products, profile, pinnedVariables, customVariables, milestones, weeklyReports]);
 
   const handleAddProduct = useCallback((name: string, category: ProductCategory) => {
     addProduct(name, category);
@@ -130,45 +195,35 @@ export default function App() {
   const showTabBar = overlay === null;
 
   return (
-    <div className="max-w-[430px] mx-auto min-h-screen bg-sd-bg">
-      <div className="px-5 pt-6" style={{ opacity: 1 }}>
-        {activeTab === 'home' && (
+    <div className="max-w-[430px] mx-auto min-h-screen bg-background">
+      <div className="px-6 pt-2">
+        {activeTab === 'home' && overlay === null && (
           <HomePage
             records={records}
             products={activeProducts}
             userName={profile?.name || ''}
-            onOpenNightLog={() => setOverlay('nightLog')}
-            onOpenMorningLog={() => setOverlay('morningLog')}
-            onOpenProducts={() => setOverlay('products')}
-            onOpenSettings={() => setOverlay('settings')}
+            streak={streak}
+            latestMilestone={latestMilestone}
             bestProduct={bestProduct}
             worstVariable={worstVariable}
+            recordingRate={recordingRate}
+            onOpenNightLog={() => setOverlay('nightLog')}
+            onOpenMorningLog={() => setOverlay('morningLog')}
+            onOpenSettings={() => setOverlay('settings')}
             onNavigateToInsight={() => setActiveTab('insight')}
-            onEditMorning={() => { setEditDate(getToday()); setOverlay('morningLog'); }}
-            onEditNight={() => { setEditDate(getToday()); setOverlay('nightLog'); }}
+            onEditMorning={(d) => { setEditDate(d); setOverlay('morningLog'); }}
+            onEditNight={(d) => { setEditDate(d); setOverlay('nightLog'); }}
+            onOpenWeeklyReport={() => setOverlay('weeklyReport')}
           />
         )}
-        {activeTab === 'calendar' && (
+        {activeTab === 'calendar' && overlay === null && (
           <CalendarPage
             records={records}
-            onEditDate={(date: string) => {
-              const r = records[date];
-              setEditDate(date);
-              if (r?.morningLog) {
-                setOverlay('morningLog');
-              } else if (r?.nightLog) {
-                setOverlay('nightLog');
-              } else {
-                setOverlay('morningLog');
-              }
-            }}
-            onEditNightDate={(date: string) => {
-              setEditDate(date);
-              setOverlay('nightLog');
-            }}
+            onEditMorning={(d) => { setEditDate(d); setOverlay('morningLog'); }}
+            onEditNight={(d) => { setEditDate(d); setOverlay('nightLog'); }}
           />
         )}
-        {activeTab === 'insight' && (
+        {activeTab === 'insight' && overlay === null && (
           <InsightPage records={records} products={activeProducts} />
         )}
       </div>
@@ -181,12 +236,15 @@ export default function App() {
         <NightLogPage
           products={activeProducts}
           records={records}
+          pinnedVariables={pinnedVariables}
+          customVariables={activeCustomVariables}
           onSave={(date, log) => {
             saveNightLog(date, log);
-            showToast('기록이 저장되었어요');
+            showToast('밤 기록이 저장되었어요');
           }}
           onClose={() => { setOverlay(null); setEditDate(null); }}
           onAddProduct={handleAddProduct}
+          onAddCustomVariable={(label) => addCustomVariable(label)}
           editDate={editDate}
         />
       )}
@@ -196,7 +254,7 @@ export default function App() {
           records={records}
           onSave={(date, log) => {
             saveMorningLog(date, log);
-            showToast('기록이 저장되었어요');
+            showToast('아침 기록이 저장되었어요');
           }}
           onClose={() => { setOverlay(null); setEditDate(null); }}
           editDate={editDate}
@@ -221,16 +279,29 @@ export default function App() {
           profile={profile}
           records={records}
           isDemoMode={demoMode}
+          milestones={milestones}
+          pinnedVariables={pinnedVariables}
+          customVariables={customVariables}
           onToggleDemo={handleToggleDemo}
           onResetData={handleResetData}
           onBack={() => setOverlay(null)}
           onExportData={handleExportData}
+          onOpenProducts={() => setOverlay('products')}
+          onTogglePinned={togglePinned}
+          onRemoveCustomVariable={removeCustomVariable}
+        />
+      )}
+
+      {overlay === 'weeklyReport' && (
+        <WeeklyReportPage
+          reports={weeklyReports}
+          onBack={() => setOverlay(null)}
         />
       )}
 
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] bg-sd-text text-white font-body text-sm px-5 py-2.5 rounded-xl shadow-lg" style={{ opacity: 1, transition: 'opacity 200ms' }}>
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] bg-inverse-surface text-inverse-on-surface font-body text-sm px-5 py-2.5 rounded-xl shadow-lg">
           {toastMessage}
         </div>
       )}

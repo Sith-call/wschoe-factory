@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { SkinRecord, Product } from '../types';
 import { VARIABLE_LABELS, KEYWORD_LABELS } from '../types';
-import type { Variable } from '../types';
+import type { Variable, SkinKeyword } from '../types';
+import { getCustomVariables } from '../utils/storage';
 import { useInsights } from '../hooks/useInsights';
 import { InsightCard } from '../components/InsightCard';
 import { ProductCombo } from '../components/ProductCombo';
@@ -106,6 +107,31 @@ export function InsightPage({ records, products }: Props) {
                     </span>
                   ))}
                 </p>
+              )}
+
+              {/* Variable-keyword correlations (causal insight) */}
+              {miniInsight.correlations.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-outline-variant/10 space-y-3">
+                  <p className="font-body text-xs font-semibold text-on-surface flex items-center gap-1">
+                    <span className="material-symbols-outlined text-primary text-sm">link</span>
+                    발견된 패턴
+                  </p>
+                  {miniInsight.correlations.map((c, i) => {
+                    const customVars = getCustomVariables();
+                    const varLabel = VARIABLE_LABELS[c.variable as Variable]
+                      || customVars.find(cv => cv.id === c.variable)?.label
+                      || c.variable;
+                    return (
+                      <p key={i} className="font-body text-[13px] text-on-surface-variant leading-relaxed">
+                        <span className="text-primary font-semibold">{varLabel}</span>
+                        {' '}다음날{' '}
+                        <span className="text-on-surface font-medium">{KEYWORD_LABELS[c.keyword as SkinKeyword]}</span>
+                        {' '}등장 확률{' '}
+                        <span className="serif-numbers text-primary font-bold text-base">{c.probability}%</span>
+                      </p>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </section>

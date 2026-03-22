@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { SkinRecord, Product, ProductInsight, VariableInsight, Milestone } from '../types';
 import { getToday, getRecentDates, getPrevDate } from '../utils/date';
-import { KEYWORD_LABELS, VARIABLE_LABELS } from '../types';
+import { KEYWORD_LABELS, VARIABLE_LABELS, MILESTONE_LABELS } from '../types';
 import type { SkinKeyword, Variable } from '../types';
 import { WeeklyChart } from '../components/WeeklyChart';
 import { StreakBadge, MilestoneBadge } from '../components/MilestoneBadge';
@@ -23,6 +23,7 @@ interface Props {
   onNavigateToInsight: () => void;
   onEditMorning: (date: string) => void;
   onEditNight: (date: string) => void;
+  onOpenWeeklyReport: () => void;
 }
 
 export function HomePage({
@@ -40,6 +41,7 @@ export function HomePage({
   onNavigateToInsight,
   onEditMorning,
   onEditNight,
+  onOpenWeeklyReport,
 }: Props) {
   const today = getToday();
   const todayRecord = records[today];
@@ -52,6 +54,20 @@ export function HomePage({
   const showMorningNudge = yesterdayRecord?.nightLog && !hasMorningLog;
 
   const [detailDate, setDetailDate] = useState<string | null>(null);
+  const [showStreakCelebration, setShowStreakCelebration] = useState(false);
+
+  // Check if we should show streak celebration
+  useEffect(() => {
+    const celebrationMilestones = [7, 14, 30, 60, 100];
+    if (celebrationMilestones.includes(streak)) {
+      const key = `streak_celebrated_${streak}`;
+      if (!sessionStorage.getItem(key)) {
+        setShowStreakCelebration(true);
+        sessionStorage.setItem(key, 'true');
+        setTimeout(() => setShowStreakCelebration(false), 4000);
+      }
+    }
+  }, [streak]);
 
   return (
     <div className="pb-24">
@@ -205,6 +221,23 @@ export function HomePage({
           </div>
         </section>
 
+        {/* Quick combined log: when both are missing, offer a combined option */}
+        {!hasNightLog && !hasMorningLog && (
+          <section>
+            <button
+              onClick={onOpenMorningLog}
+              className="w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-primary-fixed/40 border border-primary/10 active:scale-[0.98] transition-transform"
+            >
+              <span className="material-symbols-outlined text-primary text-lg">bolt</span>
+              <div className="text-left flex-1">
+                <p className="text-sm font-medium text-on-surface">아침 빠른 기록</p>
+                <p className="text-[11px] text-on-surface-variant">점수와 키워드만 30초 기록</p>
+              </div>
+              <span className="material-symbols-outlined text-on-surface-variant/40 text-sm">arrow_forward</span>
+            </button>
+          </section>
+        )}
+
         {/* Recording Rate */}
         {recordingRate > 0 && (
           <section className="flex items-center gap-3 px-1">
@@ -225,6 +258,65 @@ export function HomePage({
           records={records}
           onDayTap={(date) => setDetailDate(date)}
         />
+
+        {/* Weekly Report Link */}
+        <section>
+          <button
+            onClick={onOpenWeeklyReport}
+            className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl bg-surface-container-lowest border border-outline-variant/10 active:scale-[0.98] transition-transform group"
+          >
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-primary text-lg">summarize</span>
+              <span className="text-sm font-medium text-on-surface">주간 리포트 보기</span>
+            </div>
+            <span className="material-symbols-outlined text-on-surface-variant/40 text-sm group-hover:translate-x-1 transition-transform">
+              arrow_forward
+            </span>
+          </button>
+        </section>
+
+        {/* Recent Timeline (3-5 days) */}
+        {(() => {
+          const recentDates = getRecentDates(5).reverse(); // oldest first
+          const timelineData = recentDates.filter(d => records[d]?.morningLog || records[d]?.nightLog);
+          if (timelineData.length === 0) return null;
+          return (
+            <section className="space-y-4">
+              <h3 className="text-sm font-semibold text-on-surface-variant">최근 기록</h3>
+              <div className="space-y-2">
+                {timelineData.map(date => {
+                  const rec = records[date];
+                  const dayLabel = date === today ? '오늘' : `${new Date(date + 'T12:00:00').getMonth() + 1}/${new Date(date + 'T12:00:00').getDate()}`;
+                  return (
+                    <button
+                      key={date}
+                      onClick={() => setDetailDate(date)}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-lowest border border-outline-variant/5 active:scale-[0.98] transition-transform"
+                    >
+                      <span className="text-xs font-medium text-on-surface-variant w-10">{dayLabel}</span>
+                      {rec?.morningLog && (
+                        <span className="text-xs text-primary font-semibold">{rec.morningLog.score}점</span>
+                      )}
+                      {rec?.morningLog?.keywords.slice(0, 2).map(kw => (
+                        <span key={kw} className="text-[10px] px-2 py-0.5 rounded-full bg-primary-container/20 text-on-surface-variant">
+                          {KEYWORD_LABELS[kw]}
+                        </span>
+                      ))}
+                      {rec?.nightLog && (
+                        <span className="text-[10px] text-on-surface-variant/60 ml-auto">
+                          {rec.nightLog.products.length}개 제품
+                        </span>
+                      )}
+                      {!rec?.morningLog && !rec?.nightLog && (
+                        <span className="text-[10px] text-on-surface-variant/40">미기록</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Insight Preview Card */}
         {(bestProduct || worstVariable) && (
@@ -269,6 +361,36 @@ export function HomePage({
           </section>
         )}
       </main>
+
+      {/* Streak Celebration */}
+      {showStreakCelebration && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-on-surface/30"
+          onClick={() => setShowStreakCelebration(false)}
+        >
+          <div className="bg-surface rounded-3xl p-8 mx-6 max-w-sm text-center space-y-4 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <span className="material-symbols-outlined text-primary text-5xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+              celebration
+            </span>
+            <h2 className="font-headline text-2xl font-medium text-on-surface">
+              {streak}일 연속 기록!
+            </h2>
+            <p className="text-sm text-on-surface-variant leading-relaxed">
+              {streak >= 30
+                ? '한 달 넘게 꾸준히 기록하고 있어요. 대단해요!'
+                : streak >= 14
+                  ? '2주 동안 빠짐없이 기록했어요. 피부 변화가 보이기 시작할 거예요.'
+                  : '일주일 연속 기록 달성! 첫 번째 인사이트가 준비되었어요.'}
+            </p>
+            <button
+              onClick={() => setShowStreakCelebration(false)}
+              className="px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold active:scale-95 transition-transform"
+            >
+              계속하기
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Day detail bottom sheet */}
       {detailDate && (

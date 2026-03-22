@@ -74,9 +74,14 @@ export function NightLogPage({
             </span>
             <h2 className="font-headline text-2xl font-medium text-on-surface">기록 완료!</h2>
             {showMorningNudge && (
-              <p className="text-sm text-on-surface-variant text-center leading-relaxed">
-                내일 아침에 피부 점수도 기록해봐요
-              </p>
+              <div className="bg-primary-fixed/50 rounded-2xl px-6 py-4 flex items-center gap-3 mt-2">
+                <span className="material-symbols-outlined text-primary text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  wb_sunny
+                </span>
+                <p className="text-sm text-on-surface text-left leading-relaxed">
+                  내일 아침에 피부 점수도<br/>기록해봐요
+                </p>
+              </div>
             )}
             <button
               onClick={onClose}

@@ -3,51 +3,108 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#c2847a" />
+    <meta name="theme-color" content="#855048" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="피부 일지" />
     <meta name="description" content="스킨케어 루틴과 생활 변수를 기록하고, 피부에 영향을 주는 것을 데이터로 발견하세요." />
-    <link rel="manifest" href="/manifest.json" />
     <title>피부 일지</title>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Crimson+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
       tailwind.config = {
+        darkMode: "class",
         theme: {
           extend: {
             colors: {
-              'sd-bg': '#fdf8f4',
-              'sd-surface': '#ffffff',
-              'sd-text': '#3d2c2c',
-              'sd-text-secondary': '#8b7e7e',
-              'sd-text-tertiary': '#b5aaaa',
-              'sd-primary': '#c2847a',
-              'sd-primary-light': '#f5ebe8',
-              'sd-primary-dark': '#9b6259',
-              'sd-accent': '#7ea5c2',
-              'sd-success': '#7ab87a',
-              'sd-warning': '#c9a84c',
-              'sd-danger': '#c27a7a',
-              'sd-border': '#ece4df',
-              'sd-score-1': '#e8a0a0',
-              'sd-score-2': '#e8c4a0',
-              'sd-score-3': '#e8dca0',
-              'sd-score-4': '#a0d4a0',
-              'sd-score-5': '#7ac27a',
+              "primary": "#855048",
+              "primary-container": "#c2847a",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#4a2019",
+              "secondary": "#7c554d",
+              "secondary-container": "#ffcbc1",
+              "on-secondary": "#ffffff",
+              "on-secondary-container": "#7b544c",
+              "tertiary": "#77574c",
+              "tertiary-container": "#b08b7e",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#3f261d",
+              "background": "#fdf8f4",
+              "on-background": "#1d1b19",
+              "surface": "#fdf8f4",
+              "surface-dim": "#ded9d5",
+              "surface-bright": "#fdf8f4",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f8f3ef",
+              "surface-container": "#f2ede9",
+              "surface-container-high": "#ece7e3",
+              "surface-container-highest": "#e6e2de",
+              "on-surface": "#1d1b19",
+              "on-surface-variant": "#524341",
+              "surface-variant": "#e6e2de",
+              "surface-tint": "#855048",
+              "outline": "#847370",
+              "outline-variant": "#d7c2bf",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "on-error-container": "#93000a",
+              "inverse-surface": "#32302e",
+              "inverse-on-surface": "#f5f0ec",
+              "inverse-primary": "#fbb6aa",
+              "primary-fixed": "#ffdad4",
+              "primary-fixed-dim": "#fbb6aa",
+              "on-primary-fixed": "#350f0a",
+              "on-primary-fixed-variant": "#6a3932",
+              "secondary-fixed": "#ffdad3",
+              "secondary-fixed-dim": "#edbbb1",
+              "on-secondary-fixed": "#2f140e",
+              "on-secondary-fixed-variant": "#613e36",
+              "tertiary-fixed": "#ffdbcf",
+              "tertiary-fixed-dim": "#e7bdaf",
+              "on-tertiary-fixed": "#2c160d",
+              "on-tertiary-fixed-variant": "#5d4035",
             },
             fontFamily: {
-              'heading': ['"Gowun Batang"', 'serif'],
-              'body': ['"SUIT Variable"', 'sans-serif'],
-              'number': ['"Crimson Pro"', 'serif'],
+              "noto-serif": ["Noto Serif KR", "serif"],
+              "manrope": ["Manrope", "sans-serif"],
+              "headline": ["Noto Serif KR", "serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              "DEFAULT": "0.125rem",
+              "lg": "0.25rem",
+              "xl": "0.5rem",
+              "full": "9999px",
             },
           },
         },
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-CLgsDLhb.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Cv8bxR1c.css">
+    <style>
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #fdf8f4;
+        color: #1d1b19;
+        -webkit-font-smoothing: antialiased;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .serif-numbers {
+        font-family: 'Noto Serif KR', serif;
+        font-weight: 200;
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .journal-paper {
+        background-image: radial-gradient(#d7c2bf 0.5px, transparent 0.5px);
+        background-size: 24px 24px;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-DxHCQ2Nl.js"></script>
   </head>
   <body>
     <div id="root"></div>
