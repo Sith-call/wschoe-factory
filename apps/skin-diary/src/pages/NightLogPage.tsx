@@ -66,13 +66,28 @@ export function NightLogPage({
       <div className="fixed inset-0 z-50 bg-surface flex justify-center">
         <main className="w-full max-w-[430px] bg-surface min-h-screen flex flex-col items-center justify-center px-6">
           <div className="flex flex-col items-center gap-6">
-            <span
-              className="material-symbols-outlined text-primary text-5xl"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              check_circle
-            </span>
+            <div className="relative">
+              <div className="absolute -inset-4 bg-primary/5 rounded-full animate-pulse" />
+              <span
+                className="material-symbols-outlined text-primary text-5xl relative"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                check_circle
+              </span>
+            </div>
             <h2 className="font-headline text-2xl font-medium text-on-surface">기록 완료!</h2>
+            <p className="text-sm text-on-surface-variant text-center leading-relaxed">
+              오늘도 피부를 위한 한 걸음을 내디뎠어요.
+              <br />꾸준한 기록이 건강한 피부를 만들어요.
+            </p>
+            {selectedProducts.length > 0 && (
+              <div className="bg-primary-fixed/30 rounded-2xl px-5 py-3 w-full max-w-[280px]">
+                <p className="text-[10px] text-on-surface-variant/60 uppercase tracking-widest mb-1">오늘의 루틴</p>
+                <p className="text-sm text-on-surface font-medium">
+                  {selectedProducts.length}개 제품 사용 완료
+                </p>
+              </div>
+            )}
             {showMorningNudge && (
               <div className="bg-primary-fixed/50 rounded-2xl px-6 py-4 flex items-center gap-3 mt-2">
                 <span className="material-symbols-outlined text-primary text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -133,6 +148,7 @@ export function NightLogPage({
               onAddProduct={onAddProduct}
               lastNightProducts={prevNightLog?.products}
               onCopyLastNight={handleCopyLastNight}
+              records={records}
             />
           </section>
 

@@ -14,6 +14,7 @@ interface Props {
   onResetData: () => void;
   onBack: () => void;
   onExportData: () => void;
+  onExportCSV: () => void;
   onOpenProducts: () => void;
   onTogglePinned: (varKey: string) => void;
   onRemoveCustomVariable: (id: string) => void;
@@ -30,6 +31,7 @@ export function SettingsPage({
   onResetData,
   onBack,
   onExportData,
+  onExportCSV,
   onOpenProducts,
   onTogglePinned,
   onRemoveCustomVariable,
@@ -185,8 +187,22 @@ export function SettingsPage({
               onClick={onExportData}
               className="w-full flex items-center justify-between bg-surface-container-low rounded-xl p-4"
             >
-              <span className="text-sm text-on-surface">데이터 내보내기</span>
+              <div className="flex flex-col items-start">
+                <span className="text-sm text-on-surface">JSON 내보내기</span>
+                <span className="text-[10px] text-on-surface-variant/50">전체 데이터 백업</span>
+              </div>
               <span className="material-symbols-outlined text-on-surface-variant text-sm">download</span>
+            </button>
+
+            <button
+              onClick={onExportCSV}
+              className="w-full flex items-center justify-between bg-surface-container-low rounded-xl p-4"
+            >
+              <div className="flex flex-col items-start">
+                <span className="text-sm text-on-surface">CSV 내보내기</span>
+                <span className="text-[10px] text-on-surface-variant/50">스프레드시트용 (날짜, 점수, 키워드, 제품)</span>
+              </div>
+              <span className="material-symbols-outlined text-on-surface-variant text-sm">table_chart</span>
             </button>
 
             <button

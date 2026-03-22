@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import type { ProductCategory, WeeklyReport } from './types';
+import type { ProductCategory, WeeklyReport, SkinKeyword } from './types';
+import { KEYWORD_LABELS } from './types';
 import { getToday } from './utils/date';
 import { useRecords } from './hooks/useRecords';
 import { useProducts } from './hooks/useProducts';
@@ -177,6 +178,31 @@ export default function App() {
     URL.revokeObjectURL(url);
   }, [records, products, profile, pinnedVariables, customVariables, milestones, weeklyReports]);
 
+  const handleExportCSV = useCallback(() => {
+    const dates = Object.keys(records).sort();
+    const rows: string[] = [];
+    rows.push('날짜,피부점수,키워드,트러블부위,아침메모,사용제품,생활습관,밤메모');
+    for (const date of dates) {
+      const rec = records[date];
+      const score = rec.morningLog?.score || '';
+      const keywords = (rec.morningLog?.keywords || []).map((k: SkinKeyword) => KEYWORD_LABELS[k] || k).join(';');
+      const troubleAreas = (rec.morningLog?.troubleAreas || []).join(';');
+      const morningMemo = (rec.morningLog?.memo || '').replace(/,/g, ' ').replace(/\n/g, ' ');
+      const prods = (rec.nightLog?.products || []).join(';');
+      const vars = (rec.nightLog?.variables || []).join(';');
+      const nightMemo = (rec.nightLog?.memo || '').replace(/,/g, ' ').replace(/\n/g, ' ');
+      rows.push(`${date},${score},${keywords},${troubleAreas},${morningMemo},${prods},${vars},${nightMemo}`);
+    }
+    const csv = '\uFEFF' + rows.join('\n'); // BOM for Excel Korean support
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `skin-diary-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [records]);
+
   const handleAddProduct = useCallback((name: string, category: ProductCategory) => {
     addProduct(name, category);
   }, [addProduct]);
@@ -287,6 +313,7 @@ export default function App() {
           onResetData={handleResetData}
           onBack={() => setOverlay(null)}
           onExportData={handleExportData}
+          onExportCSV={handleExportCSV}
           onOpenProducts={() => setOverlay('products')}
           onTogglePinned={togglePinned}
           onRemoveCustomVariable={removeCustomVariable}

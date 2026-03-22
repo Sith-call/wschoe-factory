@@ -74,7 +74,10 @@ export function MorningLogPage({ records, onSave, onClose, editDate }: Props) {
                   ))}
                 </div>
               )}
-              <p className="text-[9px] text-on-surface-variant/40 mt-2 font-noto-serif italic">피부 일지</p>
+              <div className="mt-3 pt-2 border-t border-outline-variant/10 flex items-center justify-center gap-1.5">
+                <span className="material-symbols-outlined text-primary/40 text-xs">spa</span>
+                <span className="text-[9px] font-noto-serif italic text-on-surface-variant/40">피부 일지</span>
+              </div>
             </div>
             <button
               onClick={handleShareScore}

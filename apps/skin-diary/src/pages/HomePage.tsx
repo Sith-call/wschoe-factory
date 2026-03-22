@@ -136,12 +136,16 @@ export function HomePage({
         )}
 
         {/* Today's Recording Status — completion banner */}
-        <section className="bg-surface-container-lowest rounded-2xl p-4 flex items-center gap-3 border border-outline-variant/5">
+        <section className={`rounded-2xl p-4 flex items-center gap-3 border transition-all ${
+          hasMorningLog && hasNightLog
+            ? 'bg-primary-fixed/40 border-primary/10'
+            : 'bg-surface-container-lowest border-outline-variant/5'
+        }`} style={hasMorningLog && hasNightLog ? { boxShadow: '0 2px 12px rgba(133,80,72,0.08)' } : {}}>
           <div className="flex gap-1.5">
-            <div className={`w-3 h-3 rounded-full ${hasMorningLog ? 'bg-primary' : 'bg-surface-container-highest'}`} />
-            <div className={`w-3 h-3 rounded-full ${hasNightLog ? 'bg-primary' : 'bg-surface-container-highest'}`} />
+            <div className={`w-3 h-3 rounded-full transition-colors ${hasMorningLog ? 'bg-primary' : 'bg-surface-container-highest'}`} />
+            <div className={`w-3 h-3 rounded-full transition-colors ${hasNightLog ? 'bg-primary' : 'bg-surface-container-highest'}`} />
           </div>
-          <p className="text-xs text-on-surface-variant flex-1">
+          <p className={`text-xs flex-1 ${hasMorningLog && hasNightLog ? 'text-primary font-medium' : 'text-on-surface-variant'}`}>
             {hasMorningLog && hasNightLog
               ? '오늘 기록을 모두 완료했어요!'
               : hasMorningLog
@@ -151,7 +155,7 @@ export function HomePage({
                   : '아직 오늘의 기록이 없어요'}
           </p>
           {hasMorningLog && hasNightLog && (
-            <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>task_alt</span>
+            <span className="material-symbols-outlined text-primary text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>task_alt</span>
           )}
         </section>
 
