@@ -70,7 +70,7 @@ export function DayDetail({ date, record, records, onClose, onEditMorning, onEdi
               )}
               {causativeNightLog.variables.length > 0 && (
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">변수</span>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">생활 습관</span>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {causativeNightLog.variables.map((v, i) => (
                       <span key={i} className="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">
@@ -174,7 +174,7 @@ export function DayDetail({ date, record, records, onClose, onEditMorning, onEdi
               )}
               {nightLog.variables.length > 0 && (
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">변수</span>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">생활 습관</span>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {nightLog.variables.map((v, i) => (
                       <span key={i} className="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">

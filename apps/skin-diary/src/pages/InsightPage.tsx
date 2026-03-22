@@ -17,6 +17,9 @@ type InsightTab = 'product' | 'variable' | 'trend';
 
 export function InsightPage({ records, products }: Props) {
   const [activeTab, setActiveTab] = useState<InsightTab>('product');
+  const [showAllProducts, setShowAllProducts] = useState(false);
+  const [showAllVariables, setShowAllVariables] = useState(false);
+  const [showCombos, setShowCombos] = useState(false);
   const {
     totalRecordDays,
     hasEnoughData,
@@ -30,9 +33,61 @@ export function InsightPage({ records, products }: Props) {
 
   const tabs: { key: InsightTab; label: string }[] = [
     { key: 'product', label: '제품 분석' },
-    { key: 'variable', label: '변수 분석' },
+    { key: 'variable', label: '습관 분석' },
     { key: 'trend', label: '트렌드' },
   ];
+
+  // Build top 3 key insights for the summary section
+  const buildKeyInsights = () => {
+    const insights: { icon: string; text: string; detail: string }[] = [];
+
+    // Best product
+    if (productInsights.length > 0 && productInsights[0].impact > 0) {
+      insights.push({
+        icon: 'thumb_up',
+        text: `${productInsights[0].productName}`,
+        detail: `사용 시 점수 +${productInsights[0].impact.toFixed(1)}점`,
+      });
+    }
+
+    // Worst variable
+    const worstVar = variableInsights.find(v => v.impact < 0);
+    if (worstVar) {
+      const label = VARIABLE_LABELS[worstVar.variable as Variable] || worstVar.variable;
+      insights.push({
+        icon: 'warning',
+        text: label,
+        detail: `있는 날 점수 ${worstVar.impact.toFixed(1)}점`,
+      });
+    }
+
+    // Top correlation
+    if (miniInsight && miniInsight.correlations.length > 0) {
+      const c = miniInsight.correlations[0];
+      const customVars = getCustomVariables();
+      const varLabel = VARIABLE_LABELS[c.variable as Variable]
+        || customVars.find(cv => cv.id === c.variable)?.label
+        || c.variable;
+      insights.push({
+        icon: 'link',
+        text: `${varLabel} + ${KEYWORD_LABELS[c.keyword as SkinKeyword]}`,
+        detail: `등장 확률 ${c.probability}%`,
+      });
+    }
+
+    // Best combo
+    if (comboInsights.length > 0 && comboInsights[0].synergyScore > 0) {
+      insights.push({
+        icon: 'join',
+        text: `${comboInsights[0].productA} + ${comboInsights[0].productB}`,
+        detail: `시너지 +${comboInsights[0].synergyScore.toFixed(1)}점`,
+      });
+    }
+
+    return insights.slice(0, 3);
+  };
+
+  const keyInsights = hasEnoughData ? buildKeyInsights() : [];
 
   return (
     <div className="pb-24">
@@ -62,6 +117,31 @@ export function InsightPage({ records, products }: Props) {
       </header>
 
       <main className="space-y-12 mt-8">
+        {/* Key Insights Summary (top 3) -- shown above all tabs when enough data */}
+        {hasEnoughData && keyInsights.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="font-headline text-lg font-medium text-on-surface">이번 주 핵심 발견</h2>
+            <div className="space-y-3">
+              {keyInsights.map((insight, i) => (
+                <div
+                  key={i}
+                  className="bg-surface-container-lowest rounded-xl p-4 flex items-center gap-4 border border-outline-variant/5"
+                >
+                  <div className="bg-primary/10 p-2 rounded-xl">
+                    <span className="material-symbols-outlined text-primary text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+                      {insight.icon}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-on-surface truncate">{insight.text}</p>
+                    <p className="text-xs text-on-surface-variant">{insight.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* 3-Day Mini Insight */}
         {miniInsight && !hasEnoughData && (
           <section className="space-y-4">
@@ -74,7 +154,7 @@ export function InsightPage({ records, products }: Props) {
             <div className="bg-surface-container-highest/40 rounded-xl p-6 space-y-5">
               <div className="flex justify-between items-center">
                 <p className="font-body text-sm text-on-surface font-medium">
-                  {miniInsight.totalDays}일차 — {miniInsight.totalDays >= 3 ? '첫 번째 인사이트가 준비되었어요!' : '조금만 더 기록해봐요'}
+                  {miniInsight.totalDays}일차 -- {miniInsight.totalDays >= 3 ? '첫 번째 인사이트가 준비되었어요!' : '조금만 더 기록해봐요'}
                 </p>
                 <span className="serif-numbers text-xs text-on-surface-variant">{miniInsight.totalDays}/7 days</span>
               </div>
@@ -137,14 +217,33 @@ export function InsightPage({ records, products }: Props) {
           </section>
         )}
 
-        {/* Not enough data message */}
+        {/* Not enough data message -- better empty state */}
         {!hasMinimumData && (
-          <div className="bg-surface-container-low rounded-xl p-8 text-center space-y-3">
-            <span className="material-symbols-outlined text-primary-container text-4xl">hourglass_empty</span>
-            <h3 className="font-headline text-lg text-on-surface">아직 데이터가 부족해요</h3>
-            <p className="text-sm text-on-surface-variant">
-              3일 이상 기록하면 첫 인사이트를 볼 수 있어요.
-              <br />지금까지 {totalRecordDays}일 기록했어요.
+          <div className="bg-surface-container-low rounded-xl p-8 text-center space-y-4">
+            <div className="w-16 h-16 mx-auto bg-primary-fixed/40 rounded-full flex items-center justify-center">
+              <span className="material-symbols-outlined text-primary text-3xl">spa</span>
+            </div>
+            <h3 className="font-headline text-lg text-on-surface">피부의 비밀을 알아가는 중이에요</h3>
+            <p className="text-sm text-on-surface-variant leading-relaxed">
+              3일 이상 기록하면 첫 인사이트가 나타나요.
+              <br />매일 조금씩 기록하면 놀라운 패턴을 발견할 수 있어요.
+            </p>
+            <div className="flex justify-center gap-2 mt-2">
+              {[1, 2, 3].map(day => (
+                <div
+                  key={day}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                    day <= totalRecordDays
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-container-highest text-on-surface-variant/40'
+                  }`}
+                >
+                  {day}
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-on-surface-variant/50">
+              {totalRecordDays}일 기록 완료 -- {Math.max(0, 3 - totalRecordDays)}일 남았어요
             </p>
           </div>
         )}
@@ -194,62 +293,88 @@ export function InsightPage({ records, products }: Props) {
               </section>
             )}
 
-            {/* All product insights */}
-            <section className="space-y-6">
-              <h2 className="font-headline text-2xl font-light text-on-surface">제품별 영향</h2>
-              <div className="flex flex-col gap-4">
-                {productInsights.map(pi => {
-                  const isPositive = pi.impact > 0;
-                  const impactPercent = pi.avgScoreWhenNotUsed > 0
-                    ? Math.round(((pi.avgScoreWhenUsed - pi.avgScoreWhenNotUsed) / pi.avgScoreWhenNotUsed) * 100)
-                    : 0;
+            {/* All product insights (collapsible) */}
+            {productInsights.length > 1 && (
+              <section className="space-y-4">
+                <button
+                  onClick={() => setShowAllProducts(!showAllProducts)}
+                  className="w-full flex items-center justify-between"
+                >
+                  <h2 className="font-headline text-2xl font-light text-on-surface">제품별 영향</h2>
+                  <div className="flex items-center gap-1 text-primary text-sm">
+                    <span>{showAllProducts ? '접기' : '더 보기'}</span>
+                    <span className="material-symbols-outlined text-sm">
+                      {showAllProducts ? 'expand_less' : 'expand_more'}
+                    </span>
+                  </div>
+                </button>
+                {showAllProducts && (
+                  <div className="flex flex-col gap-4">
+                    {productInsights.map(pi => {
+                      const isPositive = pi.impact > 0;
+                      const impactPercent = pi.avgScoreWhenNotUsed > 0
+                        ? Math.round(((pi.avgScoreWhenUsed - pi.avgScoreWhenNotUsed) / pi.avgScoreWhenNotUsed) * 100)
+                        : 0;
 
-                  return (
-                    <div
-                      key={pi.productName}
-                      className="bg-surface-container-lowest rounded-xl p-6 flex flex-col gap-4"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-headline font-medium text-on-surface">{pi.productName}</h3>
-                          <p className="font-label text-[10px] uppercase tracking-wider text-on-surface-variant opacity-60">
-                            {pi.usedDays}회 사용
-                          </p>
+                      return (
+                        <div
+                          key={pi.productName}
+                          className="bg-surface-container-lowest rounded-xl p-6 flex flex-col gap-4"
+                        >
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h3 className="font-headline font-medium text-on-surface">{pi.productName}</h3>
+                              <p className="font-label text-[10px] uppercase tracking-wider text-on-surface-variant opacity-60">
+                                {pi.usedDays}회 사용
+                              </p>
+                            </div>
+                            <span className={`text-[11px] font-bold px-2 py-1 rounded-full ${
+                              isPositive
+                                ? 'text-emerald-700/70 bg-emerald-50'
+                                : 'text-orange-700/70 bg-orange-50'
+                            }`}>
+                              {isPositive ? '계속 사용하세요' : '주의가 필요해요'}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="flex-1 space-y-1">
+                              <div
+                                className="h-1 bg-primary-container rounded-full"
+                                style={{ width: `${(pi.avgScoreWhenUsed / 5) * 100}%` }}
+                              />
+                              <div
+                                className="h-1 bg-surface-container-highest rounded-full"
+                                style={{ width: `${(pi.avgScoreWhenNotUsed / 5) * 100}%` }}
+                              />
+                            </div>
+                            <span className={`serif-numbers text-xs ${isPositive ? 'text-primary' : 'text-on-surface-variant'}`}>
+                              {impactPercent > 0 ? '+' : ''}{impactPercent}%
+                            </span>
+                          </div>
                         </div>
-                        <span className={`text-[11px] font-bold px-2 py-1 rounded-full ${
-                          isPositive
-                            ? 'text-emerald-700/70 bg-emerald-50'
-                            : 'text-orange-700/70 bg-orange-50'
-                        }`}>
-                          {isPositive ? '계속 사용하세요' : '주의가 필요해요'}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="flex-1 space-y-1">
-                          <div
-                            className="h-1 bg-primary-container rounded-full"
-                            style={{ width: `${(pi.avgScoreWhenUsed / 5) * 100}%` }}
-                          />
-                          <div
-                            className="h-1 bg-surface-container-highest rounded-full"
-                            style={{ width: `${(pi.avgScoreWhenNotUsed / 5) * 100}%` }}
-                          />
-                        </div>
-                        <span className={`serif-numbers text-xs ${isPositive ? 'text-primary' : 'text-on-surface-variant'}`}>
-                          {impactPercent > 0 ? '+' : ''}{impactPercent}%
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            )}
 
-            {/* Combo Analysis */}
+            {/* Combo Analysis (collapsible) */}
             {comboInsights.length > 0 && (
-              <section className="space-y-6">
-                <h2 className="font-headline text-2xl font-light text-on-surface">콤보 분석</h2>
-                {comboInsights.map((combo, i) => (
+              <section className="space-y-4">
+                <button
+                  onClick={() => setShowCombos(!showCombos)}
+                  className="w-full flex items-center justify-between"
+                >
+                  <h2 className="font-headline text-2xl font-light text-on-surface">콤보 분석</h2>
+                  <div className="flex items-center gap-1 text-primary text-sm">
+                    <span>{showCombos ? '접기' : '더 보기'}</span>
+                    <span className="material-symbols-outlined text-sm">
+                      {showCombos ? 'expand_less' : 'expand_more'}
+                    </span>
+                  </div>
+                </button>
+                {showCombos && comboInsights.map((combo, i) => (
                   <ProductCombo key={i} combo={combo} />
                 ))}
               </section>
@@ -260,10 +385,23 @@ export function InsightPage({ records, products }: Props) {
         {/* Variable analysis tab */}
         {activeTab === 'variable' && hasEnoughData && (
           <section className="space-y-6">
-            <h2 className="font-headline text-2xl font-light text-on-surface">변수별 영향</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="font-headline text-2xl font-light text-on-surface">생활 습관별 영향</h2>
+              {variableInsights.length > 3 && (
+                <button
+                  onClick={() => setShowAllVariables(!showAllVariables)}
+                  className="flex items-center gap-1 text-primary text-sm"
+                >
+                  <span>{showAllVariables ? '접기' : '더 보기'}</span>
+                  <span className="material-symbols-outlined text-sm">
+                    {showAllVariables ? 'expand_less' : 'expand_more'}
+                  </span>
+                </button>
+              )}
+            </div>
             {variableInsights.length > 0 ? (
               <div className="flex flex-col gap-4">
-                {variableInsights.map(vi => {
+                {(showAllVariables ? variableInsights : variableInsights.slice(0, 3)).map(vi => {
                   const label = VARIABLE_LABELS[vi.variable as Variable] || vi.variable;
                   const isNegative = vi.impact < 0;
 
@@ -316,7 +454,7 @@ export function InsightPage({ records, products }: Props) {
             ) : (
               <div className="bg-surface-container-low rounded-xl p-6 text-center">
                 <p className="text-sm text-on-surface-variant">
-                  변수 데이터가 충분하지 않아요. 더 기록해보세요.
+                  생활 습관 데이터가 충분하지 않아요. 더 기록해보세요.
                 </p>
               </div>
             )}

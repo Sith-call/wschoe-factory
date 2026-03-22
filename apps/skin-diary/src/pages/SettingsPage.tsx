@@ -1,158 +1,219 @@
 import React from 'react';
-import type { SkinRecord, UserProfile } from '../types';
-import { ChevronLeftIcon, ChevronRightIcon } from '../components/Icons';
+import type { SkinRecord, UserProfile, Milestone, CustomVariable } from '../types';
+import { ALL_VARIABLES, VARIABLE_LABELS, MILESTONE_LABELS, type Variable } from '../types';
+import { calculateRecordingRate, calculateStreak } from '../utils/insights';
 
-interface SettingsPageProps {
+interface Props {
   profile: UserProfile | null;
   records: Record<string, SkinRecord>;
   isDemoMode: boolean;
+  milestones: Milestone[];
+  pinnedVariables: string[];
+  customVariables: CustomVariable[];
   onToggleDemo: () => void;
   onResetData: () => void;
   onBack: () => void;
   onExportData: () => void;
+  onOpenProducts: () => void;
+  onTogglePinned: (varKey: string) => void;
+  onRemoveCustomVariable: (id: string) => void;
 }
 
 export function SettingsPage({
   profile,
   records,
   isDemoMode,
+  milestones,
+  pinnedVariables,
+  customVariables,
   onToggleDemo,
   onResetData,
   onBack,
   onExportData,
-}: SettingsPageProps) {
+  onOpenProducts,
+  onTogglePinned,
+  onRemoveCustomVariable,
+}: Props) {
+  const streak = calculateStreak(records);
+  const { rate, recorded, total } = calculateRecordingRate(records, 30);
   const totalDays = Object.values(records).filter(r => r.morningLog || r.nightLog).length;
-
-  // Calculate longest streak
-  const dates = Object.keys(records).sort();
-  let maxStreak = 0;
-  let currentStreak = 0;
-  for (let i = 0; i < dates.length; i++) {
-    const r = records[dates[i]];
-    if (r.morningLog && r.nightLog) {
-      currentStreak++;
-      maxStreak = Math.max(maxStreak, currentStreak);
-    } else {
-      currentStreak = 0;
-    }
-  }
-
-  const productCount = new Set(
-    Object.values(records).flatMap(r => r.nightLog?.products || [])
-  ).size;
-
-  const handleReset = () => {
-    if (confirm('정말 초기화할까요?')) {
-      if (confirm('모든 기록이 삭제됩니다. 되돌릴 수 없어요.')) {
-        onResetData();
-      }
-    }
-  };
+  const activeCustomVars = customVariables.filter(v => !v.archived);
 
   return (
-    <div className="fixed inset-0 z-50 bg-sd-bg overflow-y-auto">
-      <div className="max-w-[430px] mx-auto min-h-screen">
-        {/* Top bar */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-sd-border">
-          <button onClick={onBack} aria-label="뒤로" className="text-sd-text min-w-[44px] min-h-[44px] flex items-center justify-center">
-            <ChevronLeftIcon size={22} />
+    <div className="fixed inset-0 z-50 bg-surface flex justify-center">
+      <div className="w-full max-w-[430px] bg-surface min-h-screen overflow-y-auto">
+        {/* Header */}
+        <header className="flex items-center justify-between px-6 py-4 sticky top-0 bg-background z-10">
+          <button onClick={onBack} className="active:scale-95 transition-transform text-primary">
+            <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          <span className="font-heading text-lg text-sd-text">설정</span>
-          <div className="w-[22px]" />
-        </div>
+          <h1 className="font-headline text-lg font-semibold text-primary">설정</h1>
+          <div className="w-8" />
+        </header>
 
-        <div className="px-5 py-6 space-y-6">
+        <main className="px-6 pb-10 space-y-8">
           {/* Profile */}
-          <div>
-            <h2 className="font-body text-[0.8125rem] text-sd-text-secondary mb-2">내 정보</h2>
-            <div className="bg-white border border-sd-border rounded-lg divide-y divide-sd-border">
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">이름</span>
-                <span className="font-body text-sm text-sd-text-secondary">{profile?.name || '-'}</span>
-              </div>
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">피부 타입</span>
-                <span className="font-body text-sm text-sd-text-secondary">
-                  {profile?.skinTypes?.join(', ') || '-'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Demo mode */}
-          <div>
-            <h2 className="font-body text-[0.8125rem] text-sd-text-secondary mb-2">데모</h2>
-            <div className="bg-white border border-sd-border rounded-lg">
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">데모 모드</span>
-                <button
-                  onClick={onToggleDemo}
-                  className={`w-11 h-6 rounded-full relative transition-colors duration-100 ${
-                    isDemoMode ? 'bg-sd-primary' : 'bg-sd-border'
-                  }`}
-                  aria-label="데모 모드 토글"
-                >
-                  <span
-                    className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-100 ${
-                      isDemoMode ? 'translate-x-[22px]' : 'translate-x-0.5'
-                    }`}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Data */}
-          <div>
-            <h2 className="font-body text-[0.8125rem] text-sd-text-secondary mb-2">데이터</h2>
-            <div className="bg-white border border-sd-border rounded-lg divide-y divide-sd-border">
-              <button
-                onClick={onExportData}
-                className="flex items-center justify-between px-4 py-3 w-full"
-              >
-                <span className="font-body text-sm text-sd-text">데이터 내보내기 (JSON)</span>
-                <ChevronRightIcon size={18} color="#b5aaaa" />
-              </button>
-              <button
-                onClick={handleReset}
-                className="flex items-center justify-between px-4 py-3 w-full"
-              >
-                <span className="font-body text-sm text-sd-danger">데이터 초기화</span>
-                <ChevronRightIcon size={18} color="#b5aaaa" />
-              </button>
-            </div>
-          </div>
+          {profile && (
+            <section className="bg-surface-container-lowest rounded-xl p-6 space-y-2">
+              <h2 className="font-headline text-lg font-medium text-on-surface">{profile.name}</h2>
+              <p className="text-xs text-on-surface-variant">
+                피부 타입: {profile.skinTypes.join(', ')}
+              </p>
+            </section>
+          )}
 
           {/* Stats */}
-          <div>
-            <h2 className="font-body text-[0.8125rem] text-sd-text-secondary mb-2">기록 통계</h2>
-            <div className="bg-white border border-sd-border rounded-lg divide-y divide-sd-border">
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">총 기록 일수</span>
-                <span className="font-number text-sm text-sd-text">{totalDays}일</span>
+          <section className="space-y-3">
+            <h3 className="font-headline text-sm font-medium text-on-surface">기록 통계</h3>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-surface-container-low rounded-xl p-4 text-center">
+                <p className="serif-numbers text-2xl text-primary">{totalDays}</p>
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider mt-1">총 기록일</p>
               </div>
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">최장 스트릭</span>
-                <span className="font-number text-sm text-sd-text">{maxStreak}일</span>
+              <div className="bg-surface-container-low rounded-xl p-4 text-center">
+                <p className="serif-numbers text-2xl text-primary">{streak}</p>
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider mt-1">연속 기록</p>
               </div>
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">사용 제품 수</span>
-                <span className="font-number text-sm text-sd-text">{productCount}개</span>
+              <div className="bg-surface-container-low rounded-xl p-4 text-center">
+                <p className="serif-numbers text-2xl text-primary">{rate}%</p>
+                <p className="text-[10px] text-on-surface-variant uppercase tracking-wider mt-1">이번 달</p>
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* App info */}
-          <div>
-            <h2 className="font-body text-[0.8125rem] text-sd-text-secondary mb-2">앱 정보</h2>
-            <div className="bg-white border border-sd-border rounded-lg">
-              <div className="flex items-center justify-between px-4 py-3">
-                <span className="font-body text-sm text-sd-text">버전</span>
-                <span className="font-body text-sm text-sd-text-secondary">1.0.0</span>
+          {/* Milestones */}
+          {milestones.length > 0 && (
+            <section className="space-y-3">
+              <h3 className="font-headline text-sm font-medium text-on-surface">달성한 마일스톤</h3>
+              <div className="space-y-2">
+                {milestones.map(m => (
+                  <div
+                    key={m.type}
+                    className="flex items-center gap-3 bg-surface-container-low rounded-xl p-4"
+                  >
+                    <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                      military_tech
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium text-on-surface">{MILESTONE_LABELS[m.type]}</p>
+                      <p className="text-[10px] text-on-surface-variant">
+                        {new Date(m.achievedAt).toLocaleDateString('ko')} 달성
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </section>
+          )}
+
+          {/* Pinned Variables (Presets) */}
+          <section className="space-y-3">
+            <h3 className="font-headline text-sm font-medium text-on-surface">기본 생활 습관 (프리셋)</h3>
+            <p className="text-xs text-on-surface-variant/60">
+              선택한 습관은 밤 기록 시 자동으로 체크됩니다
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {ALL_VARIABLES.map(v => {
+                const isPinned = pinnedVariables.includes(v);
+                return (
+                  <button
+                    key={v}
+                    onClick={() => onTogglePinned(v)}
+                    className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                      isPinned
+                        ? 'bg-primary text-white'
+                        : 'bg-surface-container-highest text-on-surface-variant'
+                    }`}
+                  >
+                    {VARIABLE_LABELS[v]}
+                    {isPinned && (
+                      <span className="material-symbols-outlined text-xs ml-1" style={{ fontSize: '12px' }}>push_pin</span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
-          </div>
-        </div>
+          </section>
+
+          {/* Custom Variables */}
+          {activeCustomVars.length > 0 && (
+            <section className="space-y-3">
+              <h3 className="font-headline text-sm font-medium text-on-surface">커스텀 생활 습관</h3>
+              <div className="space-y-2">
+                {activeCustomVars.map(cv => (
+                  <div
+                    key={cv.id}
+                    className="flex items-center justify-between bg-surface-container-low rounded-xl p-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-on-surface">{cv.label}</span>
+                      {pinnedVariables.includes(cv.id) && (
+                        <span className="material-symbols-outlined text-primary text-xs" style={{ fontSize: '14px' }}>push_pin</span>
+                      )}
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => onTogglePinned(cv.id)}
+                        className="text-xs text-on-surface-variant"
+                      >
+                        {pinnedVariables.includes(cv.id) ? '고정 해제' : '고정'}
+                      </button>
+                      <button
+                        onClick={() => onRemoveCustomVariable(cv.id)}
+                        className="text-xs text-error"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Actions */}
+          <section className="space-y-2">
+            <button
+              onClick={onOpenProducts}
+              className="w-full flex items-center justify-between bg-surface-container-low rounded-xl p-4"
+            >
+              <span className="text-sm text-on-surface">제품 관리</span>
+              <span className="material-symbols-outlined text-on-surface-variant text-sm">chevron_right</span>
+            </button>
+
+            <button
+              onClick={onExportData}
+              className="w-full flex items-center justify-between bg-surface-container-low rounded-xl p-4"
+            >
+              <span className="text-sm text-on-surface">데이터 내보내기</span>
+              <span className="material-symbols-outlined text-on-surface-variant text-sm">download</span>
+            </button>
+
+            <button
+              onClick={onToggleDemo}
+              className="w-full flex items-center justify-between bg-surface-container-low rounded-xl p-4"
+            >
+              <span className="text-sm text-on-surface">
+                데모 모드 {isDemoMode ? 'OFF' : 'ON'}
+              </span>
+              <div className={`w-10 h-6 rounded-full transition-colors ${isDemoMode ? 'bg-primary' : 'bg-surface-container-highest'}`}>
+                <div className={`w-5 h-5 rounded-full bg-white shadow-sm mt-0.5 transition-transform ${isDemoMode ? 'translate-x-4.5 ml-[18px]' : 'ml-0.5'}`} />
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                if (confirm('모든 데이터가 삭제됩니다. 정말 초기화할까요?')) {
+                  onResetData();
+                }
+              }}
+              className="w-full flex items-center justify-between bg-surface-container-low rounded-xl p-4"
+            >
+              <span className="text-sm text-error">데이터 초기화</span>
+              <span className="material-symbols-outlined text-error text-sm">delete_forever</span>
+            </button>
+          </section>
+        </main>
       </div>
     </div>
   );

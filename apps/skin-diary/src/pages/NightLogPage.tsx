@@ -138,7 +138,7 @@ export function NightLogPage({
 
           {/* Variables */}
           <section className="space-y-4">
-            <h2 className="font-noto-serif text-xl font-medium text-on-surface">오늘의 생활 변수</h2>
+            <h2 className="font-noto-serif text-xl font-medium text-on-surface">오늘의 생활 습관</h2>
             <VariableChips
               selected={selectedVariables}
               onChange={setSelectedVariables}

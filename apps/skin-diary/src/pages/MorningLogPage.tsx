@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import type { SkinKeyword, MorningLog, SkinRecord, TroubleArea } from '../types';
+import { KEYWORD_LABELS, SCORE_LABELS } from '../types';
 import { getToday, formatDate } from '../utils/date';
 import { ScoreSelector } from '../components/ScoreSelector';
 import { KeywordChips } from '../components/KeywordChips';
 import { TroubleAreaMap } from '../components/TroubleAreaMap';
+import { generateShareImage, shareOrDownload } from '../utils/share';
 
 interface Props {
   records: Record<string, SkinRecord>;
@@ -36,6 +38,16 @@ export function MorningLogPage({ records, onSave, onClose, editDate }: Props) {
     setSaved(true);
   };
 
+  const shareRef = useRef<HTMLDivElement>(null);
+
+  const handleShareScore = async () => {
+    if (!shareRef.current) return;
+    const blob = await generateShareImage(shareRef.current);
+    if (blob) {
+      await shareOrDownload(blob, `skin-diary-${date}.png`);
+    }
+  };
+
   if (saved) {
     return (
       <div className="fixed inset-0 z-50 bg-surface flex justify-center">
@@ -48,12 +60,35 @@ export function MorningLogPage({ records, onSave, onClose, editDate }: Props) {
               check_circle
             </span>
             <h2 className="font-headline text-2xl font-medium text-on-surface">아침 기록 완료!</h2>
+            {/* Shareable score card */}
+            <div ref={shareRef} className="bg-background rounded-2xl p-6 w-full max-w-[280px] text-center space-y-2">
+              <p className="text-[10px] text-on-surface-variant uppercase tracking-widest">{formatDate(date)}</p>
+              <p className="serif-numbers text-5xl text-primary font-medium">{score}</p>
+              <p className="text-xs text-on-surface-variant">{SCORE_LABELS[score as 1|2|3|4|5]}</p>
+              {keywords.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-1 mt-1">
+                  {keywords.map(kw => (
+                    <span key={kw} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px]">
+                      {KEYWORD_LABELS[kw]}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <p className="text-[9px] text-on-surface-variant/40 mt-2 font-noto-serif italic">피부 일지</p>
+            </div>
+            <button
+              onClick={handleShareScore}
+              className="flex items-center gap-2 text-sm font-semibold text-primary active:scale-95 transition-transform"
+            >
+              <span className="material-symbols-outlined text-sm">share</span>
+              피부 점수 공유하기
+            </button>
             <p className="text-sm text-on-surface-variant text-center leading-relaxed">
               오늘도 좋은 하루 보내세요
             </p>
             <button
               onClick={onClose}
-              className="mt-4 px-8 py-3 rounded-full bg-primary text-white font-body font-semibold active:scale-95 transition-transform"
+              className="mt-2 px-8 py-3 rounded-full bg-primary text-white font-body font-semibold active:scale-95 transition-transform"
             >
               닫기
             </button>

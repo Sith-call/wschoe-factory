@@ -52,7 +52,7 @@ export default function App() {
   const { products, activeProducts, archivedProducts, addProduct, removeProduct, archiveProduct, unarchiveProduct, loadProducts } = useProducts();
   const { pinnedVariables, activeCustomVariables, customVariables, togglePinned, isPinned, addCustomVariable, removeCustomVariable, loadPresets } = usePresets();
   const { milestones, streak, latestMilestone, unseenMilestone, checkAndAwardMilestones, markMilestoneSeen, loadMilestones } = useMilestones(records);
-  const { productInsights, variableInsights } = useInsights(records, activeProducts);
+  const { productInsights, variableInsights, miniInsight } = useInsights(records, activeProducts);
 
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);
@@ -207,6 +207,7 @@ export default function App() {
             bestProduct={bestProduct}
             worstVariable={worstVariable}
             recordingRate={recordingRate}
+            miniInsight={miniInsight}
             onOpenNightLog={() => setOverlay('nightLog')}
             onOpenMorningLog={() => setOverlay('morningLog')}
             onOpenSettings={() => setOverlay('settings')}

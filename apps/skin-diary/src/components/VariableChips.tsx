@@ -103,7 +103,7 @@ export function VariableChips({
             value={newVarLabel}
             onChange={e => setNewVarLabel(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleAdd()}
-            placeholder="변수 이름"
+            placeholder="습관 이름"
             className="px-3 py-1.5 rounded-full border border-outline-variant/30 text-sm bg-white focus:ring-1 focus:ring-primary-container/30 focus:outline-none w-24"
             autoFocus
           />
@@ -126,7 +126,7 @@ export function VariableChips({
           className="px-4 py-2 rounded-full bg-surface-container-highest text-primary font-bold text-sm flex items-center gap-1"
         >
           <span className="material-symbols-outlined text-xs" style={{ fontSize: '14px' }}>add</span>
-          변수 추가
+          습관 추가
         </button>
       )}
     </div>

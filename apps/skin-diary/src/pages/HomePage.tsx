@@ -7,6 +7,8 @@ import { WeeklyChart } from '../components/WeeklyChart';
 import { StreakBadge, MilestoneBadge } from '../components/MilestoneBadge';
 import { DayDetail } from '../components/DayDetail';
 import { calculateRecordingRate } from '../utils/insights';
+import type { MiniInsight } from '../utils/insights';
+import { getCustomVariables } from '../utils/storage';
 
 interface Props {
   records: Record<string, SkinRecord>;
@@ -17,6 +19,7 @@ interface Props {
   bestProduct: ProductInsight | null;
   worstVariable: VariableInsight | null;
   recordingRate: number;
+  miniInsight: MiniInsight | null;
   onOpenNightLog: () => void;
   onOpenMorningLog: () => void;
   onOpenSettings: () => void;
@@ -35,6 +38,7 @@ export function HomePage({
   bestProduct,
   worstVariable,
   recordingRate,
+  miniInsight,
   onOpenNightLog,
   onOpenMorningLog,
   onOpenSettings,
@@ -52,6 +56,17 @@ export function HomePage({
   const yesterday = getPrevDate(today);
   const yesterdayRecord = records[yesterday];
   const showMorningNudge = yesterdayRecord?.nightLog && !hasMorningLog;
+
+  // Time-based greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return '좋은 아침이에요';
+    if (hour >= 12 && hour < 18) return '좋은 오후예요';
+    if (hour >= 18 && hour < 22) return '좋은 저녁이에요';
+    return '좋은 밤이에요';
+  };
+
+  const greeting = getGreeting();
 
   const [detailDate, setDetailDate] = useState<string | null>(null);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
@@ -77,7 +92,7 @@ export function HomePage({
           <div className="flex items-center gap-2 text-primary">
             <span className="material-symbols-outlined">spa</span>
             <h1 className="font-noto-serif text-2xl font-light italic text-on-surface">
-              좋은 아침이에요{userName ? `, ${userName}님` : ''}
+              {greeting}{userName ? `, ${userName}님` : ''}
             </h1>
           </div>
           <button
@@ -120,24 +135,47 @@ export function HomePage({
           </section>
         )}
 
+        {/* Today's Recording Status — completion banner */}
+        <section className="bg-surface-container-lowest rounded-2xl p-4 flex items-center gap-3 border border-outline-variant/5">
+          <div className="flex gap-1.5">
+            <div className={`w-3 h-3 rounded-full ${hasMorningLog ? 'bg-primary' : 'bg-surface-container-highest'}`} />
+            <div className={`w-3 h-3 rounded-full ${hasNightLog ? 'bg-primary' : 'bg-surface-container-highest'}`} />
+          </div>
+          <p className="text-xs text-on-surface-variant flex-1">
+            {hasMorningLog && hasNightLog
+              ? '오늘 기록을 모두 완료했어요!'
+              : hasMorningLog
+                ? '아침 기록 완료 -- 밤 기록도 잊지 마세요'
+                : hasNightLog
+                  ? '밤 기록 완료 -- 아침 기록도 남겨봐요'
+                  : '아직 오늘의 기록이 없어요'}
+          </p>
+          {hasMorningLog && hasNightLog && (
+            <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>task_alt</span>
+          )}
+        </section>
+
         {/* Today's Recording Status */}
         <section className="grid grid-cols-2 gap-4">
           {/* Night Record */}
-          <div className={`p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] ${
+          <div className={`p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] border ${
             hasNightLog
-              ? 'bg-surface-container-lowest border border-outline-variant/5'
-              : 'bg-surface-container-low'
-          }`}>
+              ? 'bg-surface-container-lowest border-primary/10'
+              : 'bg-surface-container-low border-outline-variant/5'
+          }`} style={hasNightLog ? { boxShadow: '0 1px 6px rgba(133,80,72,0.06)' } : {}}>
             <div>
               <div className="flex justify-between items-start mb-2">
-                <span className={`text-[11px] font-semibold uppercase tracking-wider ${
-                  hasNightLog ? 'text-primary' : 'text-on-surface-variant/60'
-                }`}>
-                  밤 기록
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-on-surface-variant/50" style={{ fontVariationSettings: "'FILL' 1" }}>dark_mode</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${
+                    hasNightLog ? 'text-primary' : 'text-on-surface-variant/60'
+                  }`}>
+                    밤 기록
+                  </span>
+                </div>
                 {hasNightLog && (
                   <span
-                    className="material-symbols-outlined text-primary-container text-sm"
+                    className="material-symbols-outlined text-primary text-sm"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     check_circle
@@ -145,7 +183,7 @@ export function HomePage({
                 )}
               </div>
               {hasNightLog ? (
-                <p className="text-[13px] text-on-surface-variant leading-relaxed">
+                <p className="text-[13px] text-on-surface-variant leading-relaxed font-noto-serif italic">
                   {todayRecord!.nightLog!.products.length > 1
                     ? `${todayRecord!.nightLog!.products[0]} 외 ${todayRecord!.nightLog!.products.length - 1}개`
                     : todayRecord!.nightLog!.products.length === 1
@@ -170,21 +208,24 @@ export function HomePage({
           </div>
 
           {/* Morning Record */}
-          <div className={`p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] ${
+          <div className={`p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] border ${
             hasMorningLog
-              ? 'bg-surface-container-lowest border border-outline-variant/5'
-              : 'bg-surface-container-low'
-          }`}>
+              ? 'bg-surface-container-lowest border-primary/10'
+              : 'bg-surface-container-low border-outline-variant/5'
+          }`} style={hasMorningLog ? { boxShadow: '0 1px 6px rgba(133,80,72,0.06)' } : {}}>
             <div>
               <div className="flex justify-between items-start mb-2">
-                <span className={`text-[11px] font-semibold uppercase tracking-wider ${
-                  hasMorningLog ? 'text-primary' : 'text-on-surface-variant/60'
-                }`}>
-                  아침 기록
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-on-surface-variant/50" style={{ fontVariationSettings: "'FILL' 1" }}>wb_sunny</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${
+                    hasMorningLog ? 'text-primary' : 'text-on-surface-variant/60'
+                  }`}>
+                    아침 기록
+                  </span>
+                </div>
                 {hasMorningLog && (
                   <span
-                    className="material-symbols-outlined text-primary-container text-sm"
+                    className="material-symbols-outlined text-primary text-sm"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     check_circle
@@ -193,7 +234,7 @@ export function HomePage({
               </div>
               {hasMorningLog ? (
                 <div>
-                  <p className="text-[13px] text-on-surface-variant leading-relaxed">
+                  <p className="text-[13px] text-on-surface-variant leading-relaxed font-noto-serif italic">
                     피부 점수 {todayRecord!.morningLog!.score}점
                   </p>
                   <div className="flex flex-wrap gap-1 mt-1">
@@ -317,6 +358,41 @@ export function HomePage({
             </section>
           );
         })()}
+
+        {/* Mini-Insight Teaser (from day 3) */}
+        {miniInsight && miniInsight.correlations.length > 0 && (
+          <section
+            className="bg-primary-fixed/30 rounded-2xl p-5 cursor-pointer active:scale-[0.98] transition-transform"
+            onClick={onNavigateToInsight}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+                auto_awesome
+              </span>
+              <h3 className="text-xs font-semibold text-primary uppercase tracking-wider">발견된 패턴</h3>
+            </div>
+            {(() => {
+              const c = miniInsight.correlations[0];
+              const customVars = getCustomVariables();
+              const varLabel = VARIABLE_LABELS[c.variable as Variable]
+                || customVars.find(cv => cv.id === c.variable)?.label
+                || c.variable;
+              return (
+                <p className="text-[14px] text-on-surface leading-relaxed">
+                  <span className="font-semibold text-primary">{varLabel}</span>
+                  {' '}다음날{' '}
+                  <span className="font-medium">{KEYWORD_LABELS[c.keyword as SkinKeyword]}</span>
+                  {' '}등장 확률{' '}
+                  <span className="serif-numbers font-bold text-primary text-lg">{c.probability}%</span>
+                </p>
+              );
+            })()}
+            <p className="text-[11px] text-on-surface-variant/60 mt-2 flex items-center gap-1">
+              인사이트 탭에서 더 보기
+              <span className="material-symbols-outlined text-xs">arrow_forward</span>
+            </p>
+          </section>
+        )}
 
         {/* Insight Preview Card */}
         {(bestProduct || worstVariable) && (
