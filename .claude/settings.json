@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/auto-resume.sh 2>/dev/null || true",
+            "timeout": 5,
+            "statusMessage": "이전 작업 상태 확인..."
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
