@@ -1,155 +1,219 @@
-import React from 'react';
-import type { SkinRecord } from '../types';
+import React, { useMemo } from 'react';
+import type { SkinRecord, SkinKeyword, Variable, TroubleArea } from '../types';
 import { formatDate, getPrevDate } from '../utils/date';
-import { KEYWORD_LABELS, VARIABLE_LABELS, SCORE_LABELS } from '../types';
-import type { SkinKeyword, Variable } from '../types';
+import { KEYWORD_LABELS, VARIABLE_LABELS, SCORE_LABELS, TROUBLE_AREA_LABELS } from '../types';
+import { getCustomVariables } from '../utils/storage';
 
-interface DayDetailProps {
+interface Props {
   date: string;
+  record?: SkinRecord;
   records: Record<string, SkinRecord>;
   onClose: () => void;
-  onEdit?: (date: string) => void;
+  onEditMorning?: (date: string) => void;
   onEditNight?: (date: string) => void;
 }
 
-const SCORE_COLORS: Record<number, string> = {
-  1: '#e8a0a0',
-  2: '#e8c4a0',
-  3: '#e8dca0',
-  4: '#a0d4a0',
-  5: '#7ac27a',
-};
+export function DayDetail({ date, record, records, onClose, onEditMorning, onEditNight }: Props) {
+  // Build a variable label resolver that includes custom variables
+  const resolveVariableLabel = useMemo(() => {
+    const customVars = getCustomVariables();
+    const customMap = new Map(customVars.map(v => [v.id, v.label]));
+    return (v: string) => VARIABLE_LABELS[v as Variable] || customMap.get(v) || v;
+  }, []);
 
-export function DayDetail({ date, records, onClose, onEdit, onEditNight }: DayDetailProps) {
-  const record = records[date];
+  // The previous night's log affects today's morning
   const prevDate = getPrevDate(date);
   const prevRecord = records[prevDate];
 
-  if (!record) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
-        <div className="absolute inset-0 bg-black/30" style={{ opacity: 1, transition: 'opacity 150ms' }} />
-        <div
-          className="relative bg-sd-bg rounded-t-2xl w-full max-w-[430px] max-h-[70vh] overflow-y-auto p-5 pb-8"
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="w-10 h-1 bg-sd-border rounded-full mx-auto mb-4" />
-          <h3 className="font-heading text-lg text-sd-text mb-4">{formatDate(date)}</h3>
-          <p className="font-body text-sm text-sd-text-secondary mb-4">이 날은 기록이 없어요</p>
-          {(onEdit || onEditNight) && (
-            <div className="space-y-2">
-              {onEdit && (
-                <button
-                  onClick={() => onEdit(date)}
-                  className="w-full bg-sd-primary text-white rounded-xl px-5 py-2.5 font-body font-medium text-sm"
-                >
-                  아침 피부 기록하기
+  const morningLog = record?.morningLog;
+  const nightLog = record?.nightLog;
+  // Show the previous night's log as "cause" for today's morning
+  const causativeNightLog = prevRecord?.nightLog;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-end justify-center" onClick={onClose}>
+      <div className="absolute inset-0 bg-inverse-surface/40" />
+      <div
+        className="relative w-full max-w-[430px] bg-surface rounded-t-[32px] p-6 pb-10 max-h-[80vh] overflow-y-auto no-scrollbar"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Handle */}
+        <div className="flex justify-center mb-4">
+          <div className="w-10 h-1 bg-outline-variant/30 rounded-full" />
+        </div>
+
+        <h2 className="font-headline text-xl font-medium text-on-surface mb-6">
+          {formatDate(date)}
+        </h2>
+
+        {/* Previous night (cause) */}
+        {causativeNightLog && (
+          <section className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                전날 밤 기록 (원인)
+              </h3>
+              {onEditNight && (
+                <button onClick={() => onEditNight(prevDate)} className="text-xs text-primary font-medium">
+                  수정
                 </button>
               )}
+            </div>
+            <div className="space-y-2">
+              {causativeNightLog.products.length > 0 && (
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">제품</span>
+                  <p className="text-sm text-on-surface mt-1">
+                    {causativeNightLog.products.join(', ')}
+                  </p>
+                </div>
+              )}
+              {causativeNightLog.variables.length > 0 && (
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">변수</span>
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {causativeNightLog.variables.map((v, i) => (
+                      <span key={i} className="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">
+                        {resolveVariableLabel(v)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {causativeNightLog.memo && (
+                <p className="text-xs text-on-surface-variant italic mt-2">{causativeNightLog.memo}</p>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Morning (result) */}
+        {morningLog ? (
+          <section className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                아침 기록 (결과)
+              </h3>
+              {onEditMorning && (
+                <button onClick={() => onEditMorning(date)} className="text-xs text-primary font-medium">
+                  수정
+                </button>
+              )}
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+                  <span className="font-headline text-xl text-white">{morningLog.score}</span>
+                </div>
+                <span className="text-sm font-medium text-on-surface">{SCORE_LABELS[morningLog.score]}</span>
+              </div>
+              {morningLog.keywords.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {morningLog.keywords.map(kw => (
+                    <span key={kw} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-medium">
+                      {KEYWORD_LABELS[kw]}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {morningLog.troubleAreas && morningLog.troubleAreas.length > 0 && (
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">트러블 부위</span>
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {morningLog.troubleAreas.map(area => (
+                      <span key={area} className="px-2.5 py-1 rounded-full bg-error-container text-on-error-container text-[11px]">
+                        {TROUBLE_AREA_LABELS[area]}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {morningLog.memo && (
+                <p className="text-xs text-on-surface-variant italic">{morningLog.memo}</p>
+              )}
+            </div>
+          </section>
+        ) : (
+          <section className="mb-6">
+            <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">
+              아침 기록
+            </h3>
+            <div className="bg-surface-container-low rounded-xl p-4 text-center">
+              <p className="text-sm text-on-surface-variant mb-3">기록이 없어요</p>
+              {onEditMorning && (
+                <button
+                  onClick={() => onEditMorning(date)}
+                  className="text-xs font-semibold text-primary"
+                >
+                  지금 기록하기
+                </button>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Tonight's night log */}
+        {nightLog ? (
+          <section className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                오늘 밤 기록
+              </h3>
+              {onEditNight && (
+                <button onClick={() => onEditNight(date)} className="text-xs text-primary font-medium">
+                  수정
+                </button>
+              )}
+            </div>
+            <div className="space-y-2">
+              {nightLog.products.length > 0 && (
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">제품</span>
+                  <p className="text-sm text-on-surface mt-1">{nightLog.products.join(', ')}</p>
+                </div>
+              )}
+              {nightLog.variables.length > 0 && (
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest text-on-surface-variant/60 font-bold">변수</span>
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {nightLog.variables.map((v, i) => (
+                      <span key={i} className="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">
+                        {resolveVariableLabel(v)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {nightLog.memo && (
+                <p className="text-xs text-on-surface-variant italic mt-2">{nightLog.memo}</p>
+              )}
+            </div>
+          </section>
+        ) : (
+          <section className="mb-6">
+            <h3 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">
+              밤 기록
+            </h3>
+            <div className="bg-surface-container-low rounded-xl p-4 text-center">
+              <p className="text-sm text-on-surface-variant mb-3">기록이 없어요</p>
               {onEditNight && (
                 <button
                   onClick={() => onEditNight(date)}
-                  className="w-full border border-sd-primary text-sd-primary rounded-xl px-5 py-2.5 font-body font-medium text-sm"
+                  className="text-xs font-semibold text-primary"
                 >
-                  밤 루틴 기록하기
+                  지금 기록하기
                 </button>
               )}
             </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/30" style={{ opacity: 1, transition: 'opacity 150ms' }} />
-      <div
-        className="relative bg-sd-bg rounded-t-2xl w-full max-w-[430px] max-h-[70vh] overflow-y-auto p-5 pb-8"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="w-10 h-1 bg-sd-border rounded-full mx-auto mb-4" />
-
-        <h3 className="font-heading text-lg text-sd-text mb-4">{formatDate(date)}</h3>
-
-        {prevRecord?.nightLog && (
-          <div className="mb-4">
-            <p className="font-body text-sm text-sd-text-secondary mb-2">전날 밤 루틴</p>
-            <p className="font-body text-sm text-sd-text mb-1">
-              루틴: {prevRecord.nightLog.products.join(', ')}
-            </p>
-            {prevRecord.nightLog.variables.length > 0 && (
-              <p className="font-body text-sm text-sd-text">
-                생활 변수: {prevRecord.nightLog.variables.map(v => VARIABLE_LABELS[v as Variable]).join(', ')}
-              </p>
-            )}
-          </div>
+          </section>
         )}
 
-        {prevRecord?.nightLog && record.morningLog && (
-          <p className="font-body text-[0.75rem] text-sd-text-secondary text-center my-2">그 결과</p>
-        )}
-
-        {record.morningLog && (
-          <div className="mb-4">
-            {prevRecord?.nightLog && <div className="border-t border-dashed border-sd-border mb-4" />}
-            <p className="font-body text-sm text-sd-text-secondary mb-2">아침 피부</p>
-            <div className="flex items-center gap-2 mb-2">
-              <span
-                className="inline-flex items-center justify-center w-8 h-8 rounded-full text-white font-number text-sm"
-                style={{ backgroundColor: SCORE_COLORS[record.morningLog.score] }}
-              >
-                {record.morningLog.score}
-              </span>
-              <span className="font-body text-sm text-sd-text">
-                {SCORE_LABELS[record.morningLog.score]}
-              </span>
-              <span className="font-body text-sm text-sd-text-secondary">
-                {record.morningLog.keywords.map(k => KEYWORD_LABELS[k as SkinKeyword]).join(', ')}
-              </span>
-            </div>
-            {record.morningLog.memo && (
-              <p className="font-body text-sm text-sd-text-secondary italic">
-                "{record.morningLog.memo}"
-              </p>
-            )}
-          </div>
-        )}
-
-        {record.nightLog && record.nightLog.variables.length > 0 && (
-          <>
-            <div className="border-t border-dashed border-sd-border my-4" />
-            <div>
-              <p className="font-body text-sm text-sd-text-secondary mb-2">이 날의 생활 변수</p>
-              <div className="flex flex-wrap gap-1.5">
-                {record.nightLog.variables.map(v => (
-                  <span
-                    key={v}
-                    className="rounded-full px-3 py-1 text-sm font-body bg-sd-primary-light text-sd-text border border-sd-border"
-                  >
-                    {VARIABLE_LABELS[v as Variable]}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {!record.morningLog && !prevRecord?.nightLog && (
-          <p className="font-body text-sm text-sd-text-secondary">기록이 없습니다</p>
-        )}
-
-        {onEdit && (
-          <>
-            <div className="border-t border-sd-border my-4" />
-            <button
-              onClick={() => onEdit(date)}
-              className="w-full border border-sd-primary text-sd-primary rounded-xl px-5 py-2.5 font-body font-medium text-sm"
-            >
-              수정하기
-            </button>
-          </>
-        )}
+        <button
+          onClick={onClose}
+          className="w-full py-3 rounded-full bg-surface-container-highest text-on-surface-variant font-body text-sm font-medium"
+        >
+          닫기
+        </button>
       </div>
     </div>
   );

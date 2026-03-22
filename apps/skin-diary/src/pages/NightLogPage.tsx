@@ -1,134 +1,181 @@
 import React, { useState } from 'react';
-import type { Product, Variable, NightLog, SkinRecord, ProductCategory } from '../types';
-import { getToday, getPrevDate } from '../utils/date';
-import { CloseIcon } from '../components/Icons';
+import type { Product, NightLog, SkinRecord, ProductCategory, CustomVariable } from '../types';
+import { getToday, getPrevDate, formatDate } from '../utils/date';
 import { ProductSelector } from '../components/ProductSelector';
 import { VariableChips } from '../components/VariableChips';
 
-interface NightLogPageProps {
+interface Props {
   products: Product[];
   records: Record<string, SkinRecord>;
-  onSave: (date: string, nightLog: NightLog) => void;
+  pinnedVariables: string[];
+  customVariables: CustomVariable[];
+  onSave: (date: string, log: NightLog) => void;
   onClose: () => void;
   onAddProduct: (name: string, category: ProductCategory) => void;
+  onAddCustomVariable?: (label: string) => void;
   editDate?: string | null;
+  showMorningNudge?: boolean;
 }
 
-export function NightLogPage({ products, records, onSave, onClose, onAddProduct, editDate }: NightLogPageProps) {
-  const targetDate = editDate || getToday();
-  const existingLog = records[targetDate]?.nightLog;
+export function NightLogPage({
+  products,
+  records,
+  pinnedVariables,
+  customVariables,
+  onSave,
+  onClose,
+  onAddProduct,
+  onAddCustomVariable,
+  editDate,
+  showMorningNudge = true,
+}: Props) {
+  const date = editDate || getToday();
+  const existing = records[date]?.nightLog;
+  const prevDate = getPrevDate(date);
+  const prevNightLog = records[prevDate]?.nightLog;
 
   const [selectedProducts, setSelectedProducts] = useState<string[]>(
-    existingLog?.products || []
+    existing?.products || []
   );
-  const [selectedVariables, setSelectedVariables] = useState<Variable[]>(
-    existingLog?.variables || []
+  const [selectedVariables, setSelectedVariables] = useState<string[]>(
+    existing?.variables || []
   );
-  const [memo, setMemo] = useState(existingLog?.memo || '');
-
-  const prevDate = getPrevDate(targetDate);
-  const prevLog = records[prevDate]?.nightLog;
-
-  const handleCopyPrevious = () => {
-    if (prevLog) {
-      setSelectedProducts([...prevLog.products]);
-      setSelectedVariables([...prevLog.variables]);
-    }
-  };
+  const [memo, setMemo] = useState(existing?.memo || '');
+  const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
-    onSave(targetDate, {
+    const nightLog: NightLog = {
       products: selectedProducts,
       variables: selectedVariables,
       memo: memo.trim() || undefined,
       loggedAt: new Date().toISOString(),
-    });
-    onClose();
+    };
+    onSave(date, nightLog);
+    setSaved(true);
   };
 
-  const handleClose = () => {
-    const hasChanges = selectedProducts.length > 0 || selectedVariables.length > 0;
-    if (hasChanges && !existingLog) {
-      if (confirm('저장하지 않고 나갈까요?')) {
-        onClose();
-      }
-    } else {
-      onClose();
+  const handleCopyLastNight = () => {
+    if (prevNightLog) {
+      setSelectedProducts(prevNightLog.products);
+      setSelectedVariables(prevNightLog.variables);
     }
   };
 
+  if (saved) {
+    return (
+      <div className="fixed inset-0 z-50 bg-surface flex justify-center">
+        <main className="w-full max-w-[430px] bg-surface min-h-screen flex flex-col items-center justify-center px-6">
+          <div className="flex flex-col items-center gap-6">
+            <span
+              className="material-symbols-outlined text-primary text-5xl"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              check_circle
+            </span>
+            <h2 className="font-headline text-2xl font-medium text-on-surface">기록 완료!</h2>
+            {showMorningNudge && (
+              <p className="text-sm text-on-surface-variant text-center leading-relaxed">
+                내일 아침에 피부 점수도 기록해봐요
+              </p>
+            )}
+            <button
+              onClick={onClose}
+              className="mt-4 px-8 py-3 rounded-full bg-primary text-white font-body font-semibold active:scale-95 transition-transform"
+            >
+              닫기
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed inset-0 z-50 bg-sd-bg overflow-y-auto">
-      <div className="max-w-[430px] mx-auto min-h-screen flex flex-col">
-        {/* Top bar */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-sd-border">
-          <button onClick={handleClose} aria-label="닫기" className="text-sd-text">
-            <CloseIcon size={22} />
-          </button>
-          <span className="font-heading text-lg text-sd-text">밤 기록</span>
-          <div className="w-[22px]" />
+    <div className="fixed inset-0 z-50 bg-surface flex justify-center">
+      <main className="w-full max-w-[430px] bg-surface min-h-screen flex flex-col relative overflow-hidden">
+        {/* Header */}
+        <header className="w-full top-0 sticky z-50 bg-background">
+          <div className="flex items-center justify-between px-6 py-4">
+            <button
+              onClick={onClose}
+              className="active:scale-95 duration-200 hover:opacity-80 transition-opacity"
+            >
+              <span className="material-symbols-outlined text-primary text-2xl">arrow_back</span>
+            </button>
+            <h1 className="font-noto-serif text-2xl font-medium tracking-tight text-primary">
+              밤 기록
+            </h1>
+            <div className="w-8" />
+          </div>
+        </header>
+
+        {/* Date Header */}
+        <div className="px-6 pt-2 pb-6 flex flex-col items-center">
+          <span className="font-noto-serif text-lg text-on-surface-variant italic opacity-80">
+            {formatDate(date)}
+          </span>
+          <div className="w-12 h-[1px] bg-outline-variant mt-3 opacity-30" />
         </div>
 
-        <div className="flex-1 px-5 py-6 space-y-6">
-          {/* Quick copy */}
-          {prevLog && (
-            <button
-              onClick={handleCopyPrevious}
-              className="w-full border border-sd-primary text-sd-primary rounded-xl px-5 py-2.5 font-body font-medium text-sm"
-            >
-              어젯밤과 동일
-            </button>
-          )}
-
-          {/* Products section */}
-          <div>
-            <h2 className="font-heading text-lg text-sd-text mb-4">오늘 밤 뭘 발랐어?</h2>
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-6 space-y-10 pb-32 no-scrollbar">
+          {/* Products */}
+          <section>
             <ProductSelector
               products={products}
               selected={selectedProducts}
               onChange={setSelectedProducts}
               onAddProduct={onAddProduct}
+              lastNightProducts={prevNightLog?.products}
+              onCopyLastNight={handleCopyLastNight}
             />
-          </div>
+          </section>
 
-          {/* Divider */}
-          <div className="border-t border-dashed border-sd-border" />
-
-          {/* Variables section */}
-          <div>
-            <h2 className="font-heading text-lg text-sd-text mb-4">오늘 하루 어땠어?</h2>
+          {/* Variables */}
+          <section className="space-y-4">
+            <h2 className="font-noto-serif text-xl font-medium text-on-surface">오늘의 생활 변수</h2>
             <VariableChips
               selected={selectedVariables}
               onChange={setSelectedVariables}
+              pinnedVariables={pinnedVariables}
+              customVariables={customVariables}
+              onAddCustomVariable={onAddCustomVariable}
             />
-          </div>
+          </section>
 
-          {/* Divider */}
-          <div className="border-t border-dashed border-sd-border" />
-
-          {/* Memo section */}
-          <div>
-            <h2 className="font-heading text-lg text-sd-text mb-4">메모</h2>
-            <textarea
-              value={memo}
-              onChange={e => setMemo(e.target.value)}
-              placeholder="오늘 밤 루틴에 대해 메모할 게 있다면 적어봐"
-              className="w-full border border-sd-border rounded-xl px-4 py-3 font-body text-sm text-sd-text bg-white resize-none focus:outline-none focus:border-sd-primary"
-              rows={3}
-            />
-          </div>
+          {/* Memo */}
+          <section className="space-y-4">
+            <h2 className="font-noto-serif text-xl font-medium text-on-surface">한줄 메모</h2>
+            <div className="relative">
+              <textarea
+                value={memo}
+                onChange={e => setMemo(e.target.value)}
+                className="w-full min-h-[140px] bg-white rounded-2xl p-6 border-none shadow-inner focus:ring-1 focus:ring-primary-container/30 font-noto-serif text-on-surface placeholder:text-on-surface-variant/40 resize-none leading-relaxed journal-paper"
+                placeholder="오늘 피부에 대해 한마디..."
+              />
+              <div className="absolute bottom-4 right-4 text-[10px] text-on-surface-variant/30 font-manrope">
+                STORYTELLING MOMENT
+              </div>
+            </div>
+          </section>
         </div>
 
-        {/* Save button */}
-        <div className="px-5 pb-8 pt-4">
-          <button
-            onClick={handleSave}
-            className="w-full bg-sd-primary text-white rounded-xl px-5 py-3 font-body font-medium"
-          >
-            저장하기
-          </button>
+        {/* Bottom Action */}
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 flex flex-col justify-center items-center px-6 pb-10 pt-4 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent -z-10 h-full" />
+          <div className="w-full flex flex-col items-center gap-3 pointer-events-auto">
+            <button
+              onClick={handleSave}
+              className="flex items-center justify-center w-full py-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-white shadow-lg active:scale-[0.98] transition-transform"
+            >
+              <span className="material-symbols-outlined mr-2" style={{ fontVariationSettings: "'FILL' 1" }}>
+                check_circle
+              </span>
+              <span className="font-manrope font-bold uppercase tracking-widest text-sm">기록 완료</span>
+            </button>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

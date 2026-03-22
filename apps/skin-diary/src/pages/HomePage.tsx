@@ -1,224 +1,285 @@
-import React from 'react';
-import type { SkinRecord, Product, ProductInsight, VariableInsight } from '../types';
-import { getToday, formatDate, getRecentDates } from '../utils/date';
-import { KEYWORD_LABELS, SCORE_LABELS, VARIABLE_LABELS } from '../types';
+import React, { useState } from 'react';
+import type { SkinRecord, Product, ProductInsight, VariableInsight, Milestone } from '../types';
+import { getToday, getRecentDates, getPrevDate } from '../utils/date';
+import { KEYWORD_LABELS, VARIABLE_LABELS } from '../types';
 import type { SkinKeyword, Variable } from '../types';
-import { MoonIcon, SunIcon, LeafIcon, SettingsIcon } from '../components/Icons';
-import { WeeklySummary } from '../components/WeeklySummary';
+import { WeeklyChart } from '../components/WeeklyChart';
+import { StreakBadge, MilestoneBadge } from '../components/MilestoneBadge';
+import { DayDetail } from '../components/DayDetail';
+import { calculateRecordingRate } from '../utils/insights';
 
-interface HomePageProps {
+interface Props {
   records: Record<string, SkinRecord>;
   products: Product[];
   userName: string;
+  streak: number;
+  latestMilestone: Milestone | null;
+  bestProduct: ProductInsight | null;
+  worstVariable: VariableInsight | null;
+  recordingRate: number;
   onOpenNightLog: () => void;
   onOpenMorningLog: () => void;
-  onOpenProducts: () => void;
   onOpenSettings: () => void;
-  bestProduct?: ProductInsight | null;
-  worstVariable?: VariableInsight | null;
-  onNavigateToInsight?: () => void;
-  onEditMorning?: () => void;
-  onEditNight?: () => void;
-}
-
-function getTimeGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return '좋은 아침이에요';
-  if (hour < 18) return '좋은 오후예요';
-  return '오늘 하루 수고했어요';
+  onNavigateToInsight: () => void;
+  onEditMorning: (date: string) => void;
+  onEditNight: (date: string) => void;
 }
 
 export function HomePage({
   records,
   products,
   userName,
-  onOpenNightLog,
-  onOpenMorningLog,
-  onOpenProducts,
-  onOpenSettings,
+  streak,
+  latestMilestone,
   bestProduct,
   worstVariable,
+  recordingRate,
+  onOpenNightLog,
+  onOpenMorningLog,
+  onOpenSettings,
   onNavigateToInsight,
   onEditMorning,
   onEditNight,
-}: HomePageProps) {
+}: Props) {
   const today = getToday();
   const todayRecord = records[today];
-  const hasMorning = !!todayRecord?.morningLog;
-  const hasNight = !!todayRecord?.nightLog;
+  const hasNightLog = !!todayRecord?.nightLog;
+  const hasMorningLog = !!todayRecord?.morningLog;
 
-  // Calculate streak
-  let streak = 0;
-  const dates = getRecentDates(60);
-  for (let i = dates.length - 1; i >= 0; i--) {
-    const r = records[dates[i]];
-    if (r && (r.morningLog && r.nightLog)) {
-      streak++;
-    } else {
-      break;
-    }
-  }
+  // Check if yesterday had a night log but today has no morning log yet
+  const yesterday = getPrevDate(today);
+  const yesterdayRecord = records[yesterday];
+  const showMorningNudge = yesterdayRecord?.nightLog && !hasMorningLog;
 
-  const timeGreeting = getTimeGreeting();
-  const greeting = hasMorning
-    ? `${userName}님, 오늘도 기록했어요`
-    : `${timeGreeting}, ${userName || ''}님\n오늘 피부는 어때?`;
+  const [detailDate, setDetailDate] = useState<string | null>(null);
 
   return (
-    <div className="pb-20">
-      {/* Top bar */}
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={onOpenProducts} aria-label="제품 관리" className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ color: '#8b7e7e' }}>
-          <LeafIcon size={22} />
-        </button>
-        <button onClick={onOpenSettings} aria-label="설정" className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ color: '#8b7e7e' }}>
-          <SettingsIcon size={22} />
-        </button>
-      </div>
-
-      {/* Date + greeting */}
-      <p className="font-body text-sm text-sd-text-secondary mb-1">{formatDate(today)}</p>
-      <h1 className="font-heading text-2xl text-sd-text font-bold mb-6 whitespace-pre-line">
-        {greeting}
-      </h1>
-
-      {/* Morning log card */}
-      <div className="rounded-2xl p-5 mb-3" style={{ backgroundColor: '#fdf8f4' }}>
-        <div className="flex items-center gap-2.5 mb-3">
-          <SunIcon size={22} color="#d4956a" />
-          <span className="font-heading text-lg text-sd-text">오늘 아침 피부</span>
+    <div className="pb-24">
+      {/* TopAppBar */}
+      <header className="w-full pt-6 pb-2 bg-background">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2 text-primary">
+            <span className="material-symbols-outlined">spa</span>
+            <h1 className="font-noto-serif text-2xl font-light italic text-on-surface">
+              좋은 아침이에요{userName ? `, ${userName}님` : ''}
+            </h1>
+          </div>
+          <button
+            onClick={onOpenSettings}
+            className="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95"
+          >
+            <span className="material-symbols-outlined">settings</span>
+          </button>
         </div>
+      </header>
 
-        {hasMorning ? (
-          <div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="font-number text-xl text-sd-text font-semibold">
-                  {todayRecord.morningLog!.score}점
-                </span>
-                <span className="font-body text-sm text-sd-text-secondary">
-                  {SCORE_LABELS[todayRecord.morningLog!.score]}
-                </span>
+      <main className="space-y-8 mt-4">
+        {/* Milestone / Streak Badge */}
+        <section className="flex justify-center">
+          {latestMilestone ? (
+            <MilestoneBadge milestone={latestMilestone} />
+          ) : (
+            <StreakBadge streak={streak} />
+          )}
+        </section>
+
+        {/* Morning nudge banner */}
+        {showMorningNudge && (
+          <section className="bg-primary-fixed rounded-[20px] p-4">
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-primary text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                wb_sunny
+              </span>
+              <div className="flex-1">
+                <p className="text-sm text-on-surface font-medium">어젯밤 기록 완료!</p>
+                <p className="text-xs text-on-surface-variant">아침 피부 상태도 기록해봐요</p>
               </div>
-              {onEditMorning && (
-                <button onClick={onEditMorning} className="font-body text-sm text-sd-primary">
-                  수정
-                </button>
+              <button
+                onClick={onOpenMorningLog}
+                className="px-4 py-2 rounded-full bg-primary text-white text-xs font-semibold active:scale-95 transition-transform"
+              >
+                기록하기
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* Today's Recording Status */}
+        <section className="grid grid-cols-2 gap-4">
+          {/* Night Record */}
+          <div className={`p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] ${
+            hasNightLog
+              ? 'bg-surface-container-lowest border border-outline-variant/5'
+              : 'bg-surface-container-low'
+          }`}>
+            <div>
+              <div className="flex justify-between items-start mb-2">
+                <span className={`text-[11px] font-semibold uppercase tracking-wider ${
+                  hasNightLog ? 'text-primary' : 'text-on-surface-variant/60'
+                }`}>
+                  밤 기록
+                </span>
+                {hasNightLog && (
+                  <span
+                    className="material-symbols-outlined text-primary-container text-sm"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    check_circle
+                  </span>
+                )}
+              </div>
+              {hasNightLog ? (
+                <p className="text-[13px] text-on-surface-variant leading-relaxed">
+                  {todayRecord!.nightLog!.products.length > 1
+                    ? `${todayRecord!.nightLog!.products[0]} 외 ${todayRecord!.nightLog!.products.length - 1}개`
+                    : todayRecord!.nightLog!.products.length === 1
+                      ? todayRecord!.nightLog!.products[0]
+                      : '기록 완료'}
+                  <br />제품 사용 완료
+                </p>
+              ) : (
+                <p className="text-[13px] text-on-surface-variant mt-2 leading-tight">
+                  아직 기록 전이에요
+                </p>
               )}
             </div>
-            <p className="font-body text-sm text-sd-text-secondary mt-1">
-              {todayRecord.morningLog!.keywords.map(k => KEYWORD_LABELS[k as SkinKeyword]).join(', ')}
-            </p>
-            {todayRecord.morningLog!.memo && (
-              <p className="font-body text-[0.8125rem] text-sd-text-secondary mt-1 italic">
-                "{todayRecord.morningLog!.memo}"
-              </p>
+            {!hasNightLog && (
+              <button
+                onClick={onOpenNightLog}
+                className="bg-gradient-to-br from-primary to-primary-container text-white py-2.5 px-4 rounded-full text-xs font-semibold shadow-md active:scale-95 transition-transform"
+              >
+                기록하기
+              </button>
             )}
           </div>
-        ) : (
-          <div>
-            <p className="font-body text-sm text-sd-text-secondary mb-3">오늘 아침 피부는 어땠는지 남겨봐요</p>
-            <button
-              onClick={onOpenMorningLog}
-              className="bg-sd-primary text-white rounded-xl px-5 py-2.5 font-body font-medium text-sm w-full"
-            >
-              아침 피부 기록하기
-            </button>
-          </div>
-        )}
-      </div>
 
-      {/* Night log card */}
-      <div className="rounded-2xl p-5 mb-6" style={{ backgroundColor: '#f0e8e4' }}>
-        <div className="flex items-center gap-2.5 mb-3">
-          <MoonIcon size={22} color="#8a7a9e" />
-          <span className="font-heading text-lg text-sd-text">오늘 밤 루틴</span>
-        </div>
-
-        {hasNight ? (
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <p className="font-body text-sm text-sd-text">
-                {todayRecord.nightLog!.products.join(', ')}
-              </p>
-              {onEditNight && (
-                <button onClick={onEditNight} className="font-body text-sm text-sd-primary flex-shrink-0 ml-2">
-                  수정
-                </button>
+          {/* Morning Record */}
+          <div className={`p-5 rounded-[24px] flex flex-col justify-between min-h-[160px] ${
+            hasMorningLog
+              ? 'bg-surface-container-lowest border border-outline-variant/5'
+              : 'bg-surface-container-low'
+          }`}>
+            <div>
+              <div className="flex justify-between items-start mb-2">
+                <span className={`text-[11px] font-semibold uppercase tracking-wider ${
+                  hasMorningLog ? 'text-primary' : 'text-on-surface-variant/60'
+                }`}>
+                  아침 기록
+                </span>
+                {hasMorningLog && (
+                  <span
+                    className="material-symbols-outlined text-primary-container text-sm"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    check_circle
+                  </span>
+                )}
+              </div>
+              {hasMorningLog ? (
+                <div>
+                  <p className="text-[13px] text-on-surface-variant leading-relaxed">
+                    피부 점수 {todayRecord!.morningLog!.score}점
+                  </p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {todayRecord!.morningLog!.keywords.slice(0, 2).map(kw => (
+                      <span key={kw} className="text-[10px] text-primary font-medium">
+                        {KEYWORD_LABELS[kw]}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-[13px] text-on-surface-variant mt-2 leading-tight">
+                  아직 기록 전이에요
+                </p>
               )}
             </div>
-            {todayRecord.nightLog!.variables.length > 0 && (
-              <p className="font-body text-[0.8125rem] text-sd-text-secondary mt-1">
-                생활: {todayRecord.nightLog!.variables.map(v => {
-                  const labels: Record<string, string> = {
-                    flour: '밀가루', spicy: '매운 음식', alcohol: '음주', exercise: '운동',
-                    poorSleep: '수면 부족', bangs: '앞머리', stress: '스트레스',
-                    overtime: '야근', mask: '마스크', period: '생리전',
-                  };
-                  return labels[v] || v;
-                }).join(', ')}
-              </p>
+            {!hasMorningLog && (
+              <button
+                onClick={onOpenMorningLog}
+                className="bg-gradient-to-br from-primary to-primary-container text-white py-2.5 px-4 rounded-full text-xs font-semibold shadow-md active:scale-95 transition-transform"
+              >
+                기록하기
+              </button>
             )}
           </div>
-        ) : (
-          <div>
-            <p className="font-body text-sm text-sd-text-secondary mb-3">오늘 밤 루틴을 기록해봐요</p>
-            <button
-              onClick={onOpenNightLog}
-              className={`rounded-xl px-5 py-2.5 font-body font-medium text-sm w-full ${
-                hasMorning
-                  ? 'bg-sd-primary text-white'
-                  : 'border border-sd-primary text-sd-primary'
-              }`}
-            >
-              밤 루틴 기록하기
-            </button>
-          </div>
+        </section>
+
+        {/* Recording Rate */}
+        {recordingRate > 0 && (
+          <section className="flex items-center gap-3 px-1">
+            <div className="flex-1 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary-container rounded-full transition-all"
+                style={{ width: `${recordingRate}%` }}
+              />
+            </div>
+            <span className="text-[11px] text-on-surface-variant/60 font-medium whitespace-nowrap">
+              이번 달 {recordingRate}%
+            </span>
+          </section>
         )}
-      </div>
 
-      {/* Weekly summary */}
-      <WeeklySummary records={records} />
+        {/* Weekly Chart */}
+        <WeeklyChart
+          records={records}
+          onDayTap={(date) => setDetailDate(date)}
+        />
 
-      {/* Insight summary — tappable to navigate to insight tab */}
-      {(bestProduct || worstVariable) ? (
-        <button
-          onClick={onNavigateToInsight}
-          className="w-full text-left rounded-xl p-4 mt-4 border border-sd-border"
-          style={{ backgroundColor: '#fdf8f4' }}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-heading text-sm text-sd-text font-medium">이번 주 발견</p>
-            <span className="font-body text-[0.75rem] text-sd-text-secondary">자세히 보기 &rsaquo;</span>
-          </div>
-          {bestProduct && (
-            <p className="font-body text-[0.8125rem] text-sd-text-secondary">
-              가장 좋았던 제품: <span className="text-sd-text font-medium">{bestProduct.productName}</span> (사용 시 +{bestProduct.impact.toFixed(1)}점)
-            </p>
-          )}
-          {worstVariable && (
-            <p className="font-body text-[0.8125rem] text-sd-text-secondary mt-1">
-              가장 나빴던 변수: <span className="text-sd-text font-medium">{VARIABLE_LABELS[worstVariable.variable as Variable]}</span> (다음날 {worstVariable.impact.toFixed(1)}점)
-            </p>
-          )}
-        </button>
-      ) : (
-        <div
-          className="rounded-xl p-4 mt-4 border border-sd-border"
-          style={{ backgroundColor: '#fdf8f4' }}
-        >
-          <p className="font-heading text-sm text-sd-text font-medium mb-1">이번 주 발견</p>
-          <p className="font-body text-[0.8125rem] text-sd-text-secondary">
-            7일 이상 기록하면 인사이트가 나와요
-          </p>
-        </div>
-      )}
+        {/* Insight Preview Card */}
+        {(bestProduct || worstVariable) && (
+          <section className="relative overflow-hidden bg-surface-container-highest rounded-[28px] p-6">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary-container/10 rounded-full blur-2xl" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="bg-primary/10 p-2 rounded-xl">
+                <span className="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+              </div>
+              <h3 className="text-sm font-bold text-on-surface">이번 주 발견</h3>
+            </div>
+            {bestProduct && (
+              <p className="text-[15px] text-on-surface-variant leading-relaxed">
+                <span className="text-primary font-semibold">{bestProduct.productName}</span>를 사용한 날,{' '}
+                <br />
+                평소보다 피부 점수가{' '}
+                <span className="serif-numbers font-bold text-lg">{Math.abs(bestProduct.impact).toFixed(1)}</span>
+                점 높았어요.
+              </p>
+            )}
+            {!bestProduct && worstVariable && (
+              <p className="text-[15px] text-on-surface-variant leading-relaxed">
+                <span className="text-primary font-semibold">
+                  {VARIABLE_LABELS[worstVariable.variable as Variable] || worstVariable.variable}
+                </span>
+                이 있는 날,{' '}
+                <br />
+                피부 점수가{' '}
+                <span className="serif-numbers font-bold text-lg">{Math.abs(worstVariable.impact).toFixed(1)}</span>
+                점 낮았어요.
+              </p>
+            )}
+            <button
+              onClick={onNavigateToInsight}
+              className="mt-4 text-[13px] font-semibold text-primary flex items-center gap-1 group"
+            >
+              자세히 보기
+              <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
+                arrow_forward
+              </span>
+            </button>
+          </section>
+        )}
+      </main>
 
-      {/* Streak */}
-      {streak > 0 && (
-        <p className="font-body text-sm text-sd-text-secondary mt-4 text-center">
-          {streak}일 연속 기록 중
-        </p>
+      {/* Day detail bottom sheet */}
+      {detailDate && (
+        <DayDetail
+          date={detailDate}
+          record={records[detailDate]}
+          records={records}
+          onClose={() => setDetailDate(null)}
+          onEditMorning={(d) => { setDetailDate(null); onEditMorning(d); }}
+          onEditNight={(d) => { setDetailDate(null); onEditNight(d); }}
+        />
       )}
     </div>
   );
