@@ -4,12 +4,20 @@ import { computeSupplyDemand } from '../models/supplyDemand';
 import { computeElasticity } from '../models/elasticity';
 import { computeGDP } from '../models/gdp';
 import { computeInflation } from '../models/inflation';
+import { computePPF } from '../models/ppf';
+import { computeComparativeAdvantage } from '../models/comparativeAdvantage';
+import { computeMultiplier } from '../models/multiplier';
+import { computeISLM } from '../models/islm';
 
 const modelFunctions: Record<string, (vars: Record<string, number>) => ModelOutput> = {
   'supply-demand': computeSupplyDemand,
   'elasticity': computeElasticity,
   'gdp': computeGDP,
   'inflation': computeInflation,
+  'ppf': computePPF,
+  'comparative-advantage': computeComparativeAdvantage,
+  'multiplier': computeMultiplier,
+  'is-lm': computeISLM,
 };
 
 export function useModel(modelId: string, variables: Variable[]) {
@@ -33,6 +41,10 @@ export function useModel(modelId: string, variables: Variable[]) {
     setValues(defaults);
   }, [variables]);
 
+  const setPreset = useCallback((presetValues: Record<string, number>) => {
+    setValues(prev => ({ ...prev, ...presetValues }));
+  }, []);
+
   const output = useMemo(() => {
     const fn = modelFunctions[modelId];
     if (!fn) return null;
@@ -43,6 +55,7 @@ export function useModel(modelId: string, variables: Variable[]) {
     values,
     updateVariable,
     resetToDefaults,
+    setPreset,
     output,
   };
 }

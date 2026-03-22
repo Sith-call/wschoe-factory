@@ -74,12 +74,65 @@ const GDPBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
   );
 };
 
+const MultiplierBarChart: React.FC<{ output: ModelOutput }> = ({ output }) => {
+  const maxVal = Math.max(...output.curves.map(c => c.points[1]?.y ?? 0));
+  const chartW = 360;
+  const chartH = 280;
+  const chartPadding = 30;
+  const barWidth = (chartW - chartPadding * 2) / output.curves.length - 4;
+
+  return (
+    <svg viewBox="0 0 400 350" className="w-full h-full">
+      <text x="200" y="24" textAnchor="middle" className="font-headline text-sm font-bold" fill="#818a9d">
+        연쇄 소비 라운드
+      </text>
+
+      {/* Y-axis label */}
+      <text x="12" y="170" textAnchor="middle" className="font-label" fontSize="10" fill="#818a9d" transform="rotate(-90, 12, 170)">
+        지출액 (조원)
+      </text>
+
+      {/* Bars */}
+      {output.curves.map((curve, i) => {
+        const value = curve.points[1]?.y ?? 0;
+        const barH = maxVal > 0 ? (value / maxVal) * (chartH - 40) : 0;
+        const x = chartPadding + i * (barWidth + 4);
+        const y = chartH - barH + 20;
+
+        return (
+          <g key={curve.id}>
+            <rect x={x} y={y} width={barWidth} height={barH} rx="3" fill={curve.color} opacity="0.85">
+              <animate attributeName="height" from="0" to={barH} dur="0.4s" fill="freeze" />
+              <animate attributeName="y" from={chartH + 20} to={y} dur="0.4s" fill="freeze" />
+            </rect>
+            <text x={x + barWidth / 2} y={chartH + 36} textAnchor="middle" fill="#45474c" className="font-label" fontSize="10" fontWeight="600">
+              {curve.label}
+            </text>
+            <text x={x + barWidth / 2} y={y - 6} textAnchor="middle" fill="#45474c" className="font-label" fontSize="9" fontWeight="700">
+              {value.toFixed(1)}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* Baseline */}
+      <line x1={chartPadding} y1={chartH + 20} x2={chartW - 10} y2={chartH + 20} stroke="#c5c6cc" strokeWidth="1" />
+
+      {/* Total */}
+      {output.equilibrium && (
+        <text x="200" y="340" textAnchor="middle" fill="#040d1b" className="font-headline font-bold" fontSize="14">
+          {output.equilibrium.label}
+        </text>
+      )}
+    </svg>
+  );
+};
+
 export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
-  // For GDP, render a bar chart instead
+  // For GDP, render a bar chart
   if (modelId === 'gdp') {
     return (
       <section className="relative bg-primary-container h-[420px] w-full p-8 overflow-hidden">
-        {/* Grid Lines */}
         <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 opacity-10 pointer-events-none">
           {Array.from({ length: 64 }).map((_, i) => (
             <div key={i} className="border-r border-b border-surface-variant" />
@@ -92,6 +145,23 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
     );
   }
 
+  // For multiplier, render vertical bar chart
+  if (modelId === 'multiplier') {
+    return (
+      <section className="relative bg-primary-container h-[420px] w-full p-8 overflow-hidden">
+        <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 opacity-10 pointer-events-none">
+          {Array.from({ length: 64 }).map((_, i) => (
+            <div key={i} className="border-r border-b border-surface-variant" />
+          ))}
+        </div>
+        <div className="relative w-full h-full">
+          <MultiplierBarChart output={output} />
+        </div>
+      </section>
+    );
+  }
+
+  // For all other models (line/curve graphs)
   // Calculate ranges from all curve points
   const { xRange, yRange } = useMemo(() => {
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
@@ -116,6 +186,9 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
   const svgH = 350;
   const pad = 40;
 
+  // Custom axis labels based on model
+  const axisLabels = getAxisLabels(modelId);
+
   // Convert equilibrium point
   const eqSVG = output.equilibrium
     ? toSVG({ x: output.equilibrium.quantity, y: output.equilibrium.price }, xRange, yRange, svgW, svgH, pad)
@@ -133,10 +206,10 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
       <div className="relative w-full h-full border-l-2 border-b-2 border-primary-fixed-dim/30 flex items-end">
         {/* Axis Labels */}
         <span className="absolute -left-6 -top-4 font-label text-[10px] text-on-primary-container uppercase tracking-widest">
-          가격 (P)
+          {axisLabels.y}
         </span>
         <span className="absolute -right-2 -bottom-6 font-label text-[10px] text-on-primary-container uppercase tracking-widest">
-          수량 (Q)
+          {axisLabels.x}
         </span>
 
         {/* Graph Curves SVG */}
@@ -232,3 +305,21 @@ export const EconGraph: React.FC<EconGraphProps> = ({ output, modelId }) => {
     </section>
   );
 };
+
+function getAxisLabels(modelId: string): { x: string; y: string } {
+  switch (modelId) {
+    case 'supply-demand':
+    case 'elasticity':
+      return { x: '수량 (Q)', y: '가격 (P)' };
+    case 'ppf':
+      return { x: '재화A', y: '재화B' };
+    case 'comparative-advantage':
+      return { x: '재화1 (전자제품)', y: '재화2 (농산물)' };
+    case 'is-lm':
+      return { x: '국민소득 (Y)', y: '이자율 (r)' };
+    case 'inflation':
+      return { x: '통화량 (M)', y: '물가 (P)' };
+    default:
+      return { x: 'X', y: 'Y' };
+  }
+}
