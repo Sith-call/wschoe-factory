@@ -2,17 +2,17 @@
 :root {
   --primary: #E8651A;
   --primary-dark: #C4520F;
-  --primary-light: #FFF5EE;
+  --primary-light: #FFF0E6;
   --secondary: #2B5F3A;
   --secondary-light: #E8F5EC;
-  --background: #FAFAFA;
+  --background: #FBF7F0;
   --surface: #FFFFFF;
-  --text-primary: #1A1A1A;
-  --text-secondary: #6B6B6B;
-  --text-tertiary: #A0A0A0;
+  --text-primary: #2D2418;
+  --text-secondary: #7A6F60;
+  --text-tertiary: #AEA494;
   --accent: #D4A843;
   --danger: #C23B3B;
-  --border: #E8E8E8;
+  --border: #E5DDD2;
 
   --font-body: 'Nanum Gothic', sans-serif;
   --font-number: 'Sora', sans-serif;
@@ -51,7 +51,7 @@ body {
 
 @media (min-width: 431px) {
   body {
-    background: #F0F0F0;
+    background: #E5DDD2;
   }
 }
 
@@ -96,7 +96,7 @@ body {
   border: none;
   color: var(--primary);
   cursor: pointer;
-  padding: var(--space-sm);
+  padding: 10px;
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -231,7 +231,7 @@ body {
   border: none;
   color: var(--text-tertiary);
   cursor: pointer;
-  padding: var(--space-sm);
+  padding: 10px var(--space-sm);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -239,6 +239,7 @@ body {
   font-family: var(--font-body);
   font-size: 0.8125rem;
   font-weight: 400;
+  min-height: 44px;
   transition: color 150ms ease-in-out, background 150ms ease-in-out;
 }
 
@@ -417,7 +418,7 @@ body {
   border: none;
   color: var(--text-primary);
   cursor: pointer;
-  padding: var(--space-sm);
+  padding: 12px;
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -484,12 +485,12 @@ body {
   border: 1px solid var(--border);
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 6px 12px;
+  padding: 10px 12px;
   border-radius: 6px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 700;
-  min-height: 36px;
+  min-height: 44px;
   transition: background 150ms ease-in-out;
 }
 
@@ -620,6 +621,60 @@ body {
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* === Focus Visible === */
+.btn-primary:focus-visible,
+.btn-skip:focus-visible,
+.btn-secondary:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.fav-icon-btn:focus-visible,
+.back-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.joke-action-btn:focus-visible,
+.fav-action-btn:focus-visible,
+.fav-delete-btn:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 1px;
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  .joke-appear,
+  .punchline-appear,
+  .heart-bounce,
+  .reaction-appear,
+  .confetti-piece {
+    animation: none !important;
+  }
+
+  .joke-appear,
+  .punchline-appear,
+  .reaction-appear {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .toast {
+    transition: none !important;
+  }
+
+  .btn-primary,
+  .fav-icon-btn,
+  .back-btn,
+  .joke-action-btn,
+  .fav-action-btn,
+  .fav-delete-btn,
+  .btn-skip,
+  .btn-secondary {
+    transition: none !important;
+  }
 }
 
 /* === Utility === */
