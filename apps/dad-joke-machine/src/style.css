@@ -2,17 +2,17 @@
 :root {
   --primary: #E8651A;
   --primary-dark: #C4520F;
-  --primary-light: #FFF0E6;
+  --primary-light: #FFF5EE;
   --secondary: #2B5F3A;
   --secondary-light: #E8F5EC;
-  --background: #FBF7F0;
+  --background: #FAFAFA;
   --surface: #FFFFFF;
-  --text-primary: #2D2418;
-  --text-secondary: #7A6F60;
-  --text-tertiary: #AEA494;
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --text-tertiary: #A0A0A0;
   --accent: #D4A843;
   --danger: #C23B3B;
-  --border: #E5DDD2;
+  --border: #E8E8E8;
 
   --font-body: 'Nanum Gothic', sans-serif;
   --font-number: 'Sora', sans-serif;
@@ -51,7 +51,7 @@ body {
 
 @media (min-width: 431px) {
   body {
-    background: var(--border);
+    background: #F0F0F0;
   }
 }
 
@@ -85,7 +85,7 @@ body {
 
 .app-title {
   font-family: var(--font-title);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 400;
   color: var(--text-primary);
   letter-spacing: -0.02em;
