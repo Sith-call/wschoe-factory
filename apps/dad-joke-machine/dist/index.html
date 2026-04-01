@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#FBF7F0" />
+    <title>아재개그 자판기</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic:wght@400;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/assets/index-Bo81mzYB.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-B6bH_gU9.css">
+  </head>
+  <body>
+    <div class="app-container">
+
+      <!-- ===== Main Screen ===== -->
+      <div id="main-screen" class="main-screen">
+
+        <!-- Header -->
+        <header class="header">
+          <h1 class="app-title">아재개그 자판기</h1>
+          <button id="fav-icon-btn" class="fav-icon-btn" aria-label="즐겨찾기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><path fill="currentColor" d="M243,96.05a20.5,20.5,0,0,0-17.57-14.07l-56.38-4.87L147.26,24.68a20.36,20.36,0,0,0-38.52,0L87,77.11,30.56,82a20.52,20.52,0,0,0-11.69,36.06l43.14,37.23L48.84,210.72a20.51,20.51,0,0,0,30.63,22.23L128,204.39l48.53,28.56a20.51,20.51,0,0,0,30.63-22.23L194,155.27l43.14-37.23A20.5,20.5,0,0,0,243,96.05Zm-51.37,43.51a12,12,0,0,0-3.84,11.86L200.4,205.3,155,178.58a12,12,0,0,0-12.18,0L97.6,205.3l12.56-53.88a12,12,0,0,0-3.84-11.86L63.48,102.53l55-4.76a12,12,0,0,0,10.06-7.32L128,36.89l.46,1.1-.46-1.1v0L149.5,90.45a12,12,0,0,0,10.06,7.32l55,4.76Z"/></svg>
+          </button>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+          <!-- Loading Area -->
+          <div id="loading-area" class="loading-area hidden">
+            <div class="loading-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+
+          <!-- Joke Area -->
+          <div id="joke-area" class="hidden">
+            <div id="joke-card" class="joke-card">
+              <p id="joke-setup" class="joke-setup"></p>
+              <p id="joke-punchline" class="joke-punchline hidden"></p>
+              <p id="tap-hint" class="tap-hint hidden">탭해서 답 보기</p>
+              <div id="joke-actions" class="joke-actions hidden">
+                <button id="copy-btn" class="joke-action-btn" aria-label="복사">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></svg>
+                  <span>복사</span>
+                </button>
+                <button id="fav-btn" class="joke-action-btn" aria-label="즐겨찾기 추가">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M243,96.05a20.5,20.5,0,0,0-17.57-14.07l-56.38-4.87L147.26,24.68a20.36,20.36,0,0,0-38.52,0L87,77.11,30.56,82a20.52,20.52,0,0,0-11.69,36.06l43.14,37.23L48.84,210.72a20.51,20.51,0,0,0,30.63,22.23L128,204.39l48.53,28.56a20.51,20.51,0,0,0,30.63-22.23L194,155.27l43.14-37.23A20.5,20.5,0,0,0,243,96.05Zm-51.37,43.51a12,12,0,0,0-3.84,11.86L200.4,205.3,155,178.58a12,12,0,0,0-12.18,0L97.6,205.3l12.56-53.88a12,12,0,0,0-3.84-11.86L63.48,102.53l55-4.76a12,12,0,0,0,10.06-7.32L128,36.89l.46,1.1-.46-1.1v0L149.5,90.45a12,12,0,0,0,10.06,7.32l55,4.76Z"/></svg>
+                  <span>저장</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clear Area (50 jokes done) -->
+          <div id="clear-area" class="clear-area hidden">
+            <div id="confetti-container" class="confetti-container"></div>
+            <p class="clear-title">50개 전부 클리어!</p>
+            <p class="clear-subtitle">당신은 진정한</p>
+            <p class="clear-subtitle-bold">아재개그 마스터</p>
+          </div>
+
+          <!-- Sub Copy (idle state) -->
+          <p id="sub-copy" class="sub-copy">매일 아재개그 한 잔, 동전은 필요 없어요</p>
+
+          <!-- Main Button -->
+          <button id="main-btn" class="btn-primary">눌러봐!</button>
+        </div>
+
+        <!-- Counter -->
+        <div id="counter" class="counter">오늘 0개 봄</div>
+
+        <!-- Toast -->
+        <div id="toast" class="toast hidden"></div>
+      </div>
+
+      <!-- ===== Favorites Screen ===== -->
+      <div id="favorites-screen" class="favorites-screen hidden">
+
+        <header class="fav-header">
+          <button id="back-btn" class="back-btn" aria-label="뒤로가기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M228,128a12,12,0,0,1-12,12H69l51.52,51.51a12,12,0,0,1-17,17l-72-72a12,12,0,0,1,0-17l72-72a12,12,0,0,1,17,17L69,116H216A12,12,0,0,1,228,128Z"/></svg>
+          </button>
+          <h2 class="fav-title">즐겨찾기</h2>
+        </header>
+
+        <!-- Empty State -->
+        <div id="fav-empty" class="fav-empty hidden">
+          <div class="fav-empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="currentColor" d="M243,96.05a20.5,20.5,0,0,0-17.57-14.07l-56.38-4.87L147.26,24.68a20.36,20.36,0,0,0-38.52,0L87,77.11,30.56,82a20.52,20.52,0,0,0-11.69,36.06l43.14,37.23L48.84,210.72a20.51,20.51,0,0,0,30.63,22.23L128,204.39l48.53,28.56a20.51,20.51,0,0,0,30.63-22.23L194,155.27l43.14-37.23A20.5,20.5,0,0,0,243,96.05Zm-51.37,43.51a12,12,0,0,0-3.84,11.86L200.4,205.3,155,178.58a12,12,0,0,0-12.18,0L97.6,205.3l12.56-53.88a12,12,0,0,0-3.84-11.86L63.48,102.53l55-4.76a12,12,0,0,0,10.06-7.32L128,36.89l.46,1.1-.46-1.1v0L149.5,90.45a12,12,0,0,0,10.06,7.32l55,4.76Z"/></svg>
+          </div>
+          <p class="fav-empty-title">아직 저장한 개그가 없어요</p>
+          <p class="fav-empty-desc">마음에 드는 개그를 발견하면 별표를 눌러보세요</p>
+          <button id="fav-cta-btn" class="btn-secondary">개그 뽑으러 가기</button>
+        </div>
+
+        <!-- Favorites List -->
+        <div id="fav-list" class="fav-list hidden"></div>
+      </div>
+
+    </div>
+
+  </body>
+</html>
