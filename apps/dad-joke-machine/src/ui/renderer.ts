@@ -14,11 +14,30 @@ import {
   animateJokeIn,
   animatePunchlineIn,
   animateHeartBounce,
+  animateReactionIn,
   animateConfetti,
 } from "./animations";
 
 let currentPhase: AppPhase = "idle";
 let loadingTimeout: ReturnType<typeof setTimeout> | null = null;
+let reactionTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const LAUGH_REACTIONS = [
+  "ㅋㅋㅋㅋㅋ",
+  "푸하하핫",
+  "아..ㅋㅋㅋ",
+  "헐ㅋㅋㅋㅋ",
+  "ㅎㅎㅎㅎㅎ",
+  "크큭ㅋㅋ",
+  "빵 터졌다",
+  "아 왜 웃기지",
+  "ㅋㅋ 아재다",
+  "아놔ㅋㅋㅋ",
+];
+
+function pickReaction(): string {
+  return LAUGH_REACTIONS[Math.floor(Math.random() * LAUGH_REACTIONS.length)];
+}
 
 // SVG icons as constants (Phosphor Icons - star outline and filled)
 const STAR_OUTLINE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><path fill="currentColor" d="M243,96.05a20.5,20.5,0,0,0-17.57-14.07l-56.38-4.87L147.26,24.68a20.36,20.36,0,0,0-38.52,0L87,77.11,30.56,82a20.52,20.52,0,0,0-11.69,36.06l43.14,37.23L48.84,210.72a20.51,20.51,0,0,0,30.63,22.23L128,204.39l48.53,28.56a20.51,20.51,0,0,0,30.63-22.23L194,155.27l43.14-37.23A20.5,20.5,0,0,0,243,96.05Zm-51.37,43.51a12,12,0,0,0-3.84,11.86L200.4,205.3,155,178.58a12,12,0,0,0-12.18,0L97.6,205.3l12.56-53.88a12,12,0,0,0-3.84-11.86L63.48,102.53l55-4.76a12,12,0,0,0,10.06-7.32L128,36.89l.46,1.1-.46-1.1v0L149.5,90.45a12,12,0,0,0,10.06,7.32l55,4.76Z"/></svg>';
@@ -142,6 +161,15 @@ function renderSetup(joke: Joke): void {
   tapHint.classList.remove("hidden");
   actionsEl.classList.add("hidden");
 
+  // Reset laugh reaction
+  const reactionEl = $("laugh-reaction");
+  reactionEl.classList.add("hidden");
+  reactionEl.textContent = "";
+  if (reactionTimeout) {
+    clearTimeout(reactionTimeout);
+    reactionTimeout = null;
+  }
+
   animateJokeIn($("joke-card"));
 
   // "건너뛰기" = Secondary style (R16)
@@ -174,6 +202,15 @@ function revealPunchline(joke: Joke): void {
   actionsEl.classList.remove("hidden");
 
   animatePunchlineIn(punchlineEl);
+
+  // Show laugh reaction after a beat
+  const reactionEl = $("laugh-reaction");
+  reactionTimeout = setTimeout(() => {
+    reactionEl.textContent = pickReaction();
+    reactionEl.classList.remove("hidden");
+    animateReactionIn(reactionEl);
+    reactionTimeout = null;
+  }, 500);
 
   // Update favorite button state
   updateFavButton(joke.id);
