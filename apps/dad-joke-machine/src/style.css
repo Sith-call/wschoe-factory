@@ -151,9 +151,9 @@ body {
 
 /* Joke Card */
 .joke-card {
-  background: var(--primary-light);
-  border-left: 4px solid var(--primary);
-  border-radius: 0 12px 12px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
   padding: var(--space-lg) 20px;
   width: 100%;
   cursor: pointer;
