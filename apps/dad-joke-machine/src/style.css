@@ -1,18 +1,18 @@
 /* === CSS Variables (Design System Tokens) === */
 :root {
-  --primary: #C85A1A;
-  --primary-dark: #A84810;
-  --primary-light: #FDF6F0;
-  --secondary: #3D7A50;
-  --secondary-light: #EDF5EF;
-  --background: #F7F4EF;
+  --primary: #E8651A;
+  --primary-dark: #C4520F;
+  --primary-light: #FFF0E6;
+  --secondary: #2B5F3A;
+  --secondary-light: #E8F5EC;
+  --background: #FBF7F0;
   --surface: #FFFFFF;
-  --text-primary: #33302B;
-  --text-secondary: #6B6560;
-  --text-tertiary: #9E9890;
-  --accent: #C49A3A;
+  --text-primary: #2D2418;
+  --text-secondary: #7A6F60;
+  --text-tertiary: #AEA494;
+  --accent: #D4A843;
   --danger: #C23B3B;
-  --border: #E8E2DA;
+  --border: #E5DDD2;
 
   --font-body: 'Nanum Gothic', sans-serif;
   --font-number: 'Sora', sans-serif;
@@ -51,7 +51,7 @@ body {
 
 @media (min-width: 431px) {
   body {
-    background: #EDE9E3;
+    background: #E5DDD2;
   }
 }
 
@@ -85,10 +85,10 @@ body {
 
 .app-title {
   font-family: var(--font-title);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 400;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .fav-icon-btn {
@@ -151,9 +151,9 @@ body {
 
 /* Joke Card */
 .joke-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: var(--primary-light);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 12px 12px 0;
   padding: var(--space-lg) 20px;
   width: 100%;
   cursor: pointer;
@@ -172,9 +172,9 @@ body {
 .joke-punchline {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.25rem;
-  line-height: 1.5;
-  color: var(--text-primary);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--primary);
   margin-top: 12px;
   padding-right: 0;
   word-break: keep-all;
@@ -191,12 +191,12 @@ body {
 /* Laugh Reaction */
 .laugh-reaction {
   margin-top: 16px;
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--text-secondary);
-  text-align: left;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--secondary);
+  text-align: right;
   font-family: var(--font-body);
-  letter-spacing: 0;
+  letter-spacing: 0.02em;
 }
 
 @keyframes reaction-pop {
@@ -221,11 +221,9 @@ body {
 /* Joke Action Buttons (copy + favorite) */
 .joke-actions {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   gap: var(--space-sm);
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
+  margin-top: 12px;
 }
 
 .joke-action-btn {
@@ -305,40 +303,38 @@ body {
   color: #FFFFFF;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.125rem;
-  padding: 14px 36px;
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 2px 8px rgba(200, 90, 26, 0.25);
+  font-size: 1.25rem;
+  padding: 16px 40px;
+  border-radius: 8px;
+  border: 3px solid var(--primary-dark);
+  box-shadow: 0 4px 0 var(--primary-dark);
   cursor: pointer;
-  transition: background 150ms ease-out, box-shadow 150ms ease-out, transform 100ms ease-out;
+  transition: box-shadow 100ms ease-out, transform 100ms ease-out;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary:hover {
   background: var(--primary-dark);
-  box-shadow: 0 3px 12px rgba(200, 90, 26, 0.3);
 }
 
 .btn-primary:active {
-  box-shadow: 0 1px 4px rgba(200, 90, 26, 0.2);
-  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--primary-dark);
+  transform: translateY(3px);
 }
 
 .btn-primary:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 /* Counter */
 .counter {
   font-family: var(--font-number);
-  font-weight: 500;
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-  padding: var(--space-md) 0 var(--space-lg);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  padding: var(--space-md) 0;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
@@ -474,7 +470,7 @@ body {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 1rem;
-  color: var(--text-primary);
+  color: var(--primary);
 }
 
 .fav-item-actions {
@@ -555,10 +551,10 @@ body {
   color: var(--secondary);
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   padding: 12px 24px;
-  border-radius: 12px;
-  border: 1.5px solid var(--secondary);
+  border-radius: 8px;
+  border: 2px solid var(--secondary);
   cursor: pointer;
   transition: background 150ms ease-in-out;
 }
@@ -580,26 +576,26 @@ body {
 /* Skip Button (Secondary style for "건너뛰기") */
 .btn-skip {
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--secondary);
   font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 0.9375rem;
+  font-weight: 700;
+  font-size: 1rem;
   padding: 12px 24px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  border-radius: 8px;
+  border: 2px solid var(--secondary);
   cursor: pointer;
-  transition: background 150ms ease-in-out, color 150ms ease-in-out;
+  transition: background 150ms ease-in-out, border-color 150ms ease-in-out;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 .btn-skip:hover {
-  background: var(--primary-light);
-  color: var(--text-primary);
+  background: var(--secondary-light);
+  border-color: var(--secondary);
 }
 
 .btn-skip:active {
-  background: var(--primary-light);
+  background: var(--secondary-light);
 }
 
 /* Toast Notification */

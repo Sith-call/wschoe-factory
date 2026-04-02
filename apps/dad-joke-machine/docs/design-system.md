@@ -16,24 +16,24 @@
 ```
 Token              Value       Usage
 ─────────────────  ─────────   ──────────────────────────────
-primary            #C85A1A     차분한 탠저린 — 메인 버튼, 강조 (채도 낮춘 자판기 색)
-primary-dark       #A84810     hover/active 상태
-primary-light      #FDF6F0     아주 연한 크림 틴트
+primary            #E8651A     탠저린 오렌지 — 메인 버튼, 강조 (자판기 코인 투입구 색)
+primary-dark       #C4520F     hover/active 상태
+primary-light      #FFF0E6     오렌지 틴트 배경 (개그 카드 배경)
 
-secondary          #3D7A50     녹색 — 보조 액션, 텍스트 포인트
-secondary-light    #EDF5EF     녹색 틴트 배경
+secondary          #2B5F3A     짙은 녹색 — 보조 액션, 텍스트 포인트 (자판기 바디 색)
+secondary-light    #E8F5EC     녹색 틴트 배경
 
-background         #F7F4EF     따뜻한 크림 — 앱 전체 배경 (눈에 편한 톤)
+background         #FBF7F0     따뜻한 크림 — 앱 전체 배경 (오래된 플라스틱 느낌)
 surface            #FFFFFF     카드, 모달 배경
 
-text-primary       #33302B     따뜻한 다크 — 본문 텍스트
-text-secondary     #6B6560     따뜻한 회갈색 — 보조 텍스트
-text-tertiary      #9E9890     비활성 텍스트
+text-primary       #2D2418     따뜻한 갈흑색 — 본문 텍스트
+text-secondary     #7A6F60     따뜻한 회갈색 — 보조 텍스트
+text-tertiary      #AEA494     비활성 텍스트
 
-accent             #C49A3A     머스터드 옐로 — 배지, 카운터 숫자
+accent             #D4A843     머스터드 옐로 — 배지, 카운터 숫자
 danger             #C23B3B     빨간색 — 에러 상태
 
-border             #E8E2DA     따뜻한 베이지 구분선
+border             #E5DDD2     따뜻한 베이지 구분선
 ```
 
 ### 왜 이 팔레트인가?
@@ -158,16 +158,15 @@ xl:   24px / 1.5rem
 
 ```css
 .joke-card {
-  background: #FFFFFF;           /* surface — 깨끗한 화이트 */
-  border: 1px solid #E8E2DA;     /* 얇은 베이지 보더 */
-  border-radius: 16px;           /* 균일한 라운드 */
+  background: #FFF0E6;           /* primary-light */
+  border-left: 4px solid #E8651A; /* 좌측 액센트 바 */
+  border-radius: 0 12px 12px 0;  /* 좌측은 sharp, 우측은 round */
   padding: 24px 20px;
   margin: 0 16px;
 }
 ```
 
-카드 안에 카드를 넣지 않는다. colored left-border는 AI 안티패턴이므로 사용하지 않는다.
-질문과 답은 같은 카드 내에서 여백으로 분리, 액션 버튼은 border-top으로 구분.
+카드 안에 카드를 넣지 않는다. 질문과 답은 같은 카드 내에서 구분선(border-bottom) 또는 여백으로 분리.
 
 ### 텍스트 스타일: 개그 셋업 vs 펀치라인
 
@@ -181,13 +180,13 @@ xl:   24px / 1.5rem
   color: #2D2418;
 }
 
-/* 펀치라인 (답) — 강조하되 차분하게 */
+/* 펀치라인 (답) — 강조! */
 .joke-punchline {
   font-family: 'Nanum Gothic', sans-serif;
   font-weight: 700;
-  font-size: 1.25rem;     /* 20px — 셋업보다 약간 크게 */
-  line-height: 1.5;
-  color: #33302B;         /* text-primary — 읽기 편한 다크 톤 */
+  font-size: 1.5rem;     /* 24px — 셋업보다 크게 */
+  line-height: 1.4;
+  color: #E8651A;         /* primary 색상으로 강조 */
   margin-top: 12px;
 }
 ```
@@ -391,8 +390,8 @@ npm install @phosphor-icons/react
 ```
 요소                 Radius          비고
 ──────────────────  ──────────────  ─────────────────
-메인 버튼            12px            부드럽고 모던한 라운드
-개그 카드            16px            균일한 라운드 — 깨끗한 카드
+메인 버튼            8px             sharp에 가까운 약간의 둥글기 — 레트로 물리 버튼
+개그 카드            0 12px 12px 0   좌측 sharp (accent bar) + 우측 round
 즐겨찾기 아이템      0px             sharp — 리스트는 날카롭게
 뒤로가기 아이콘 영역  9999px (pill)   원형 터치 영역
 카운터 배지          4px             작고 단단한 느낌
