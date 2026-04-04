@@ -1,0 +1,169 @@
+.item {
+  position: relative;
+  background: var(--color-surface);
+  border: none;
+  border-left: 3px solid var(--color-text-secondary);
+  border-radius: 0;
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.item:active {
+  opacity: 0.9;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.text {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.moreBtn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  padding: var(--space-1);
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2)) 0 0;
+}
+
+.moreBtn:active {
+  opacity: 0.7;
+}
+
+.dropdown {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: var(--color-background);
+  border-radius: var(--radius-card);
+  box-shadow: 0 2px 8px rgba(46, 42, 37, 0.12);
+  z-index: 10;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: var(--space-3) var(--space-5);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.dropdownItem:active {
+  background: var(--color-surface);
+}
+
+.dropdownDanger {
+  color: var(--color-danger);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-2);
+}
+
+.prompt {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.time {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.editWrapper {
+  padding: var(--space-2) 0;
+}
+
+/* Delete confirmation overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(46, 42, 37, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+}
+
+.confirmSheet {
+  background: var(--color-background);
+  border-radius: var(--radius-modal) var(--radius-modal) 0 0;
+  padding: var(--space-6);
+  width: 100%;
+  max-width: 480px;
+}
+
+.confirmText {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.confirmSub {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.confirmActions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.cancelBtn {
+  flex: 1;
+  background: transparent;
+  color: var(--color-secondary);
+  font-weight: 500;
+  font-size: 14px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-button);
+  border: 1.5px solid var(--color-secondary);
+  min-height: 44px;
+}
+
+.deleteBtn {
+  flex: 1;
+  background: var(--color-danger);
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-button);
+  min-height: 44px;
+}

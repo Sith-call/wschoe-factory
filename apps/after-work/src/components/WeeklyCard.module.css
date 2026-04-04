@@ -1,0 +1,86 @@
+.card {
+  background: var(--color-surface);
+  border: 1px solid rgba(94, 75, 60, 0.1);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.toggle {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+}
+
+.summary {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail {
+  margin-top: var(--space-4);
+}
+
+.count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.dayList {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dayRow {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.dayName {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.dayText {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text);
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dayEmpty {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}

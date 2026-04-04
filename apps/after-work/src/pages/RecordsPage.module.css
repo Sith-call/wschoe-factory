@@ -1,0 +1,67 @@
+.page {
+  min-height: 100dvh;
+}
+
+.content {
+  padding: var(--space-5) var(--space-6) 64px;
+}
+
+.dateDivider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0 var(--space-2);
+}
+
+.dateLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.dateDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-text-secondary);
+  opacity: 0.2;
+}
+
+/* Empty state */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.emptyMain {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.emptySub {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.emptyLink {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: var(--space-2) 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}

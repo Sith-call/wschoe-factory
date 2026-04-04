@@ -1,0 +1,36 @@
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 50;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.item.active {
+  color: var(--color-primary);
+}
+
+.label {
+  line-height: 1;
+}

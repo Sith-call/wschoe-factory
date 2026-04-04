@@ -1,0 +1,1 @@
+{"version":3,"file":"agent-registry.d.ts","sourceRoot":"","sources":["../../src/skill/agent-registry.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,SAAS,EAAe,MAAM,aAAa,CAAC;AAW1D,qBAAa,aAAa;IACxB,OAAO,CAAC,MAAM,CAAmC;IAE3C,QAAQ,IAAI,OAAO,CAAC,IAAI,CAAC;IAoC/B,MAAM,CAAC,KAAK,EAAE,MAAM,GAAG,SAAS,EAAE;IASlC,MAAM,IAAI,SAAS,EAAE;CAGtB"}

@@ -1,0 +1,40 @@
+.card {
+  background: var(--color-surface);
+  border-radius: 0;
+  border-left: 3px solid var(--color-text-secondary);
+  padding: var(--space-5);
+  margin: 0 var(--space-6);
+  cursor: pointer;
+}
+
+.card:active {
+  opacity: 0.9;
+}
+
+.text {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-3);
+}
+
+.time {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.editHint {
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+}

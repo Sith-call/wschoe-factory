@@ -1,27 +1,29 @@
 ---
-saved_at: 2026-03-22T16:18:56Z
+saved_at: 2026-03-23T14:30:00Z
 branch: main
-trigger: auto (Stop/PreCompact hook)
 ---
 
-# 이어갈 작업
+# v3 경제 아카데미 — 진행 상황
 
-## 마지막 커밋
-feat: 완전 자동 세션 재개 — SessionStart hook
+## 완료
+- 100개 용어 데이터 (10 카테고리 × 10 용어)
+- 12개 UI 컴포넌트 (홈, 카테고리, 용어목록, 용어카드, 퀴즈, 실험실목록, 마인드맵, 진도, 검색, 설정, 탭바, 카테고리아이콘)
+- 70+ 인터랙티브 실험실 (19개 핵심 + ConceptLabs 1-4)
+- 마인드맵 (의존성 그래프, 노드 드래그, 줌/팬)
+- 네비게이션 히스토리 스택
+- 잠금 제거 (카테고리/용어/실험실 자유 접근)
+- 경제 전문가 리뷰 기반 P0 수정 (PPF MRT, GDP NX, Monopoly 렌더버그)
+- 실험실 전용 탭 추가
+- 설정 접근 경로 (진도 화면에서 링크)
 
-## 최근 커밋 이력
-dac5197 feat: 완전 자동 세션 재개 — SessionStart hook
-45a73cf Stage 0 완료: 100개 경제 용어 체계 (NotebookLM 전문가 자문)
-5668531 feat: 세션 자동 저장 hook (Stop + PreCompact)
-b2efa7a 경제 실험실 v3.0 — 13개 모델 + 전문가 검증 완료
-2344b46 chore(econ-lab): update ralph-state — 13개 모델 전체 완성
+## Ralph Loop 결과 (Iteration 2)
+- 페르소나 1 (대학생): 62/100
+- 페르소나 3 (공시생): 72/100
+- Design Visionary: 7.5/10
+- PRD Verifier: 88%
+- 페르소나 2 (직장인): 대기 중
 
-## 커밋 안 된 변경 파일
-.claude/session-state/current-task.md
-
-## 스테이징된 파일
-
-
-## 추가 컨텍스트
-이 상태는 세션 종료/컨텍스트 압축 시 자동 저장되었습니다.
-더 자세한 컨텍스트가 필요하면 최근 커밋을 확인하세요.
+## 남은 작업
+- 직장인 페르소나 결과 확인
+- Ralph Step C 개선 → Iteration 3
+- 커밋

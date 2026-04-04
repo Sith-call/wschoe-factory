@@ -1,0 +1,31 @@
+:root {
+  /* Colors */
+  --color-primary: #5C4B3C;
+  --color-secondary: #8B7E6A;
+  --color-surface: #F5F0E8;
+  --color-background: #FAF7F2;
+  --color-text: #2E2A25;
+  --color-text-secondary: #7E7569;
+  --color-accent: #C4724E;
+  --color-danger: #B44D4D;
+
+  /* Typography */
+  --font-family: 'Pretendard Variable', 'Sora', system-ui, sans-serif;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Border Radius */
+  --radius-input: 2px;
+  --radius-card: 8px;
+  --radius-button: 6px;
+  --radius-toast: 4px;
+  --radius-modal: 12px;
+}

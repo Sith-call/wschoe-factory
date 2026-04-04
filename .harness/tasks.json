@@ -1,0 +1,2654 @@
+[
+  {
+    "id": "9e8221ad",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "e2e-test",
+    "status": "completed",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/9e8221ad",
+    "branch": "harness/task-9e8221ad",
+    "createdAt": "2026-04-02T13:46:45.596Z",
+    "completedAt": "2026-04-03T12:21:02.605Z"
+  },
+  {
+    "id": "c68dc014",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "run-test",
+    "status": "completed",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/c68dc014",
+    "branch": "harness/task-c68dc014",
+    "createdAt": "2026-04-02T15:43:53.007Z",
+    "completedAt": "2026-04-03T12:21:12.348Z"
+  },
+  {
+    "id": "2d2dd094",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random1",
+    "status": "completed",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/2d2dd094",
+    "branch": "harness/task-2d2dd094",
+    "createdAt": "2026-04-03T01:28:36.974Z",
+    "initialPrompt": "아무거나 하나 만들어봐",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "manual",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      }
+    ],
+    "lastSessionId": "harness-mni968kk",
+    "completedAt": "2026-04-03T12:21:03.761Z"
+  },
+  {
+    "id": "ca997bae",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random2",
+    "status": "completed",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/ca997bae",
+    "branch": "harness/task-ca997bae",
+    "createdAt": "2026-04-03T03:05:25.193Z",
+    "initialPrompt": "일정 관리 앱",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "manual",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      }
+    ],
+    "lastSessionId": "harness-mnibn2mq",
+    "completedAt": "2026-04-03T12:21:05.047Z"
+  },
+  {
+    "id": "8f8817c2",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random3",
+    "status": "running",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/8f8817c2",
+    "branch": "harness/task-8f8817c2",
+    "createdAt": "2026-04-03T03:31:44.890Z",
+    "initialPrompt": "일정 관리 앱",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "manual",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      }
+    ],
+    "lastSessionId": "harness-mnickv9z"
+  },
+  {
+    "id": "333d0eb5",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random4",
+    "status": "created",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/333d0eb5",
+    "branch": "harness/task-333d0eb5",
+    "createdAt": "2026-04-03T03:52:02.557Z"
+  },
+  {
+    "id": "20a4d95c",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random5",
+    "status": "created",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/20a4d95c",
+    "branch": "harness/task-20a4d95c",
+    "createdAt": "2026-04-03T03:52:58.188Z"
+  },
+  {
+    "id": "227d1441",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random5",
+    "status": "created",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/227d1441",
+    "branch": "harness/task-227d1441",
+    "createdAt": "2026-04-03T03:55:35.300Z",
+    "initialPrompt": "간단한 일정 관리 앱",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "manual",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      }
+    ],
+    "lastSessionId": "harness-mnidfrpz"
+  },
+  {
+    "id": "5f7d8216",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random6",
+    "status": "created",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/5f7d8216",
+    "branch": "harness/task-5f7d8216",
+    "createdAt": "2026-04-03T04:02:58.338Z",
+    "initialPrompt": "간단한 일정 관리 앱",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "a-cbad2115",
+            "agent": {
+              "name": "critic",
+              "description": "Work plan and code review expert — thorough, structured, multi-perspective (Opus)",
+              "source": "discovered",
+              "path": "/Users/wschoe/.claude/plugins/cache/omc/oh-my-claudecode/4.9.3/agents/critic.md",
+              "model": "claude-opus-4-6"
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "a-985b3317",
+        "agent": {
+          "name": "critic",
+          "description": "Work plan and code review expert — thorough, structured, multi-perspective (Opus)",
+          "source": "discovered",
+          "path": "/Users/wschoe/.claude/plugins/cache/omc/oh-my-claudecode/4.9.3/agents/critic.md",
+          "model": "claude-opus-4-6"
+        },
+        "gate": "auto"
+      }
+    ],
+    "lastSessionId": "harness-mnj4wm8n"
+  },
+  {
+    "id": "6a01563f",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "random7",
+    "status": "created",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/6a01563f",
+    "branch": "harness/task-6a01563f",
+    "createdAt": "2026-04-03T05:56:49.511Z",
+    "initialPrompt": "아무거나 하나 만들어줘",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "auto"
+      }
+    ],
+    "lastSessionId": "harness-mnj4cleb",
+    "completedAt": "2026-04-03T16:25:46.275Z"
+  },
+  {
+    "id": "9073f47c",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "t",
+    "status": "completed",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/9073f47c",
+    "branch": "harness/task-9073f47c",
+    "createdAt": "2026-04-03T10:35:20.079Z",
+    "initialPrompt": "제일 마지막 커밋 리뷰해봐",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "p-c341a185",
+        "pattern": "parallel",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "a-014681f1",
+            "agent": {
+              "name": "code-reviewer",
+              "description": "Reviews code for bugs, logic errors, security vulnerabilities, code quality issues, and adherence to project conventions, using confidence-based filtering to report only high-priority issues that truly matter",
+              "source": "discovered",
+              "path": "/Users/wschoe/.claude/plugins/cache/claude-plugins-official/feature-dev/unknown/agents/code-reviewer.md",
+              "model": "sonnet"
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "a-fa65635b",
+            "agent": {
+              "name": "test-writer",
+              "description": "Generates tests for existing code",
+              "source": "preset",
+              "model": "sonnet"
+            },
+            "gate": "auto"
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      }
+    ],
+    "lastSessionId": "harness-mnixf6ty",
+    "completedAt": "2026-04-04T11:43:48.470Z"
+  },
+  {
+    "id": "15487b61",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "e2e-verify",
+    "status": "running",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/15487b61",
+    "branch": "harness/task-15487b61",
+    "createdAt": "2026-04-03T12:38:20.825Z",
+    "initialPrompt": "Review the codebase thoroughly and write comprehensive tests",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "p-test1",
+        "pattern": "parallel",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "a-reviewer",
+            "agent": {
+              "name": "code-reviewer",
+              "description": "Reviews code for bugs and quality issues",
+              "source": "adhoc",
+              "model": "sonnet"
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "a-tester",
+            "agent": {
+              "name": "test-writer",
+              "description": "Generates tests for existing code",
+              "source": "adhoc",
+              "model": "sonnet"
+            },
+            "gate": "auto"
+          }
+        ]
+      }
+    ],
+    "lastSessionId": "harness-mniw5kg4"
+  },
+  {
+    "id": "955380b1",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "real-e2e-test",
+    "status": "created",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/955380b1",
+    "branch": "harness/task-955380b1",
+    "createdAt": "2026-04-03T16:50:42.244Z",
+    "initialPrompt": "E2E 테스트용 실행. 간단한 할일 관리 앱을 만들어주세요. React + Vite 기반으로.",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "manual",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      }
+    ],
+    "lastSessionId": "harness-mnj5yug0"
+  },
+  {
+    "id": "ac07f268",
+    "projectId": "0d34cb3d-15aa-43ef-ac45-ddaddca0a467",
+    "name": "gui-e2e-test",
+    "status": "running",
+    "worktreePath": "/Users/wschoe/project/plz-survive-jay/.harness/worktrees/ac07f268",
+    "branch": "harness/task-ac07f268",
+    "createdAt": "2026-04-04T08:16:36.443Z",
+    "initialPrompt": "간단한 할일 관리 앱을 만들어주세요. React + Vite 기반으로.",
+    "workflowSteps": [
+      {
+        "type": "pattern",
+        "id": "tmpl-1034",
+        "pattern": "parallel",
+        "prompt": "Phase 0: 시장 조사. 앱 컨셉을 데이터 기반으로 결정한다.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1035",
+            "agent": {
+              "name": "ecosystem-analyst",
+              "description": "생태계 분석",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 시장 분석 전문가입니다. 타겟 플랫폼의 기존 앱, 인기 앱, 포화/블루오션 카테고리를 분석하세요. 경쟁 앱 목록과 차별화 포인트를 제시하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1036",
+            "agent": {
+              "name": "tech-researcher",
+              "description": "기술 역량 조사",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 기술 리서처입니다. SDK/API 제약, 백엔드 필요 여부, 사용 가능한 모듈과 라이브러리를 조사하세요. 기술적 실현 가능성을 평가하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1037",
+            "agent": {
+              "name": "trend-researcher",
+              "description": "트렌드 리서치",
+              "source": "adhoc",
+              "model": "sonnet",
+              "systemPrompt": "당신은 트렌드 분석가입니다. MZ세대 패턴, 바이럴 공식, 경쟁 앱을 분석하세요. 블루오션 점수 + 바이럴 잠재력 기준으로 TOP 3 앱 컨셉을 추천하세요.",
+              "tools": [
+                "read",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1038",
+        "pattern": "parallel",
+        "prompt": "Phase 1: 기획. 선택된 컨셉으로 PRD와 TRD를 작성한다.",
+        "gate": "manual",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1039",
+            "agent": {
+              "name": "product-manager",
+              "description": "PM 에이전트: PRD + 유저스토리 + 화면플로우",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 시니어 PM입니다. PRD(문제 정의 + 핵심 가치 + 3 페르소나 + MVP 기능 + 성공 지표), 유저 스토리 맵(첫 방문→1주→1달, 15+ 스토리), 화면 플로우(전체 화면 목록 + 네비게이션 구조 + 화면별 상세)를 작성하세요. docs/pm-outputs/ 에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "agent",
+            "id": "tmpl-1040",
+            "agent": {
+              "name": "tech-architect",
+              "description": "기술 아키텍처 에이전트: TRD",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 기술 아키텍트입니다. TRD(데이터 모델 + API 설계 + SDK 모듈 계획), 프로젝트 구조, 배포 계획을 작성하세요. docs/trd.md에 저장.",
+              "tools": [
+                "read",
+                "edit",
+                "web"
+              ]
+            },
+            "gate": "auto"
+          }
+        ]
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1041",
+        "agent": {
+          "name": "design-visionary",
+          "description": "디자인 시스템 확정",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 Design Visionary입니다. DESIGN_RULES.md를 읽고, 앱 성격에 맞는 디자인 토큰(색상 팔레트, 폰트 조합, border-radius, 버튼 스타일, 레이아웃 원칙, 애니메이션)을 결정하세요. 기존 앱들과 중복되지 않는 팔레트를 선택하세요. docs/design-system.md에 저장.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 2: DESIGN_RULES.md 기반으로 디자인 시스템을 확정한다. 개발 전에 디자인 언어를 먼저 결정.",
+        "gate": "manual"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1042",
+        "agent": {
+          "name": "developer",
+          "description": "PRD + 디자인시스템 + TRD 기반 구현",
+          "source": "adhoc",
+          "model": "opus",
+          "systemPrompt": "당신은 시니어 개발자입니다. 반드시 다음 파일을 먼저 읽으세요: docs/pm-outputs/screen-flows.md, docs/design-system.md, docs/trd.md, DESIGN_RULES.md. 화면 플로우대로 모든 화면을 구현하고, design-system.md 토큰을 그대로 사용하세요. 색상/폰트 임의 변경 금지. npm run build 통과를 확인하세요.",
+          "tools": [
+            "read",
+            "edit",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 3: 개발. PRD + design-system.md + TRD를 따라 구현한다. 디자인 토큰 임의 변경 금지.",
+        "gate": "auto"
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1043",
+        "agent": {
+          "name": "pm-verifier",
+          "description": "P0 유저스토리 구현 여부 확인",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "당신은 PM 검증자입니다. docs/pm-outputs/user-stories.md의 P0 스토리만 확인하세요. 라이브 앱에서 P0 기능이 존재하는지 체크하세요. 명백한 누락만 잡습니다. 누락된 P0 기능이 있으면 목록을 작성하세요.",
+          "tools": [
+            "read",
+            "bash"
+          ]
+        },
+        "prompt": "Phase 4: PM 검증. P0 유저 스토리의 핵심 기능이 존재하는지 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1044",
+        "skillName": "qa",
+        "prompt": "Phase 5: QA 테스트. 모바일 뷰포트(375x812)로 전 화면 테스트. 엣지 케이스(빈 데이터, 극단 입력, 뒤로가기, 새로고침), 접근성(폰트 13px+, 터치타겟 44px+, 컬러대비 4.5:1+), 콘솔 에러 확인.",
+        "gate": "auto"
+      },
+      {
+        "type": "pattern",
+        "id": "tmpl-1045",
+        "pattern": "generator-evaluator",
+        "prompt": "Phase 6: Ralph Loop. 페르소나 3명 + Design Visionary + PRD Verifier 전원 통과까지 반복.",
+        "gate": "auto",
+        "children": [
+          {
+            "type": "agent",
+            "id": "tmpl-1046",
+            "agent": {
+              "name": "integrator",
+              "description": "통합 구현: 5개 피드백 기반 개선",
+              "source": "adhoc",
+              "model": "opus",
+              "systemPrompt": "당신은 통합 구현 에이전트입니다. 5개 피드백 리포트(페르소나 3명 + 디자인 + PRD)를 읽고, 우선순위(PRD갭 > 디자인 > UX)로 정리한 후 한 번에 모든 개선사항을 구현하세요. npm run build 통과 확인. 반영 체크리스트를 작성하세요.",
+              "tools": [
+                "read",
+                "edit",
+                "bash"
+              ]
+            },
+            "gate": "auto"
+          },
+          {
+            "type": "pattern",
+            "id": "tmpl-1047",
+            "pattern": "parallel",
+            "prompt": "피드백 수집: 5 에이전트 병렬. 코드 수정 금지, 피드백 리포트만 작성.",
+            "gate": "auto",
+            "children": [
+              {
+                "type": "agent",
+                "id": "tmpl-1048",
+                "agent": {
+                  "name": "persona-1",
+                  "description": "페르소나 1: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 첫 번째 페르소나입니다. 앱을 실제 사용자로서 테스트하세요. 코드 수정 금지. 화면별 피드백(좋은 점 + 개선점), 개선 제안 3-5개(P0/P1/P2), 만족도 점수(0-100%), 만족도 근거를 작성하세요. 전원 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1049",
+                "agent": {
+                  "name": "persona-2",
+                  "description": "페르소나 2: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 두 번째 페르소나입니다. 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1050",
+                "agent": {
+                  "name": "persona-3",
+                  "description": "페르소나 3: UX 피드백 + 만족도",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 세 번째 페르소나입니다. 또 다른 관점에서 앱을 테스트하세요. 코드 수정 금지. 만족도 점수(0-100%)와 개선 제안을 작성하세요. 80% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1051",
+                "agent": {
+                  "name": "design-critic",
+                  "description": "Design Visionary: 디자인 크리틱",
+                  "source": "adhoc",
+                  "model": "opus",
+                  "systemPrompt": "당신은 Design Visionary입니다. 375x812 모바일 뷰포트로 전 화면 스크린샷을 확인하세요. DESIGN_RULES.md 기준으로 크리틱하세요. AI 안티패턴(중앙정렬, 카드네스팅, 모노컬러, 버튼위계부재) 체크. 디자인 점수(1-10)를 매기세요. 7 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              },
+              {
+                "type": "agent",
+                "id": "tmpl-1052",
+                "agent": {
+                  "name": "prd-verifier",
+                  "description": "PRD Verifier: PRD 반영도 검증",
+                  "source": "adhoc",
+                  "model": "sonnet",
+                  "systemPrompt": "당신은 PRD Verifier입니다. docs/pm-outputs/prd.md, user-stories.md, screen-flows.md를 읽고 라이브 앱과 비교하세요. 유저 스토리별 구현 여부(✅/❌/⚠️), 누락 화면, 디자인 토큰 위반을 체크하세요. P0 반영도 점수(0-100%)를 매기세요. 90% 이상이면 APPROVED.",
+                  "tools": [
+                    "read",
+                    "bash"
+                  ]
+                },
+                "gate": "auto"
+              }
+            ]
+          }
+        ],
+        "config": {
+          "maxIterations": 5
+        }
+      },
+      {
+        "type": "agent",
+        "id": "tmpl-1053",
+        "agent": {
+          "name": "rule-updater",
+          "description": "DESIGN_RULES.md 자동 업데이트",
+          "source": "adhoc",
+          "model": "sonnet",
+          "systemPrompt": "Design Visionary 리포트에서 새로운 안티패턴을 추출하고, DESIGN_RULES.md에 아직 없는 것만 추가하세요. 새 발견이 없으면 '새 발견 없음'을 보고하세요.",
+          "tools": [
+            "read",
+            "edit"
+          ]
+        },
+        "prompt": "Phase 7: 이번 루프에서 발견한 새 안티패턴을 DESIGN_RULES.md에 추가.",
+        "gate": "auto"
+      },
+      {
+        "type": "skill",
+        "id": "tmpl-1054",
+        "skillName": "ship",
+        "prompt": "Phase 8: 배포 준비. npm run build 후 배포.",
+        "gate": "manual"
+      }
+    ],
+    "lastSessionId": "harness-mnk6wty0"
+  }
+]

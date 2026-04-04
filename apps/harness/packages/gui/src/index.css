@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light theme */
+  --surface-0: #fafafa;
+  --surface-1: #ffffff;
+  --surface-2: #f4f4f5;
+  --surface-3: #e4e4e7;
+  --border: #d4d4d8;
+  --border-subtle: #e4e4e7;
+  --text-primary: #18181b;
+  --text-secondary: #3f3f46;
+  --text-muted: #71717a;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-subtle: #eef2ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-0: #09090b;
+    --surface-1: #18181b;
+    --surface-2: #27272a;
+    --surface-3: #3f3f46;
+    --border: #3f3f46;
+    --border-subtle: #27272a;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --accent: #818cf8;
+    --accent-hover: #6366f1;
+    --accent-subtle: rgba(99, 102, 241, 0.1);
+  }
+}
+
+/* ─── Scrollbar ────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ─── Flow connector lines ─────────────────── */
+.flow-connector {
+  position: relative;
+}
+.flow-connector::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 2px;
+  height: 12px;
+  background: var(--border);
+}
+
+/* ─── Status pulse ─────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.status-pulse {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* ─── Step type badges ─────────────────────── */
+.badge-skill { @apply bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20; }
+.badge-agent { @apply bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20; }
+.badge-pattern { @apply bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20; }
