@@ -137,7 +137,7 @@ TIER 1: Main Claude Session (the only orchestrator)
 
 ## 5. Component Inventory
 
-### 5.1 Skills (total: 11)
+### 5.1 Skills (total: 12)
 
 | Skill | Source | Location | Role |
 |---|---|---|---|
@@ -150,6 +150,7 @@ TIER 1: Main Claude Session (the only orchestrator)
 | `ralph-design-loop` | existing (retained) | `plugins/design-team/skills/ralph-design-loop.md` | Inner loop of `design-sync` |
 | `release-prep` | new (extracted from app-factory Stage 5) | `plugins/pm-agent/skills/release-prep/SKILL.md` | Stage 5: commit, RELEASE.md, DESIGN_RULES update |
 | `bugfix-coordinate` | `dev-team/agents/bugfix-coordinator.md` | `plugins/dev-team/skills/bugfix-coordinate/SKILL.md` | Standalone bug lifecycle workflow |
+| `dev-review` | `dev-team/agents/dev-reviewer.md` | `plugins/dev-team/skills/dev-review/SKILL.md` | Multi-layer code review orchestration; dispatches 12+ compound-engineering review agents across 8 review layers (security, performance, architecture, quality, language-specific, data, deployment, PR workflow) |
 | `maker-orchestrate` | `agent-maker/agents/maker-orchestrator.md` | `plugins/agent-maker/skills/maker-orchestrate/SKILL.md` | Agent-maker meta workflow |
 | `ait-orchestrate` | `ait-team/agents/ait-orchestrator.md` | `plugins/ait-team/skills/ait-orchestrate/SKILL.md` | Stage 8: Apps-in-Toss deployment |
 
@@ -166,6 +167,7 @@ Thin wrappers around skills for explicit invocation:
 | `/dev-orchestrate <app-name>` | `dev-orchestrate` skill |
 | `/ralph-loop <app-name>` | `ralph-persona-loop` skill |
 | `/release-prep <app-name>` | `release-prep` skill |
+| `/dev-review <scope>` | `dev-review` skill |
 
 ### 5.3 Worker subagents (retained, `tools` restriction applied)
 
@@ -207,7 +209,6 @@ Thin wrappers around skills for explicit invocation:
 | `dev-frontend` | `[Read, Edit, Write, Bash, Grep, Glob]` |
 | `dev-ui-engineer` | `[Read, Edit, Write, Bash, Grep, Glob]` |
 | `dev-qa` | `[Read, Edit, Write, Bash, Grep, Glob]` |
-| `dev-reviewer` | `[Read, Grep, Glob]` (read-only) |
 | `dev-debugger` | `[Read, Edit, Bash, Grep, Glob]` |
 | `dev-devops` | `[Read, Edit, Write, Bash, Grep, Glob]` |
 | `flow-graph-validator` | `[Read, Write, Grep, Glob]` (read-only for source; writes validation reports) |
@@ -221,7 +222,7 @@ Thin wrappers around skills for explicit invocation:
 #### agent-maker & ait-team plugins
 Worker subagents inventoried in Migration Phase M1. Same `tools` restriction rules apply. Based on M1 inventory: `ait-feature-dev` requires `WebFetch` (for TDS/SDK docs); default ait worker tools for it are `[Read, Edit, Write, Bash, Grep, Glob, WebFetch]`. Other ait workers use the standard `[Read, Edit, Write, Bash, Grep, Glob]`.
 
-### 5.4 Deleted files (total: 8, single commit)
+### 5.4 Deleted files (total: 9, single commit)
 
 ```
 plugins/pm-agent/agents/app-factory.md
@@ -229,6 +230,7 @@ plugins/pm-agent/agents/pm-orchestrator.md
 plugins/design-team/agents/design-orchestrator.md
 plugins/design-team/agents/design-sync-lead.md
 plugins/dev-team/agents/dev-orchestrator.md
+plugins/dev-team/agents/dev-reviewer.md
 plugins/dev-team/agents/bugfix-coordinator.md
 plugins/agent-maker/agents/maker-orchestrator.md
 plugins/ait-team/agents/ait-orchestrator.md
@@ -778,6 +780,20 @@ Short ADR capturing:
 - CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: enabled in ~/.claude/settings.json ✅
 - tmux: 3.5a installed ✅
 - M4 prerequisites: all met, split-pane Teams mode available.
+
+### 11.2.2 Late-stage finding during Task 17 verification
+
+During Task 17 global verification of the `tools` restriction, we discovered that `dev-reviewer.md` is a hidden orchestrator, not a worker. Its body contains 8 "Review Layers" tables listing 12+ compound-engineering review agents to "Launch" in parallel.
+
+This was missed in M1 Task 5 inventory because the subagent checked frontmatter and top-level body patterns but not detailed table contents.
+
+Corrective action taken:
+- Section 5.1: Added `dev-review` skill (12 skills total now, up from 11)
+- Section 5.2: Added `/dev-review` slash command
+- Section 5.3: Removed `dev-reviewer` row from dev-team tools matrix
+- Section 5.4: Added `dev-reviewer.md` to deletion list (9 files total now, up from 8)
+
+Interim behavior (Plan 1–3): The tools restriction `[Read, Grep, Glob]` remains in place on `dev-reviewer.md`. This structurally blocks its nested orchestration (which was always violating the official 2-tier constraint). dev-reviewer calls will behave as a single-worker code review during the interim period until Plan 4 replaces it with the `dev-review` skill. Users of `dev-reviewer` should explicitly invoke `/dev-review` once the skill lands.
 
 ### 11.3 Non-obvious decisions logged
 
