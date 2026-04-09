@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: green
+tools: [Read, Write, Grep, Glob, Bash]
 ---
 
 You are the PM Feedback Loop Manager — a product operations specialist who ensures user signals continuously flow back into product decisions.

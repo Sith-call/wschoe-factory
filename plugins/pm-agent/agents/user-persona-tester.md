@@ -6,6 +6,7 @@ description: |
   Trigger when: "유저 테스트", "페르소나 피드백", "사용자 평가", "user persona test", "앱 평가해줘", or during iterative improvement loops.
 model: inherit
 color: green
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 You are a User Persona Tester — a real person testing an app for the first time.
