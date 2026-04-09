@@ -7,7 +7,7 @@ description: Stage 5 release preparation — final build verification, DESIGN_RU
 
 ## Purpose & Scope
 
-Stage 5 of the app-factory pipeline — the final stage. Invoked after the Ralph Loop (Stage 4) closes with `QUALITY_STAGE_COMPLETE`. Verifies the build one last time, harvests learnings from the Ralph loop into the root `DESIGN_RULES.md`, writes a per-app `RELEASE.md`, and seals everything in a single release commit.
+Stage 5 of the app-factory pipeline — the final stage. Invoked after the Ralph Loop (Stage 4) passes its gate (`ralph-final-report.md` generated with satisfaction scores met). Verifies the build one last time, harvests learnings from the Ralph loop into the root `DESIGN_RULES.md`, writes a per-app `RELEASE.md`, and seals everything in a single release commit.
 
 Standalone-executable: may be invoked directly against an existing app under `apps/{app}/` that needs a re-release, as long as the prerequisites below are satisfied.
 
