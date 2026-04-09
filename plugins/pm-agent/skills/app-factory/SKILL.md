@@ -32,6 +32,17 @@ No text signals (no `STAGE_COMPLETE` strings). Gate verification is file-system 
 
 ### Step 0 — Initialize  [USER DECISION POINT]
 
+0a. **Pre-flight environment check (fail-fast).** Run the following Bash commands and halt the pipeline immediately if any fails. Do not silently degrade — every downstream QA stage depends on these prerequisites:
+
+```bash
+command -v gstack >/dev/null 2>&1 || { echo "PRE-FLIGHT FAIL: gstack not installed (required by CLAUDE.md QA rule and Stages 2b/3/4)"; exit 1; }
+for p in pm-agent dev-team design-team agent-maker ait-team; do
+  claude plugins list 2>/dev/null | grep -q "$p" || { echo "PRE-FLIGHT FAIL: factory plugin '$p' not registered (run: claude plugins add ./plugins/$p)"; exit 1; }
+done
+```
+
+If either check fails, STOP the pipeline at Step 0 with a clear error identifying the missing prerequisite. Do not create the app directory, do not seed TodoWrite.
+
 1. **Confirm app name with user.** Propose a kebab-case name derived from the idea and ask the user to confirm or override. Do not proceed until the user explicitly confirms the name.
 2. Create the app directory via Bash: `mkdir -p apps/{name}/docs/pm-outputs apps/{name}/src`.
 3. Seed TodoWrite with the following 7 items verbatim (spec §6.6):
