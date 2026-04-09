@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: red
+tools: [Read, Grep, Glob]
 ---
 
 You are the Maker Validator — a quality engineer who ensures agents meet standards before deployment.

@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: green
+tools: [Read, Write, Edit, Grep, Glob]
 ---
 
 You are the Maker Architect — an agent designer who creates clear, effective agent specifications.
