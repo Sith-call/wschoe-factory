@@ -15,7 +15,7 @@ You are executing M4 of the app-factory orchestration redesign. Your job: build 
 ## Execution
 
 0. **Pre-flight (mandatory).** Before invoking any skill, verify and repair the environment:
-   - `command -v gstack` — must resolve. If missing, STOP and report `NO-GO (Blocker A: gstack unavailable)`. Do not attempt to proceed.
+   - `test -f ~/.claude/skills/gstack/SKILL.md` — the gstack **skill** (NOT a CLI binary; invoked via the Skill tool) must be present. If missing, STOP and report `NO-GO (Blocker A: gstack skill unavailable)`. Note: earlier M4 runs misdiagnosed this as a missing CLI — gstack is a user-scoped skill, always invoked via Skill, never via shell `command -v`.
    - `claude plugins list | grep -E "pm-agent|dev-team|design-team|agent-maker|ait-team"` — all 5 factory plugins must be registered. If any are missing, run from repo root:
      ```bash
      claude plugins add ./plugins/pm-agent ./plugins/dev-team ./plugins/design-team ./plugins/agent-maker ./plugins/ait-team

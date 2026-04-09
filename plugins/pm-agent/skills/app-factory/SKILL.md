@@ -35,7 +35,8 @@ No text signals (no `STAGE_COMPLETE` strings). Gate verification is file-system 
 0a. **Pre-flight environment check (fail-fast).** Run the following Bash commands and halt the pipeline immediately if any fails. Do not silently degrade — every downstream QA stage depends on these prerequisites:
 
 ```bash
-command -v gstack >/dev/null 2>&1 || { echo "PRE-FLIGHT FAIL: gstack not installed (required by CLAUDE.md QA rule and Stages 2b/3/4)"; exit 1; }
+# gstack is a user-scoped Claude Code skill, NOT a CLI binary. Verify by SKILL.md presence.
+test -f "$HOME/.claude/skills/gstack/SKILL.md" || { echo "PRE-FLIGHT FAIL: gstack skill not installed (required by CLAUDE.md QA rule and Stages 2b/3/4)"; exit 1; }
 for p in pm-agent dev-team design-team agent-maker ait-team; do
   claude plugins list 2>/dev/null | grep -q "$p" || { echo "PRE-FLIGHT FAIL: factory plugin '$p' not registered (run: claude plugins add ./plugins/$p)"; exit 1; }
 done
