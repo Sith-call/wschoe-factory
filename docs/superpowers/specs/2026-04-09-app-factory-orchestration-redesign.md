@@ -184,7 +184,9 @@ Thin wrappers around skills for explicit invocation:
 | `ux-specialist` | `[Read, Write, Bash, Grep, Glob]` |
 | `user-persona-tester` | `[Read, Write, Bash, Grep, Glob]` |
 | `live-app-walkthrough` | `[Read, Write, Bash, Grep, Glob]` |
-| `domain-expert-consultant` | `[Read, Write, Grep, Glob, WebSearch, WebFetch]` + NotebookLM MCP |
+| `domain-expert-consultant` | `[Read, Write, Edit, Bash, Grep, Glob]` + NotebookLM MCP [^dec] |
+
+[^dec]: `domain-expert-consultant` Phase 5 auto-fix requires `Edit` (concepts.ts, models/*.ts) and `Bash` (build verification, atomic commit). `WebSearch`/`WebFetch` unused — source verification handled via NotebookLM MCP.
 
 #### design-team plugin
 
@@ -204,18 +206,20 @@ Thin wrappers around skills for explicit invocation:
 | `dev-backend` | `[Read, Edit, Write, Bash, Grep, Glob]` |
 | `dev-frontend` | `[Read, Edit, Write, Bash, Grep, Glob]` |
 | `dev-ui-engineer` | `[Read, Edit, Write, Bash, Grep, Glob]` |
-| `dev-qa` | `[Read, Edit, Bash, Grep, Glob]` |
+| `dev-qa` | `[Read, Edit, Write, Bash, Grep, Glob]` |
 | `dev-reviewer` | `[Read, Grep, Glob]` (read-only) |
 | `dev-debugger` | `[Read, Edit, Bash, Grep, Glob]` |
 | `dev-devops` | `[Read, Edit, Write, Bash, Grep, Glob]` |
-| `flow-graph-validator` | `[Read, Grep, Glob]` (read-only) |
-| `live-app-tester` | `[Read, Bash, Grep, Glob]` |
-| `app-qa-tester` | `[Read, Bash, Grep, Glob]` |
+| `flow-graph-validator` | `[Read, Write, Grep, Glob]` (read-only for source; writes validation reports) |
+| `live-app-tester` | `[Read, Write, Bash, Grep, Glob]` |
+| `app-qa-tester` | `[Read, Write, Bash, Grep, Glob]` |
 | `ops-monitor` | `[Read, Bash, Grep, Glob]` |
-| `bridge-translator` | `[Read, Edit, Grep, Glob]` |
+| `bridge-translator` | `[Read, Edit, Write, Grep, Glob]` |
+
+**Note on "read-only" workers**: The term "read-only" in this matrix means "cannot modify source code" (no `Edit`), NOT "cannot write any files". Workers that generate validation reports, test reports, or QA reports still need `Write` to create those new output files. The structural protection is `Edit` omission, which prevents modifying existing source files while still allowing report generation.
 
 #### agent-maker & ait-team plugins
-Worker subagents to be inventoried in Migration Phase M1. Same `tools` restriction rules apply.
+Worker subagents inventoried in Migration Phase M1. Same `tools` restriction rules apply. Based on M1 inventory: `ait-feature-dev` requires `WebFetch` (for TDS/SDK docs); default ait worker tools for it are `[Read, Edit, Write, Bash, Grep, Glob, WebFetch]`. Other ait workers use the standard `[Read, Edit, Write, Bash, Grep, Glob]`.
 
 ### 5.4 Deleted files (total: 8, single commit)
 
@@ -754,11 +758,26 @@ Short ADR capturing:
 | Token cost increase from skill reloading on every stage | Low | Skills are cached by prompt-caching per official docs |
 | `pm-executor` reviewer mode conflicts with writer mode | Low | Spawn prompt explicitly sets mode; file paths protect prd.md |
 
-### 11.2 Open questions (to resolve in M1)
+### 11.2 Resolved in M1 (2026-04-10)
 
-1. Are `maker-orchestrator.md` and `ait-orchestrator.md` really orchestrators (spawning other subagents) or self-contained workers? If self-contained, they become workers with `tools` restriction, not deleted.
-2. Does `agent-maker` plugin have a "master" that creates other agents? If so, how to model in 2-tier?
-3. Current `ralph-persona-loop.md` already references `references/ralph-phase-details.md` — is that path still valid after skill reorganization?
+1. **Q: Are `maker-orchestrator.md` and `ait-orchestrator.md` really orchestrators or self-contained workers?**
+   Resolution: Both are TRUE ORCHESTRATORS.
+   - `maker-orchestrator` coordinates maker-researcher, maker-architect, maker-builder, maker-validator in a 4-phase pipeline (research → design → build → validate).
+   - `ait-orchestrator` coordinates ait-planner, ait-scaffolder, ait-feature-dev, ait-verifier in a 4-phase pipeline (init → scaffold → develop → verify).
+   - Spec impact: both confirmed in Section 5.4 deletion list. No change.
+
+2. **Q: Does `agent-maker` plugin have a "master" that creates other agents?**
+   Resolution: Yes — `maker-orchestrator` is that master. Becomes `maker-orchestrate` skill per Section 5.1. No additional master pattern found.
+
+3. **Q: Is `ralph-phase-details.md` reference path still valid?**
+   Resolution: CONFIRMED VALID. File exists at `plugins/pm-agent/references/ralph-phase-details.md` and is correctly referenced at line 84 of `ralph-persona-loop.md` ("각 Phase의 상세 워크플로우는 `references/ralph-phase-details.md`를 참조."). No change needed.
+
+### 11.2.1 Additional M1 Environment Findings
+
+- Claude Code version: 2.1.97 (≥ 2.1.32 required for Agent Teams ✅)
+- CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: enabled in ~/.claude/settings.json ✅
+- tmux: 3.5a installed ✅
+- M4 prerequisites: all met, split-pane Teams mode available.
 
 ### 11.3 Non-obvious decisions logged
 
