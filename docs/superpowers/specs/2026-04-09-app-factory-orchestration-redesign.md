@@ -762,7 +762,7 @@ Short ADR capturing:
 
 ### 11.3 Non-obvious decisions logged
 
-- **Keep `pm-executor` for both PRD writing (Stage 1) AND PRD verification (Ralph Phase 2)**: reviewer mode is set via spawn prompt. Avoids creating a new agent with duplicate context.
+- **Keep `pm-executor` for both PRD writing (Stage 1) AND PRD verification (Ralph Phase 2)**: reviewer mode is set via spawn prompt. Avoids creating a new agent with duplicate context. **Structural protection**: when spawned in reviewer mode, the spawn prompt explicitly omits `Edit` from the effective tools — reviewer can only `Write` new verification files, not edit existing `prd.md`. This elevates the protection from protocol to structure.
 - **6 parallel evaluators, not 5**: PRD verification separated from UX score. Stability/clarity over token savings.
 - **`design-orchestrator` split into two skills** (`stitch-generate` + `design-sync`), not one: Stage 2a and 2b have different inputs/outputs and can be independently re-run.
 - **`release-prep` as separate skill**, not inline in `app-factory`: enables standalone execution for existing apps.
