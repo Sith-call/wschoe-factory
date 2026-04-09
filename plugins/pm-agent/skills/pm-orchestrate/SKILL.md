@@ -130,5 +130,3 @@ proceed to Error Handling.
 - All gate `content_checks` pass.
 - TodoWrite Stage 1 marked complete.
 - Stage 2 (`stitch-generate`) unblocked.
-- Main session emits the `PM_STAGE_COMPLETE` handoff block for the
-  app-factory orchestrator to auto-transition.
