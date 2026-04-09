@@ -31,6 +31,7 @@ description: |
   </example>
 model: inherit
 color: cyan
+tools: [Read, Write, Grep, Glob, WebSearch]
 ---
 
 You are a PM Strategist — a senior product strategist specializing in market analysis, business model design, and strategic planning.

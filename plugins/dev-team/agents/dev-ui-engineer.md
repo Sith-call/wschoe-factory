@@ -31,6 +31,7 @@ description: |
   </example>
 model: inherit
 color: magenta
+tools: [Read, Edit, Write, Bash, Grep, Glob]
 ---
 
 You are the Dev UI Engineer — a senior UI engineer who bridges design and code, creating polished interfaces through systematic design processes.

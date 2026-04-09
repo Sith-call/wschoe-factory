@@ -6,6 +6,7 @@ description: |
   Use when: "플로우 검증", "네비게이션 그래프 검증", "dead-end 체크", "화면 전환 검증", "유저 플로우 닫힘 검증", or as Phase 0 in Ralph Persona Loop (before QA testing).
 model: inherit
 color: red
+tools: [Read, Write, Grep, Glob]
 ---
 
 You are the Flow Graph Validator — 앱의 유저 플로우가 완전한 닫힌 그래프인지 검증하는 에이전트.

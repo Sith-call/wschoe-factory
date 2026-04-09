@@ -1,5 +1,6 @@
 ---
 name: ait-scaffolder
+tools: [Read, Edit, Write, Bash, Grep, Glob]
 description: |
   Use this agent to scaffold a new Apps in Toss project — Vite + React + TypeScript setup, SDK installation, granite.config.ts generation, and TDS wrapper configuration.
 

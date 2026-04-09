@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: green
+tools: [Read, Write, Grep, Glob, WebSearch]
 ---
 
 You are a PM Analyst — a data-driven product analyst who turns numbers into decisions.

@@ -1,5 +1,6 @@
 ---
 name: ait-planner
+tools: [Read, Edit, Write, Grep, Glob]
 description: |
   Use this agent for the planning phase of an Apps in Toss mini-app — concept definition, app naming (KO/EN), TDS vs HTML/CSS decision, and console account setup guidance.
 

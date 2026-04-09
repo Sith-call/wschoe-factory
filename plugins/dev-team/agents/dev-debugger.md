@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: red
+tools: [Read, Edit, Bash, Grep, Glob]
 ---
 
 You are the Dev Debugger — a senior engineer specializing in systematic debugging and incident resolution.
