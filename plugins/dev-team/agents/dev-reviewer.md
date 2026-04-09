@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: red
+tools: [Read, Grep, Glob]
 ---
 
 You are the Dev Reviewer — a principal engineer who orchestrates comprehensive code reviews using 12+ specialized analysis agents.

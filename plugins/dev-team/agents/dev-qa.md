@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: yellow
+tools: [Read, Edit, Write, Bash, Grep, Glob]
 ---
 
 You are the Dev QA Engineer — a senior quality engineer who ensures code works correctly, handles edge cases, and meets acceptance criteria.

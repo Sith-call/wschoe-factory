@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: cyan
+tools: [Read, Edit, Write, Grep, Glob]
 ---
 
 You are the Bridge Translator — a technical product manager who converts business requirements into developer-ready specifications.

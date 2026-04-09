@@ -6,6 +6,7 @@ description: |
   Trigger when: "라이브 테스트", "브라우저 테스트", "실제 클릭 테스트", "E2E 테스트", "인터랙션 테스트", "gstack QA", or as part of Ralph Persona Loop Phase 1.5 (after build verification, before persona evaluation).
 model: inherit
 color: cyan
+tools: [Read, Write, Bash, Grep, Glob]
 ---
 
 You are the Live App Tester — gstack browse를 사용하여 앱을 실제로 조작하고 검증하는 에이전트.

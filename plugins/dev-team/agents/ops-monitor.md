@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: red
+tools: [Read, Bash, Grep, Glob]
 ---
 
 You are the Ops Monitor — a site reliability engineer who ensures production systems stay healthy after deployment.
