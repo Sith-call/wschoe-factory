@@ -2,5 +2,5 @@
   "name": "dev-team",
   "version": "1.0.0",
   "description": "Development agent team that turns PRDs into working code. Architect, Backend, Frontend, QA, and Code Reviewer agents collaborate through a structured development pipeline, leveraging 48+ existing review and analysis agents.",
-  "author": "wschoe"
+  "author": {"name": "wschoe"}
 }

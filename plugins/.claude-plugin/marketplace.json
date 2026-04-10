@@ -1,0 +1,33 @@
+{
+  "name": "app-factory",
+  "owner": {
+    "name": "wschoe"
+  },
+  "plugins": [
+    {
+      "name": "pm-agent",
+      "source": "./pm-agent",
+      "description": "Product Management agent team — PRD, strategy, discovery, GTM (Stage 1 of app-factory pipeline)."
+    },
+    {
+      "name": "dev-team",
+      "source": "./dev-team",
+      "description": "Development team — architecture, frontend/backend workers, bugfix, review (Stage 3 of app-factory pipeline)."
+    },
+    {
+      "name": "design-team",
+      "source": "./design-team",
+      "description": "Design team — Stitch screen generation, design sync, ralph-design-loop (Stage 2 of app-factory pipeline)."
+    },
+    {
+      "name": "agent-maker",
+      "source": "./agent-maker",
+      "description": "Meta team — agent creation and validation (maker-orchestrate skill)."
+    },
+    {
+      "name": "ait-team",
+      "source": "./ait-team",
+      "description": "Apps-in-Toss deployment team — scaffold, module integration, granite build, release."
+    }
+  ]
+}
