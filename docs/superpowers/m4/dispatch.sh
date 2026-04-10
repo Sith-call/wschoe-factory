@@ -34,7 +34,15 @@ if [[ ! -f docs/superpowers/m4/dispatch-prompt.md ]]; then
   exit 1
 fi
 
-PROMPT="$(cat docs/superpowers/m4/dispatch-prompt.md)"
+PROMPT="You are the M4 Executor for the app-factory orchestration redesign in this repository. Your working directory is the current directory. The factory plugins have been loaded at startup via --plugin-dir flags; verify this in Step 0.B before proceeding.
+
+Your task manual follows between the BEGIN/END markers. Follow it verbatim from the \"## Execution\" section onward. Begin IMMEDIATELY with Step 0 — do not ask for confirmation, do not ask clarifying questions, do not treat this as context-only. This message IS your assignment. Your final output (after all stages complete or you halt at a failed gate) must be the Go/No-Go report written to docs/superpowers/m4/report.md plus a short summary of verdict + stage outcomes in your final text response.
+
+===BEGIN M4 DISPATCH PROMPT===
+$(cat docs/superpowers/m4/dispatch-prompt.md)
+===END M4 DISPATCH PROMPT===
+
+Begin Step 0 now."
 
 CMD=(claude -p "$PROMPT"
   --permission-mode auto
