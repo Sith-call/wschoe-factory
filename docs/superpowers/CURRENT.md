@@ -50,11 +50,35 @@ claude
 Plan 0 (brainstorming + spec)      ✅ DONE
 Plan 1 (M1 + M2)                   ✅ DONE
 Plan 2 (M3 — 12 skills + 8 cmds)   ✅ DONE
-Plan 3 (M4 — Teams test app)       ⚠️  IN PROGRESS (재실행 예정)
-Plan 4 (M5+M6+M7)                  ⏳ NOT STARTED
+Plan 3 (M4 — Teams test app)       🟡 CONDITIONAL PASS (Stages 0-1 ✅, Stage 2a-5 blocked by Stitch MCP)
+Plan 4 (M5+M6+M7)                  ⏳ READY TO START
 ```
 
-파이프라인 마이그레이션 전체 완성도: **~50%**. 신규 skill 체인은 **아직 프로덕션 경로가 아닙니다.**
+### M4 검증 결과 요약 (9 runs, 2026-04-10)
+
+**Pipeline logic: VALIDATED.** 코드 결함 9개 발견 → 9개 모두 fix-up 커밋으로 해소.
+
+| 검증 영역 | 상태 | 증거 |
+|---|---|---|
+| Pre-flight (Step 0) | ✅ | `--plugin-dir` 아키텍처, skill-liveness probe |
+| PM (Stage 1) | ✅ 5연속 PASS | 11 artifacts, 29 stories, 3 personas, 8 workers |
+| Stitch (Stage 2a) 로직 | ✅ | 비동기 poll, timeout handling 정상 |
+| Stitch (Stage 2a) 실행 | ⚠️ Stitch MCP 불안정 | rate limit + list_screens API 버그 |
+| Dev (Stage 3) 로직 | ✅ | 47 source files, Vite+React+TS 아키텍처 |
+| Ralph (Stage 4) | ❌ 미도달 | Stage 2a gate 미충족 |
+| Release (Stage 5) | ❌ 미도달 | Stage 4 의존 |
+
+**남은 blockers (전부 외부/인프라)**:
+- Stitch MCP rate limit (2 screen/session 후 unresponsive)
+- Stitch list_screens API 버그 (valid project에 `{}` 반환)
+
+파이프라인 마이그레이션 전체 완성도: **~65%** (코드 레벨 검증 완료, 외부 서비스 의존성 해소 필요).
+
+### Plan 4 우선순위 (추천)
+
+1. **M5: Stitch fallback path** — HTML/CSS mockup ground-truth로 Stage 2a 우회 (Stitch 의존성 제거)
+2. **M6: 레거시 오케스트레이터 deprecation** — agents-legacy/ 정리 + 레거시 진입점 제거
+3. **M7: CLAUDE.md 재작성** — 레거시 → 신규 skill chain 안내로 전환
 
 ---
-*마지막 업데이트: 2026-04-10. Plan 3 M4가 GO 판정을 받으면 이 파일을 Plan 4 상태로 갱신할 것. M7 완료 시 이 파일을 삭제하고 `CLAUDE.md`를 정식 재작성할 것.*
+*마지막 업데이트: 2026-04-10 14:30. Plan 4 플래닝은 이 파일과 report-history/ 를 입력으로 시작할 것.*
