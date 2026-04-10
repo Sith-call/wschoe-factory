@@ -14,14 +14,56 @@ You are executing M4 of the app-factory orchestration redesign. Your job: build 
 
 ## Execution
 
-0. **Pre-flight (mandatory).** Before invoking any skill, verify and repair the environment:
-   - `test -f ~/.claude/skills/gstack/SKILL.md` — the gstack **skill** (NOT a CLI binary; invoked via the Skill tool) must be present. If missing, STOP and report `NO-GO (Blocker A: gstack skill unavailable)`. Note: earlier M4 runs misdiagnosed this as a missing CLI — gstack is a user-scoped skill, always invoked via Skill, never via shell `command -v`.
-   - `claude plugins list | grep -E "pm-agent|dev-team|design-team|agent-maker|ait-team"` — all 5 factory plugins must be registered. If any are missing, run from repo root:
-     ```bash
-     claude plugins add ./plugins/pm-agent ./plugins/dev-team ./plugins/design-team ./plugins/agent-maker ./plugins/ait-team
-     ```
-     then re-verify. If registration fails, STOP and report `NO-GO (Blocker B: plugin registration failed)`.
-   - Only proceed to Step 1 when both checks pass.
+0. **Pre-flight (mandatory).** Before invoking any skill, verify and repair the environment. Run from repo root.
+
+   **A. gstack skill** — it is a user-scoped Skill invoked via the Skill tool, NOT a CLI binary. Never probe with `command -v`.
+   ```bash
+   test -f ~/.claude/skills/gstack/SKILL.md
+   ```
+   If missing, STOP and report `NO-GO (Blocker A: gstack skill unavailable)`.
+
+   **B. Factory plugins** — the 5 plugins (pm-agent, dev-team, design-team, agent-maker, ait-team) live under `plugins/` with a local marketplace manifest at `plugins/.claude-plugin/marketplace.json`. Register and install project-scoped so the config lives in this repo's `.claude/settings.json`:
+   ```bash
+   # Re-register marketplace idempotently (remove any stale registration, then add fresh)
+   claude plugins marketplace remove app-factory 2>/dev/null || true
+   claude plugins marketplace add ./plugins --scope project
+
+   # Install all 5 factory plugins (install writes to .claude/settings.json enabledPlugins)
+   for p in pm-agent dev-team design-team agent-maker ait-team; do
+     claude plugins install "${p}@app-factory" --scope project || { echo "INSTALL FAILED: $p"; exit 1; }
+   done
+   ```
+   If the `marketplace add` or any `install` command exits non-zero, STOP and report `NO-GO (Blocker B: plugin registration failed)` with the exact CLI output.
+
+   **C. Per-plugin verification** — this replaces the old `grep` that collapsed installed/enabled/absent into one result. Run:
+   ```bash
+   claude plugins list --json | python3 -c '
+   import json, sys
+   data = json.load(sys.stdin)
+   required = ["pm-agent@app-factory", "dev-team@app-factory", "design-team@app-factory", "agent-maker@app-factory", "ait-team@app-factory"]
+   by_id = {p["id"]: p for p in data}
+   bad = []
+   for r in required:
+       p = by_id.get(r)
+       if not p:
+           bad.append(r + ": NOT INSTALLED")
+       elif not p.get("enabled"):
+           scope = p.get("scope", "?")
+           bad.append(r + ": INSTALLED BUT DISABLED (scope=" + scope + ", enable in .claude/settings.json)")
+       else:
+           scope = p.get("scope", "?")
+           print(r + ": OK (scope=" + scope + ")")
+   if bad:
+       print("--- BLOCKER B ---")
+       for b in bad: print(b)
+       sys.exit(1)
+   '
+   ```
+   All 5 must print `OK`. If any line reports `NOT INSTALLED` or `DISABLED`, STOP and report `NO-GO (Blocker B)` including the exact failing lines.
+
+   **Note on `.claude/settings.json` mutation:** Step B will write `extraKnownMarketplaces.app-factory` and `enabledPlugins` into `.claude/settings.json`. `extraKnownMarketplaces` stores an **absolute path** to the marketplace, which is host-specific and must NOT be committed. When reporting M4 results, leave `.claude/settings.json` out of any commit — it is bootstrap state that Step 0 re-creates on every fresh environment.
+
+   Only proceed to Step 1 when A and C both pass.
 
 1. Invoke the `app-factory` skill (or run `/app-factory 하루 감사 일기 앱 만들어줘`).
 2. Let the full 5-stage chain run: pm-orchestrate → stitch-generate → design-sync → dev-orchestrate → ralph-persona-loop → release-prep.
