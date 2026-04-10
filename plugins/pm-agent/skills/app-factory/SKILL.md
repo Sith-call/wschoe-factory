@@ -32,19 +32,29 @@ No text signals (no `STAGE_COMPLETE` strings). Gate verification is file-system 
 
 ### Step 0 — Initialize  [USER DECISION POINT]
 
-0a. **Pre-flight environment check (fail-fast).** Run the following Bash commands and halt the pipeline immediately if any fails. Do not silently degrade — every downstream QA stage depends on these prerequisites:
+0a. **Pre-flight environment check (fail-fast).** Run the following Bash commands and halt the pipeline immediately if any fails. Do not silently degrade — every downstream QA stage depends on these prerequisites.
 
 ```bash
 # gstack is a user-scoped Claude Code skill, NOT a CLI binary. Verify by SKILL.md presence.
 test -f "$HOME/.claude/skills/gstack/SKILL.md" || { echo "PRE-FLIGHT FAIL: gstack skill not installed (required by CLAUDE.md QA rule and Stages 2b/3/4)"; exit 1; }
+
+# The 5 factory plugins are loaded into the executor session at startup via --plugin-dir
+# flags (see docs/superpowers/m4/dispatch.sh). We cannot probe the Skill tool catalogue
+# from Bash, so verify the source trees exist on disk instead — if they do, the dispatcher
+# contract guarantees the skills are live. Do NOT use `claude plugins list` here: that
+# reports INSTALLED plugins, but --plugin-dir loads plugins without installing, so the
+# check would false-negative (see docs/superpowers/m4/report-history/2026-04-10-03-blocker-c.md
+# and 2026-04-10-05-stitch-permission.md).
 for p in pm-agent dev-team design-team agent-maker ait-team; do
-  claude plugins list 2>/dev/null | grep -q "$p" || { echo "PRE-FLIGHT FAIL: factory plugin '$p' not registered (run: claude plugins add ./plugins/$p)"; exit 1; }
+  test -d "plugins/$p/skills" || { echo "PRE-FLIGHT FAIL: plugin source tree missing: plugins/$p/skills (dispatcher must launch executor with --plugin-dir ./plugins/$p)"; exit 1; }
 done
 ```
 
 If either check fails, STOP the pipeline at Step 0 with a clear error identifying the missing prerequisite. Do not create the app directory, do not seed TodoWrite.
 
-1. **Confirm app name with user.** Propose a kebab-case name derived from the idea and ask the user to confirm or override. Do not proceed until the user explicitly confirms the name.
+1. **Confirm app name with user.** Propose a kebab-case name derived from the idea. Then:
+   - **If `CLAUDE_APP_FACTORY_AUTOCONFIRM=1` is set in the environment** (autonomous runs, e.g. M4 dispatcher): skip the confirmation prompt, use the derived name, and write it to `apps/{name}/docs/pm-outputs/app-name-decision.md` with a note that it was auto-confirmed. Log the decision to the TodoWrite audit trail so humans can review later.
+   - **Otherwise**: ask the user to confirm or override. Do not proceed until the user explicitly confirms.
 2. Create the app directory via Bash: `mkdir -p apps/{name}/docs/pm-outputs apps/{name}/src`.
 3. Seed TodoWrite with the following 7 items verbatim (spec §6.6):
 

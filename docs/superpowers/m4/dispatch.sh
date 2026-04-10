@@ -44,8 +44,20 @@ $(cat docs/superpowers/m4/dispatch-prompt.md)
 
 Begin Step 0 now."
 
+# Autoconfirm envvar — read by app-factory Step 0.1 and pm-orchestrate Phase 1.4
+# to bypass USER DECISION POINT halts for autonomous M4 runs. See
+# plugins/pm-agent/skills/app-factory/SKILL.md §Step 0.1 and
+# plugins/pm-agent/skills/pm-orchestrate/SKILL.md §Phase 1.4 for the contract.
+export CLAUDE_APP_FACTORY_AUTOCONFIRM=1
+
+# --allowedTools: --permission-mode auto covers local actions (Bash/Read/Edit/etc.)
+# but does NOT auto-allow MCP tools. Stage 2a (stitch-generate) needs the Stitch
+# MCP server, and the 5th-run NO-GO confirmed that `mcp__stitch__create_project`
+# is rejected without an explicit allowlist. Use wildcard for stitch (verified
+# working). gstack is a shell-based skill that does NOT need MCP allowlist.
 CMD=(claude -p "$PROMPT"
   --permission-mode auto
+  --allowedTools "mcp__stitch__*"
   --plugin-dir ./plugins/pm-agent
   --plugin-dir ./plugins/dev-team
   --plugin-dir ./plugins/design-team
