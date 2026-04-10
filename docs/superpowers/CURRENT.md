@@ -50,8 +50,9 @@ claude
 Plan 0 (brainstorming + spec)      ✅ DONE
 Plan 1 (M1 + M2)                   ✅ DONE
 Plan 2 (M3 — 12 skills + 8 cmds)   ✅ DONE
-Plan 3 (M4 — Teams test app)       🟡 CONDITIONAL PASS (Stages 0-1 ✅, Stage 2a-5 blocked by Stitch MCP)
-Plan 4 (M5+M6+M7)                  ⏳ READY TO START
+Plan 3 (M4 — Teams test app)       ✅ GO (11 runs, all 5 stages PASS, debf813)
+Plan 3 (M5 — Stitch fallback)      ✅ DONE (HTML/CSS mockup path, 326d9ab)
+Plan 4 (M6+M7)                     ⏳ READY TO START
 ```
 
 ### M4 검증 결과 요약 (9 runs, 2026-04-10)
