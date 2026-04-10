@@ -87,12 +87,42 @@ For each screen, execute this sequence:
 
 4. **Verify the PNG** exists on disk before proceeding to the next screen.
 
-After all screens: if fewer than 3 PNGs were saved, see Error Handling.
+After all screens: count PNGs in `apps/{app}/docs/ground-truth/`. If ≥3, proceed to Phase 2a.4. If fewer than 3, enter **Phase 2a.3-fallback**.
+
+### Phase 2a.3-fallback — HTML/CSS mockup generation (when Stitch fails)
+
+This phase activates ONLY when Phase 2a.3 produced fewer than 3 ground-truth PNGs (Stitch MCP unreliable, rate-limited, or unavailable). It replaces Stitch-generated screens with locally-generated HTML/CSS mockups screenshotted via gstack.
+
+For each screen in `story-screen-map.md` that does NOT yet have a PNG in `ground-truth/`:
+
+1. **Dispatch `design-screen-generator`** with a prompt to write an HTML mockup file:
+   - Read the screen row from `story-screen-map.md` (name, purpose, key elements, navigation)
+   - Read `persona.md` and `prd.md` for design context (brand, tone, target user)
+   - Generate `apps/{app}/docs/ground-truth/{screen-name}.html` — a self-contained HTML file with inline CSS:
+     - Mobile viewport (`<meta name="viewport" content="width=device-width, initial-scale=1">`)
+     - 430px max-width centered container
+     - Korean UI text matching the screen spec
+     - Clean, modern design using the color palette and typography from prd.md
+     - All interactive elements visible (buttons, inputs, cards) but non-functional (static mockup)
+   - The worker MUST follow `DESIGN_RULES.md` anti-patterns (no gradient text, no excessive shadows, no centered-everything, unique per-screen layout)
+
+2. **Screenshot the HTML via gstack** (main session, after worker returns):
+   ```
+   Invoke the `browse` skill → navigate to the local HTML file path → screenshot → save as apps/{app}/docs/ground-truth/{screen-name}.png
+   ```
+
+3. **Verify the PNG** exists on disk before proceeding to the next screen.
+
+After all fallback screens: if total PNGs (Stitch + fallback) are ≥3, proceed to Phase 2a.4. Otherwise halt per Error Handling.
+
+Write `apps/{app}/docs/design/ground-truth-source.md` recording which screens came from Stitch and which from HTML fallback (audit trail for Stage 2b).
 
 ### Phase 2a.4 — Consistency check
 
 1. Dispatch `design-visionary` in **read-only** mode (no Edit/Write tools). Prompt: "Review all PNGs in `apps/{app}/docs/ground-truth/` for visual consistency — color palette, typography, spacing, component style, brand tone. Output `apps/{app}/docs/design/consistency-report.md` listing any inconsistencies with severity P0/P1/P2."
-2. Read the report. If P0/P1 inconsistencies exist, dispatch `design-iterator` with the list of screens to fix via `mcp__stitch__edit_screens`. `design-iterator` must re-download corrected PNGs to the same ground-truth paths.
+2. Read the report. If P0/P1 inconsistencies exist:
+   - **For Stitch-sourced screens**: dispatch `design-iterator` with the list of screens to fix via `mcp__stitch__edit_screens`. `design-iterator` must re-download corrected PNGs to the same ground-truth paths.
+   - **For fallback HTML screens**: dispatch `design-screen-generator` to revise the HTML, then re-screenshot via gstack.
 3. Re-dispatch `design-visionary` once more to confirm. If still P0, halt and escalate.
 
 ## Worker Dispatch Plan
@@ -104,8 +134,10 @@ Per spec §7.1 contract. `tools:` lists describe the worker subagent's own front
 | 2a.1 | `design-screen-generator` | write | 1 | `[Read, Write, Glob]` | no |
 | 2a.2 | — (main session) | direct MCP | 1 | n/a | `mcp__stitch__create_project` |
 | 2a.3 | — (main session) | direct MCP | N (sequential, N = screen count) | n/a | `mcp__stitch__generate_screen_from_text`, `mcp__stitch__get_screen`, `mcp__stitch__list_screens` |
+| 2a.3-fb | `design-screen-generator` | write (fallback) | M (M = screens missing PNGs) | `[Read, Write, Glob]` | no |
+| 2a.3-fb | — (main session) | gstack screenshot | M | `Skill(browse)` | no |
 | 2a.4a | `design-visionary` | read-only | 1 | `[Read, Glob, Grep]` | no |
-| 2a.4b | `design-iterator` | write (conditional) | 0-1 | `[Read, Write, Bash]` | `mcp__stitch__edit_screens`, `mcp__stitch__get_screen` |
+| 2a.4b | `design-iterator` or `design-screen-generator` | write (conditional) | 0-1 | `[Read, Write, Bash]` | `mcp__stitch__edit_screens` (Stitch screens only) |
 | 2a.4c | `design-visionary` | read-only | 1 (if 2a.4b ran) | `[Read, Glob, Grep]` | no |
 
 Every dispatch must include the absolute app path and the project ID.
@@ -137,7 +169,7 @@ If any check fails, do not mark the Stage 2a TodoWrite sub-task complete.
 - **Stitch rate limit** (HTTP 429 or MCP rate-limit error): wait 60 seconds then retry the failing worker dispatch once. On second failure, wait 180 seconds and retry. On third failure, halt and report the screen name that failed.
 - **Stitch MCP auth failure** (401/unauthenticated): halt immediately. Instruct the user to re-authenticate the Stitch MCP server (per MCP server config) and re-run the skill. Do not attempt further dispatches.
 - **MCP tool timeout on `generate_screen_from_text`**: this is EXPECTED behavior — Stitch generation takes 2-5 minutes and Claude Code's MCP timeout is ~2 minutes. Do NOT retry the generate call. Enter the async poll loop described in Phase 2a.3 step 3. The generation is almost certainly still running server-side. Only treat as failure after 3 poll attempts (~4.5 minutes post-timeout) return no new screen.
-- **Missing PNG after generation (direct or polled)**: retry the same screen generation once with a simpler prompt (reduce detail, keep only screen name + purpose). If still missing after retry + poll, log as hard failure for this screen and continue.
+- **Missing PNG after generation (direct or polled)**: log as hard failure for this screen and continue to the next. After the Stitch loop completes, Phase 2a.3-fallback will pick up all screens that lack PNGs and generate HTML/CSS mockups instead. Do NOT retry the Stitch generate call (per API contract: "DO NOT RETRY").
 - **`design-visionary` still reports P0 after one iterator pass**: halt and escalate to the user — do not loop indefinitely here (the Ralph design loop in Stage 2b handles deep iteration).
 - **Prerequisite missing** (screen-flows.md absent, <3 screens): halt before Phase 2a.1.
 
