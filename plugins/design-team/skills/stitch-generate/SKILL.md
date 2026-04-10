@@ -62,19 +62,32 @@ printf '%s\n' "{projectId}" > apps/{app}/docs/design/stitch-project-id.txt
 
 Rationale: MCP tools are not routed through the Task worker boundary cleanly; calling them from the main session keeps project ownership explicit.
 
-### Phase 2a.3 — Screen generation loop (sequential)
+### Phase 2a.3 — Screen generation loop (main session, sequential)
 
-For each screen row in `story-screen-map.md`, dispatch `design-screen-generator` **sequentially** (not parallel). Stitch rate-limits per project; parallel calls will fail.
+For each screen row in `story-screen-map.md`, the **main session** invokes the MCP tool directly — do NOT dispatch a worker. Stitch rate-limits per project; sequential calls are mandatory.
 
-Worker prompt must include:
-- Project ID read from `stitch-project-id.txt`
-- Screen name, purpose, key elements, key copy (Korean UI text in quotes)
-- Instructions to call `mcp__stitch__generate_screen_from_text` with `deviceType: MOBILE`, `modelId: GEMINI_3_1_PRO`, 430px viewport
-- Prompt-writing guidance carried forward from `stitch-workflow.md`: no emojis, mood/metaphor first, spatial layout, emotional color, tonal typography, Korean UI text in quotes, reference apps, overall impression
-- Instruction to download the rendered screen PNG to `apps/{app}/docs/ground-truth/{screen-name}.png`
-- Save a matching HTML source file `apps/{app}/docs/ground-truth/{screen-name}.html` when available (ground-truth reference)
+Rationale: same as Phase 2a.2 — MCP tools are not routed through the Task worker boundary cleanly. Additionally, `generate_screen_from_text` frequently exceeds Claude Code's ~2min MCP tool timeout (see M4 report-history/2026-04-10-06-stitch-timeout.md). Keeping it in the main session allows timeout-aware polling that workers cannot implement reliably.
 
-After each worker returns, verify the PNG exists before dispatching the next screen. On failure, see Error Handling.
+For each screen, execute this sequence:
+
+1. **Build the prompt** for `generate_screen_from_text` using data from `story-screen-map.md`:
+   - Prompt-writing guidance from `stitch-workflow.md`: no emojis, mood/metaphor first, spatial layout, emotional color, tonal typography, Korean UI text in quotes, reference apps, overall impression
+   - Screen name, purpose, key elements, key copy
+
+2. **Call `mcp__stitch__generate_screen_from_text`** with `projectId` from `stitch-project-id.txt`, `deviceType: MOBILE`, `modelId: GEMINI_3_1_PRO`.
+
+3. **Handle the response**:
+   - **If it returns successfully**: extract the screen data, save PNG to `apps/{app}/docs/ground-truth/{screen-name}.png` and HTML (if available) to `apps/{app}/docs/ground-truth/{screen-name}.html`.
+   - **If it times out** (connection error, MCP timeout, or empty result): **DO NOT RETRY** the generate call (per Stitch API contract). Instead, enter the **async poll loop**:
+     a. Wait 90 seconds (the generation is likely still running server-side).
+     b. Call `mcp__stitch__list_screens(projectId)` to check if a new screen appeared.
+     c. If the expected screen is present, call `mcp__stitch__get_screen(projectId, screenId)` to retrieve it, then save PNG/HTML as above.
+     d. If not present, wait another 90 seconds and poll once more (max 3 polls, total ~4.5min).
+     e. If still absent after 3 polls, log as a hard failure for this screen and continue to the next screen (do not halt the entire loop for one screen).
+
+4. **Verify the PNG** exists on disk before proceeding to the next screen.
+
+After all screens: if fewer than 3 PNGs were saved, see Error Handling.
 
 ### Phase 2a.4 — Consistency check
 
@@ -90,7 +103,7 @@ Per spec §7.1 contract. `tools:` lists describe the worker subagent's own front
 |---|---|---|---|---|---|
 | 2a.1 | `design-screen-generator` | write | 1 | `[Read, Write, Glob]` | no |
 | 2a.2 | — (main session) | direct MCP | 1 | n/a | `mcp__stitch__create_project` |
-| 2a.3 | `design-screen-generator` | write | N (sequential, N = screen count) | `[Read, Write, Bash]` | `mcp__stitch__generate_screen_from_text`, `mcp__stitch__get_screen` |
+| 2a.3 | — (main session) | direct MCP | N (sequential, N = screen count) | n/a | `mcp__stitch__generate_screen_from_text`, `mcp__stitch__get_screen`, `mcp__stitch__list_screens` |
 | 2a.4a | `design-visionary` | read-only | 1 | `[Read, Glob, Grep]` | no |
 | 2a.4b | `design-iterator` | write (conditional) | 0-1 | `[Read, Write, Bash]` | `mcp__stitch__edit_screens`, `mcp__stitch__get_screen` |
 | 2a.4c | `design-visionary` | read-only | 1 (if 2a.4b ran) | `[Read, Glob, Grep]` | no |
@@ -123,7 +136,8 @@ If any check fails, do not mark the Stage 2a TodoWrite sub-task complete.
 
 - **Stitch rate limit** (HTTP 429 or MCP rate-limit error): wait 60 seconds then retry the failing worker dispatch once. On second failure, wait 180 seconds and retry. On third failure, halt and report the screen name that failed.
 - **Stitch MCP auth failure** (401/unauthenticated): halt immediately. Instruct the user to re-authenticate the Stitch MCP server (per MCP server config) and re-run the skill. Do not attempt further dispatches.
-- **Missing PNG after worker returns**: treat as dispatch failure; retry the same screen worker once with a stricter prompt. If still missing, halt.
+- **MCP tool timeout on `generate_screen_from_text`**: this is EXPECTED behavior — Stitch generation takes 2-5 minutes and Claude Code's MCP timeout is ~2 minutes. Do NOT retry the generate call. Enter the async poll loop described in Phase 2a.3 step 3. The generation is almost certainly still running server-side. Only treat as failure after 3 poll attempts (~4.5 minutes post-timeout) return no new screen.
+- **Missing PNG after generation (direct or polled)**: retry the same screen generation once with a simpler prompt (reduce detail, keep only screen name + purpose). If still missing after retry + poll, log as hard failure for this screen and continue.
 - **`design-visionary` still reports P0 after one iterator pass**: halt and escalate to the user — do not loop indefinitely here (the Ralph design loop in Stage 2b handles deep iteration).
 - **Prerequisite missing** (screen-flows.md absent, <3 screens): halt before Phase 2a.1.
 
