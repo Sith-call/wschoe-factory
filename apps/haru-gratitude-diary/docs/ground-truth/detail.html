@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>하루 감사 일기 — 상세</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #f3f1eb;
+    color: #36392d;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    background-color: #fefcf4;
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px 12px;
+  }
+
+  .back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #36392d;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .back-button:hover {
+    background-color: rgba(77, 100, 78, 0.06);
+  }
+
+  .header-date {
+    font-size: 17px;
+    font-weight: 600;
+    color: #36392d;
+    letter-spacing: -0.2px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background-color: rgba(54, 57, 45, 0.08);
+    margin: 0 24px;
+  }
+
+  /* Gratitude list */
+  .gratitude-list {
+    padding: 32px 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .gratitude-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .item-number {
+    font-size: 15px;
+    font-weight: 600;
+    color: #4d644e;
+    width: 24px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .item-text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #36392d;
+    line-height: 1.75;
+    letter-spacing: -0.1px;
+    padding-top: 2px;
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 8px;
+    padding: 48px 24px 32px;
+  }
+
+  .action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 6px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .action-button:hover {
+    background-color: rgba(77, 100, 78, 0.06);
+  }
+
+  .action-edit {
+    color: #4d644e;
+  }
+
+  .action-delete {
+    color: #a54731;
+  }
+
+  .action-delete:hover {
+    background-color: rgba(165, 71, 49, 0.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+  <!-- Header -->
+  <div class="header">
+    <button class="back-button" aria-label="뒤로 가기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12.5 15L7.5 10L12.5 5"/>
+      </svg>
+    </button>
+    <span class="header-date">2026년 4월 8일 화요일</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Gratitude items -->
+  <div class="gratitude-list">
+
+    <div class="gratitude-item">
+      <span class="item-number">1</span>
+      <p class="item-text">아침에 마신 따뜻한 커피</p>
+    </div>
+
+    <div class="gratitude-item">
+      <span class="item-number">2</span>
+      <p class="item-text">동료가 도와준 코드리뷰</p>
+    </div>
+
+    <div class="gratitude-item">
+      <span class="item-number">3</span>
+      <p class="item-text">퇴근길 벚꽃이 예뻤다</p>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="action-button action-edit">수정</button>
+    <button class="action-button action-delete">삭제</button>
+  </div>
+
+</div>
+
+</body>
+</html>

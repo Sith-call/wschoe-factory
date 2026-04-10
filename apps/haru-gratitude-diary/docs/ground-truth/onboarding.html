@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>하루 감사 일기 — 온보딩</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: #fefcf4;
+    color: #2c2c2c;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+  .screen {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 56px 24px 40px;
+    background: #fefcf4;
+  }
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c2c2c;
+    line-height: 1.3;
+    text-align: left;
+    margin-bottom: 12px;
+  }
+  .tagline {
+    font-size: 16px;
+    font-weight: 400;
+    color: #7a7a6e;
+    line-height: 1.5;
+    text-align: left;
+    margin-bottom: 48px;
+  }
+  .illustration-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 260px;
+  }
+  .illustration-area svg {
+    width: 180px;
+    height: 220px;
+  }
+  .bottom-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 32px;
+  }
+  .page-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d4d4cc;
+  }
+  .dot.active {
+    background: #4d644e;
+    width: 20px;
+    border-radius: 4px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: #4d644e;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 52px;
+    transition: background 0.15s ease;
+  }
+  .btn-primary:hover {
+    background: #3d523e;
+  }
+  .btn-primary:active {
+    background: #354835;
+  }
+  .skip-link {
+    background: none;
+    border: none;
+    color: #7a7a6e;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .skip-link:hover {
+    color: #4d644e;
+  }
+</style>
+</head>
+<body>
+
+<div class="screen">
+  <div class="content">
+    <h1>하루 감사 일기</h1>
+    <p class="tagline">매일 3줄, 나를 발견하는 시간</p>
+
+    <div class="illustration-area">
+      <svg viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="잎사귀 일러스트레이션">
+        <!-- Stem -->
+        <path d="M90 210 C90 210 88 160 90 120 C92 80 90 50 90 50" stroke="#4d644e" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/>
+        <!-- Large leaf left -->
+        <path d="M90 100 C70 85 40 75 30 60 C20 45 35 35 50 45 C65 55 85 80 90 100Z" fill="#4d644e" opacity="0.25"/>
+        <!-- Large leaf right -->
+        <path d="M90 80 C110 65 140 55 150 40 C160 25 145 20 130 30 C115 40 95 60 90 80Z" fill="#4d644e" opacity="0.35"/>
+        <!-- Medium leaf left -->
+        <path d="M90 130 C75 120 55 115 48 105 C41 95 52 90 62 98 C72 106 85 118 90 130Z" fill="#4d644e" opacity="0.2"/>
+        <!-- Small leaf right -->
+        <path d="M90 150 C102 142 118 138 123 130 C128 122 120 118 112 124 C104 130 94 142 90 150Z" fill="#4d644e" opacity="0.3"/>
+        <!-- Top bud -->
+        <path d="M90 50 C85 40 78 28 82 18 C86 8 94 8 98 18 C102 28 95 40 90 50Z" fill="#4d644e" opacity="0.4"/>
+        <!-- Leaf vein details -->
+        <path d="M90 100 C78 88 58 78 45 65" stroke="#4d644e" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.15"/>
+        <path d="M90 80 C102 68 125 55 140 42" stroke="#4d644e" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.15"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="bottom-area">
+    <div class="page-dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+    </div>
+    <button class="btn-primary" type="button">시작하기</button>
+    <button class="skip-link" type="button">건너뛰기</button>
+  </div>
+</div>
+
+</body>
+</html>

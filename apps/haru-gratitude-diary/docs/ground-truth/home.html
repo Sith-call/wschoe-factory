@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Korean Gratitude Diary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#dbfce4",
+                    "secondary-fixed-dim": "#d3d5d0",
+                    "inverse-on-surface": "#9e9d96",
+                    "on-tertiary-fixed": "#34503f",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#506d5a",
+                    "error-dim": "#5c1202",
+                    "secondary-container": "#e2e3dd",
+                    "tertiary-fixed-dim": "#cdedd6",
+                    "surface-bright": "#fefcf4",
+                    "inverse-primary": "#e3fee1",
+                    "tertiary": "#4e6b59",
+                    "on-secondary-fixed": "#3d403c",
+                    "surface-variant": "#e8ead8",
+                    "error-container": "#fe8b70",
+                    "primary-fixed": "#cfeace",
+                    "on-error-container": "#742410",
+                    "tertiary-dim": "#425f4d",
+                    "error": "#a54731",
+                    "surface-container-highest": "#e8ead8",
+                    "on-primary": "#e4ffe2",
+                    "surface": "#fefcf4",
+                    "surface-tint": "#4d644e",
+                    "on-primary-fixed-variant": "#4a614c",
+                    "outline": "#808273",
+                    "tertiary-container": "#dbfce4",
+                    "surface-container-highest": "#e8ead8",
+                    "on-surface-variant": "#636658",
+                    "on-tertiary-container": "#456250",
+                    "background": "#fefcf4",
+                    "on-background": "#36392d",
+                    "outline-variant": "#b9bbaa",
+                    "primary": "#4d644e",
+                    "primary-dim": "#415843",
+                    "inverse-surface": "#0e0f0a",
+                    "surface-container-low": "#fbfaef",
+                    "on-primary-container": "#405742",
+                    "primary-container": "#cfeace",
+                    "on-secondary-container": "#50524e",
+                    "primary-fixed-dim": "#c1dbc0",
+                    "surface-container-high": "#eeefe0",
+                    "on-error": "#ffffff",
+                    "secondary-dim": "#565955",
+                    "on-primary-fixed": "#2e4431",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#5a5c58",
+                    "on-surface": "#36392d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope", "sans-serif"],
+                    "body": ["Manrope", "sans-serif"],
+                    "label": ["Manrope", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen selection:bg-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fefcf4]/80 dark:bg-[#1a1c18]/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#4d644e] dark:text-[#a5d39e]" data-icon="calendar_today">calendar_today</span>
+<h1 class="font-manrope text-left font-semibold text-lg text-[#4d644e] dark:text-[#a5d39e]">2026년 4월 10일 목요일</h1>
+</div>
+<button class="p-2 hover:bg-[#fbfaef] dark:hover:bg-[#36392d] transition-colors rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[#636658]" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-12">
+<!-- Status Card (The "Living Parchment" Entry) -->
+<section class="space-y-6">
+<div class="bg-surface-container-low p-8 rounded-xl space-y-6 transition-all">
+<div class="space-y-2">
+<h2 class="text-on-surface font-headline font-bold text-2xl tracking-tight">오늘 하루는 어땠나요?</h2>
+<p class="text-on-surface-variant body-medium leading-relaxed">아직 오늘의 감사한 순간을 기록하지 않았어요.</p>
+</div>
+<div class="pt-2">
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-semibold text-md flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span>오늘의 감사 기록하기</span>
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Weekly Progress -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<h3 class="text-on-surface font-headline font-bold text-xl">이번 주</h3>
+<span class="text-on-surface-variant text-sm font-medium">4일 연속 기록 중</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl">
+<div class="flex justify-between items-center max-w-md">
+<!-- Progress Circles -->
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">월</span>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-primary" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">화</span>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-primary" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">수</span>
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-on-primary" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">목</span>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant bg-surface-container-lowest"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">금</span>
+<div class="w-8 h-8 rounded-full border border-outline-variant/30 bg-surface-container-lowest"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">토</span>
+<div class="w-8 h-8 rounded-full border border-outline-variant/30 bg-surface-container-lowest"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-[10px] font-bold text-on-surface-variant">일</span>
+<div class="w-8 h-8 rounded-full border border-outline-variant/30 bg-surface-container-lowest"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Weekly Reflection Card -->
+<section class="space-y-4">
+<div class="bg-surface-container-lowest p-6 rounded-xl border-l-4 border-primary shadow-sm space-y-4">
+<div class="space-y-1">
+<h3 class="text-on-surface font-headline font-bold text-lg">주간 회고</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">지난 일주일간 당신의 마음은 어떠했나요? 기록들을 모아 확인해보세요.</p>
+</div>
+<a class="inline-flex items-center gap-1 text-primary font-bold text-sm hover:underline decoration-2 underline-offset-4" href="#">
+                    이번 주 회고 보기
+                    <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- Signature Quote (Editorial Touch) -->
+<section class="pt-12 text-center opacity-40">
+<p class="font-light italic text-on-surface-variant text-sm">"감사는 행복의 문을 여는 가장 조용한 열쇠입니다."</p>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center pt-2 pb-8 px-8 bg-[#fefcf4] dark:bg-[#1a1c18] border-t-[0.5px] border-[#b9bbaa]/15 shadow-[0_-4px_24px_0_rgba(54,57,45,0.05)] z-50">
+<!-- Active Tab: Home -->
+<a class="flex flex-col items-center justify-center text-[#4d644e] bg-[#e8ead8] dark:bg-[#36392d] rounded-xl px-6 py-1 hover:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="home_max" style="font-variation-settings: 'FILL' 1;">home_max</span>
+<span class="font-manrope text-[11px] font-medium tracking-wide">홈</span>
+</a>
+<!-- Inactive Tab: Calendar -->
+<a class="flex flex-col items-center justify-center text-[#636658] px-6 py-1 hover:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+<span class="font-manrope text-[11px] font-medium tracking-wide">캘린더</span>
+</a>
+</nav>
+</body></html>

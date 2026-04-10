@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gratitude Entry - Korean Diary App</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#e3fee1",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e8ead8",
+                    "on-secondary-fixed": "#3d403c",
+                    "on-primary-container": "#405742",
+                    "tertiary-fixed": "#dbfce4",
+                    "inverse-on-surface": "#9e9d96",
+                    "outline-variant": "#b9bbaa",
+                    "tertiary-container": "#dbfce4",
+                    "secondary-fixed-dim": "#d3d5d0",
+                    "on-secondary-container": "#50524e",
+                    "primary": "#4d644e",
+                    "on-surface-variant": "#636658",
+                    "surface-container-high": "#eeefe0",
+                    "inverse-surface": "#0e0f0a",
+                    "on-surface": "#36392d",
+                    "on-secondary-fixed-variant": "#5a5c58",
+                    "surface-tint": "#4d644e",
+                    "on-primary-fixed": "#2e4431",
+                    "surface-container-highest": "#e8ead8",
+                    "surface-bright": "#fefcf4",
+                    "secondary-container": "#e2e3dd",
+                    "error-dim": "#5c1202",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#636561",
+                    "on-error-container": "#742410",
+                    "surface-container-low": "#fbfaef",
+                    "on-tertiary-container": "#456250",
+                    "on-background": "#36392d",
+                    "surface": "#fefcf4",
+                    "tertiary-dim": "#425f4d",
+                    "surface-container": "#f5f4e8",
+                    "outline": "#808273",
+                    "background": "#fefcf4",
+                    "secondary-fixed": "#e2e3dd",
+                    "surface-dim": "#e2e4d0",
+                    "primary-fixed-dim": "#c1dbc0",
+                    "primary-fixed": "#cfeace",
+                    "primary-dim": "#415843",
+                    "on-tertiary-fixed-variant": "#506d5a",
+                    "on-tertiary-fixed": "#34503f",
+                    "secondary-dim": "#565955",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#cdedd6",
+                    "error-container": "#fe8b70",
+                    "tertiary": "#4e6b59",
+                    "on-primary-fixed-variant": "#4a614c",
+                    "error": "#a54731",
+                    "on-primary": "#e4ffe2",
+                    "primary-container": "#cfeace"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fefcf4;
+            font-family: 'Manrope', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .writing-surface {
+            background: radial-gradient(circle at top left, #fefcf4 0%, #fbfaef 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-[#fefcf4] dark:bg-stone-950/80 sticky top-0 z-50 no-border backdrop-blur-md flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center">
+<button class="text-[#4d644e] dark:text-[#8DA68D] hover:bg-[#fbfaef] dark:hover:bg-stone-900 transition-colors p-2 rounded-full active:opacity-70">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+</div>
+<h1 class="font-['Manrope'] font-bold text-lg tracking-tight text-[#4d644e] dark:text-[#8DA68D]">
+            2026년 4월 10일
+        </h1>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<!-- Content Canvas -->
+<main class="flex-grow writing-surface flex flex-col px-8 pt-12 pb-32 max-w-2xl mx-auto w-full">
+<!-- Instructional Header -->
+<div class="mb-12">
+<h2 class="text-3xl font-extrabold text-on-surface tracking-tight mb-2">오늘의 감사</h2>
+<p class="text-on-surface-variant text-lg leading-relaxed">작은 감사함들이 모여 단단한 하루를 만듭니다.</p>
+</div>
+<!-- Input Section: Stacked Fields -->
+<div class="space-y-10">
+<!-- Entry 1 -->
+<div class="group flex flex-col space-y-4">
+<div class="flex items-baseline space-x-4">
+<span class="text-primary/30 font-extrabold text-4xl">1</span>
+<textarea class="w-full bg-transparent border-none border-b border-outline-variant/15 focus:ring-0 focus:border-primary text-xl font-medium placeholder:text-on-surface-variant/40 resize-none transition-all duration-300 py-2" placeholder="감사한 일을 적어보세요" rows="2"></textarea>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="group flex flex-col space-y-4">
+<div class="flex items-baseline space-x-4">
+<span class="text-primary/30 font-extrabold text-4xl">2</span>
+<textarea class="w-full bg-transparent border-none border-b border-outline-variant/15 focus:ring-0 focus:border-primary text-xl font-medium placeholder:text-on-surface-variant/40 resize-none transition-all duration-300 py-2" placeholder="감사한 일을 적어보세요" rows="2"></textarea>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="group flex flex-col space-y-4">
+<div class="flex items-baseline space-x-4">
+<span class="text-primary/30 font-extrabold text-4xl">3</span>
+<textarea class="w-full bg-transparent border-none border-b border-outline-variant/15 focus:ring-0 focus:border-primary text-xl font-medium placeholder:text-on-surface-variant/40 resize-none transition-all duration-300 py-2" placeholder="감사한 일을 적어보세요" rows="2"></textarea>
+</div>
+</div>
+</div>
+<!-- Visual Anchor: Tonal Decorative Element -->
+<div class="mt-20 flex justify-center opacity-20">
+<div class="w-16 h-1 bg-primary rounded-full"></div>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full p-8 bg-gradient-to-t from-surface via-surface/90 to-transparent">
+<button class="w-full bg-primary text-on-primary font-bold text-lg py-5 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all duration-200 tracking-wider">
+            저장
+        </button>
+</div>
+<!-- Hidden Bottom Nav Suppression Logic: This screen is focused/transactional, so the global BottomNavBar is hidden in favor of the Save action -->
+</body></html>

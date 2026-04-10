@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주간 회고 — 하루 감사 일기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: #fefcf4;
+    color: #36392d;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+  .screen {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    background: #fefcf4;
+    padding: 0 20px 40px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    background: #fefcf4;
+    z-index: 10;
+  }
+  .back-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #36392d;
+    font-size: 20px;
+  }
+  .back-btn:active { background: #e8ead8; }
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #36392d;
+  }
+
+  /* Week Navigator */
+  .week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 20px;
+  }
+  .week-arrow {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e8ead8;
+    background: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #4d644e;
+    font-size: 16px;
+  }
+  .week-arrow:active { background: #e8ead8; }
+  .week-range {
+    font-size: 15px;
+    font-weight: 600;
+    color: #36392d;
+  }
+
+  /* Summary Card */
+  .summary-card {
+    background: #fbfaef;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border: 1px solid #e8ead8;
+  }
+  .summary-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4d644e;
+    letter-spacing: -0.2px;
+  }
+  .summary-text span {
+    font-weight: 700;
+  }
+
+  /* Keywords Section */
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4d644e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .keyword-chip {
+    background: #e8ead8;
+    color: #36392d;
+    border-radius: 20px;
+    font-weight: 500;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .keyword-chip.lg {
+    font-size: 15px;
+    padding: 8px 18px;
+  }
+  .keyword-chip.md {
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+  .keyword-chip.sm {
+    font-size: 12px;
+    padding: 5px 12px;
+    background: #f0f1e5;
+  }
+
+  /* Insight Section */
+  .insight-card {
+    border-left: 3px solid #4d644e;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    background: #fbfaef;
+    border-radius: 0 8px 8px 0;
+  }
+  .insight-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: #4d644e;
+    margin-bottom: 8px;
+  }
+  .insight-body {
+    font-size: 14px;
+    font-weight: 400;
+    color: #36392d;
+    line-height: 1.6;
+  }
+
+  /* Daily List */
+  .daily-group {
+    margin-bottom: 24px;
+  }
+  .daily-date {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4d644e;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e8ead8;
+  }
+  .daily-items {
+    list-style: none;
+  }
+  .daily-item {
+    font-size: 14px;
+    font-weight: 400;
+    color: #36392d;
+    padding: 8px 0;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .daily-item + .daily-item {
+    border-top: 1px solid #f0f1e5;
+  }
+  .item-dot {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    background: #4d644e;
+    border-radius: 50%;
+    margin-top: 7px;
+  }
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+  <!-- Header -->
+  <div class="header">
+    <button class="back-btn" aria-label="뒤로 가기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <h1 class="header-title">주간 회고</h1>
+  </div>
+
+  <!-- Week Navigator -->
+  <div class="week-nav">
+    <button class="week-arrow" aria-label="이전 주">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <span class="week-range">4월 4일 - 4월 10일</span>
+    <button class="week-arrow" aria-label="다음 주">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Summary Card -->
+  <div class="summary-card">
+    <p class="summary-text">이번 주 <span>5일</span> 기록 | 감사 <span>15개</span></p>
+  </div>
+
+  <!-- Keywords -->
+  <p class="section-label">자주 등장한 키워드</p>
+  <div class="keywords">
+    <span class="keyword-chip lg">커피</span>
+    <span class="keyword-chip lg">동료</span>
+    <span class="keyword-chip md">산책</span>
+    <span class="keyword-chip md">가족</span>
+    <span class="keyword-chip sm">날씨</span>
+    <span class="keyword-chip sm">음악</span>
+    <span class="keyword-chip sm">점심</span>
+  </div>
+
+  <!-- Insight -->
+  <div class="insight-card">
+    <p class="insight-heading">이번 주 인사이트</p>
+    <p class="insight-body">일상의 소소한 순간에서 감사를 발견하고 있어요. 특히 사람들과의 관계에서 많은 감사를 느끼고 있습니다.</p>
+  </div>
+
+  <!-- Daily List -->
+  <p class="section-label" style="margin-bottom: 16px;">일별 기록</p>
+
+  <div class="daily-group">
+    <p class="daily-date">4월 10일 목요일</p>
+    <ul class="daily-items">
+      <li class="daily-item"><span class="item-dot"></span>아침에 마신 따뜻한 커피 한 잔</li>
+      <li class="daily-item"><span class="item-dot"></span>동료가 업무를 도와줘서 일찍 퇴근</li>
+      <li class="daily-item"><span class="item-dot"></span>퇴근길 벚꽃이 예뻤다</li>
+    </ul>
+  </div>
+
+  <div class="daily-group">
+    <p class="daily-date">4월 9일 수요일</p>
+    <ul class="daily-items">
+      <li class="daily-item"><span class="item-dot"></span>점심에 좋아하는 메뉴가 나왔다</li>
+      <li class="daily-item"><span class="item-dot"></span>산책하며 들은 새소리</li>
+      <li class="daily-item"><span class="item-dot"></span>가족에게 온 안부 전화</li>
+    </ul>
+  </div>
+
+  <div class="daily-group">
+    <p class="daily-date">4월 8일 화요일</p>
+    <ul class="daily-items">
+      <li class="daily-item"><span class="item-dot"></span>동료와 나눈 웃긴 대화</li>
+      <li class="daily-item"><span class="item-dot"></span>좋아하는 음악 들으며 출근</li>
+      <li class="daily-item"><span class="item-dot"></span>저녁에 읽은 책이 좋았다</li>
+    </ul>
+  </div>
+
+  <div class="daily-group">
+    <p class="daily-date">4월 7일 월요일</p>
+    <ul class="daily-items">
+      <li class="daily-item"><span class="item-dot"></span>맑은 날씨 덕에 기분 좋은 하루</li>
+      <li class="daily-item"><span class="item-dot"></span>커피숍에서 발견한 새 메뉴</li>
+      <li class="daily-item"><span class="item-dot"></span>가족과 함께한 저녁 식사</li>
+    </ul>
+  </div>
+
+  <div class="daily-group">
+    <p class="daily-date">4월 4일 금요일</p>
+    <ul class="daily-items">
+      <li class="daily-item"><span class="item-dot"></span>금요일이라 마음이 가벼웠다</li>
+      <li class="daily-item"><span class="item-dot"></span>산책하며 본 노을이 아름다웠다</li>
+      <li class="daily-item"><span class="item-dot"></span>동료들과 간식 나눠 먹기</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
