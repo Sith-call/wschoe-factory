@@ -1,6 +1,25 @@
-# M4 Dispatch Prompt — feed this verbatim to the teammate / session
+# M4 Dispatch Prompt — feed this verbatim to the executor session
 
-> This is the exact prompt used when dispatching the Agent Teams teammate (primary path) or when opening a new Claude Code session in the fallback worktree. Do not paraphrase.
+> This is the exact prompt used when dispatching a fresh `claude -p` subprocess (primary path) or when opening a new Claude Code session manually in the fallback worktree. Do not paraphrase.
+
+## Architecture note (read me before anything else)
+
+This prompt assumes the **executor session was started with `--plugin-dir` flags loading the 5 factory plugins at startup**, NOT with in-session `claude plugins install` calls. The earlier design had Step 0 install plugins inside the executor session itself, which failed Blocker C: Claude Code freezes the Skill tool catalogue at session start, so mid-session `claude plugins install` succeeds on disk but the running session's `Skill(...)` tool still sees "Unknown skill" (see `docs/superpowers/m4/report-history/2026-04-10-03-blocker-c.md`).
+
+The dispatcher (parent process, human or automation) is responsible for launching the executor via:
+
+```bash
+cd <worktree root>
+claude -p "$(cat docs/superpowers/m4/dispatch-prompt.md)" \
+  --permission-mode auto \
+  --plugin-dir ./plugins/pm-agent \
+  --plugin-dir ./plugins/dev-team \
+  --plugin-dir ./plugins/design-team \
+  --plugin-dir ./plugins/agent-maker \
+  --plugin-dir ./plugins/ait-team
+```
+
+Verified working: with these flags, `Skill(app-factory)`, `Skill(pm-orchestrate)`, `Skill(stitch-generate)`, `Skill(design-sync)`, `Skill(dev-orchestrate)`, `Skill(ralph-persona-loop)`, and `Skill(release-prep)` are all present in the catalogue at startup. No install, no marketplace registration, no `.claude/settings.json` mutation, no catch-22. If you are the executor and any of those skills is missing at startup, STOP and report `NO-GO (Blocker C: executor not launched with --plugin-dir flags — check dispatcher command)`.
 
 ---
 
@@ -14,7 +33,7 @@ You are executing M4 of the app-factory orchestration redesign. Your job: build 
 
 ## Execution
 
-0. **Pre-flight (mandatory).** Before invoking any skill, verify and repair the environment. Run from repo root.
+0. **Pre-flight (mandatory, verify-only).** Install/registration happens at dispatcher level via `--plugin-dir`. Your job here is pure verification — if any check fails, STOP. Do not attempt to install anything.
 
    **A. gstack skill** — it is a user-scoped Skill invoked via the Skill tool, NOT a CLI binary. Never probe with `command -v`.
    ```bash
@@ -22,50 +41,28 @@ You are executing M4 of the app-factory orchestration redesign. Your job: build 
    ```
    If missing, STOP and report `NO-GO (Blocker A: gstack skill unavailable)`.
 
-   **B. Factory plugins** — the 5 plugins (pm-agent, dev-team, design-team, agent-maker, ait-team) live under `plugins/` with a local marketplace manifest at `plugins/.claude-plugin/marketplace.json`. Register and install project-scoped so the config lives in this repo's `.claude/settings.json`:
-   ```bash
-   # Re-register marketplace idempotently (remove any stale registration, then add fresh)
-   claude plugins marketplace remove app-factory 2>/dev/null || true
-   claude plugins marketplace add ./plugins --scope project
+   **B. Skill-liveness probe** — verify all 7 chain skills are actually in the Skill tool catalogue (not just on disk). The only reliable way is to attempt to resolve each. Use the Skill tool with a deliberately harmless no-op / help request on each of these skill names, in order:
+   - `app-factory`
+   - `pm-orchestrate`
+   - `stitch-generate`
+   - `design-sync`
+   - `dev-orchestrate`
+   - `ralph-persona-loop`
+   - `release-prep`
 
-   # Install all 5 factory plugins (install writes to .claude/settings.json enabledPlugins)
-   for p in pm-agent dev-team design-team agent-maker ait-team; do
-     claude plugins install "${p}@app-factory" --scope project || { echo "INSTALL FAILED: $p"; exit 1; }
+   If any returns "Unknown skill" or an equivalent catalogue miss, STOP and report `NO-GO (Blocker C: skill not in catalogue — <skill-name>)`. Do NOT try to install it mid-session — that is the failure mode this check exists to catch. The dispatcher must relaunch the executor with the correct `--plugin-dir` flags.
+
+   **C. Source tree sanity** — confirm the five plugin source directories exist on disk at the expected paths (they are what `--plugin-dir` pointed at):
+   ```bash
+   for d in plugins/pm-agent plugins/dev-team plugins/design-team plugins/agent-maker plugins/ait-team; do
+     test -d "$d/skills" || { echo "MISSING: $d/skills"; exit 1; }
    done
    ```
-   If the `marketplace add` or any `install` command exits non-zero, STOP and report `NO-GO (Blocker B: plugin registration failed)` with the exact CLI output.
+   If any directory is missing, STOP and report `NO-GO (Blocker D: plugin source tree corrupted — <path>)`.
 
-   **C. Per-plugin verification** — this replaces the old `grep` that collapsed installed/enabled/absent into one result. Run:
-   ```bash
-   claude plugins list --json | python3 -c '
-   import json, sys
-   data = json.load(sys.stdin)
-   required = ["pm-agent@app-factory", "dev-team@app-factory", "design-team@app-factory", "agent-maker@app-factory", "ait-team@app-factory"]
-   by_id = {p["id"]: p for p in data}
-   bad = []
-   for r in required:
-       p = by_id.get(r)
-       if not p:
-           bad.append(r + ": NOT INSTALLED")
-       elif not p.get("enabled"):
-           scope = p.get("scope", "?")
-           bad.append(r + ": INSTALLED BUT DISABLED (scope=" + scope + ", enable in .claude/settings.json)")
-       else:
-           scope = p.get("scope", "?")
-           print(r + ": OK (scope=" + scope + ")")
-   if bad:
-       print("--- BLOCKER B ---")
-       for b in bad: print(b)
-       sys.exit(1)
-   '
-   ```
-   All 5 must print `OK`. If any line reports `NOT INSTALLED` or `DISABLED`, STOP and report `NO-GO (Blocker B)` including the exact failing lines.
+   Only proceed to Step 1 when A, B, and C all pass.
 
-   **Note on `.claude/settings.json` mutation:** Step B will write `extraKnownMarketplaces.app-factory` and `enabledPlugins` into `.claude/settings.json`. `extraKnownMarketplaces` stores an **absolute path** to the marketplace, which is host-specific and must NOT be committed. When reporting M4 results, leave `.claude/settings.json` out of any commit — it is bootstrap state that Step 0 re-creates on every fresh environment.
-
-   Only proceed to Step 1 when A and C both pass.
-
-1. Invoke the `app-factory` skill (or run `/app-factory 하루 감사 일기 앱 만들어줘`).
+1. Invoke the `app-factory` skill (via the Skill tool or the `/app-factory` command) with the idea sentence `하루 감사 일기 앱 만들어줘`.
 2. Let the full 5-stage chain run: pm-orchestrate → stitch-generate → design-sync → dev-orchestrate → ralph-persona-loop → release-prep.
 3. Do NOT skip stages. Do NOT short-circuit Ralph.
 4. Ralph must run at least 1 iteration (spec §9.1 M4 Go criterion).
@@ -93,4 +90,6 @@ Include a "Defects" section listing each observed issue with file path, line num
 - Do not push to origin
 - Do not rewrite legacy orchestrator files (those are still live for rollback safety)
 - Do not modify `CLAUDE.md` or `PRODUCT_LOOP.md`
-- Do not commit `apps/haru-gratitude-diary/` itself yet — the plan-3 executor (main session) decides whether to commit the generated app in Task 6.
+- Do not commit `apps/haru-gratitude-diary/` itself yet — the plan-3 executor (dispatcher session) decides whether to commit the generated app in Task 6.
+- Do not run `claude plugins install` or `claude plugins marketplace add` inside your session. Plugins are loaded via `--plugin-dir` at dispatcher level; in-session install cannot repair a missing skill (Blocker C).
+- Do not commit `.claude/settings.json` if it becomes dirty during your run — it is host-specific bootstrap state from prior runs and must be reverted or left untracked.
