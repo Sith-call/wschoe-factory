@@ -52,7 +52,8 @@ Plan 1 (M1 + M2)                   ✅ DONE
 Plan 2 (M3 — 12 skills + 8 cmds)   ✅ DONE
 Plan 3 (M4 — Teams test app)       ✅ GO (11 runs, all 5 stages PASS, debf813)
 Plan 3 (M5 — Stitch fallback)      ✅ DONE (HTML/CSS mockup path, 326d9ab)
-Plan 4 (M6+M7)                     ⏳ READY TO START
+Plan 4 (M6 — legacy deprecation)    ✅ DONE (5 orchestrators quarantined, f3e8e9b)
+Plan 4 (M7 — CLAUDE.md rewrite)    ✅ DONE (new skill chain documented, 3e42c56)
 ```
 
 ### M4 검증 결과 요약 (9 runs, 2026-04-10)
