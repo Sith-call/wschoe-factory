@@ -2,5 +2,5 @@
   "name": "ait-team",
   "version": "1.0.0",
   "description": "Apps in Toss (앱인토스) 미니앱 개발 전용 에이전트 팀. Toss 플랫폼 SDK, granite 빌드, TDS 디자인 시스템, 12개 네이티브 모듈 통합을 지원합니다.",
-  "author": "wschoe"
+  "author": {"name": "wschoe"}
 }

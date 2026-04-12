@@ -1,0 +1,57 @@
+ralph_score_block_version: 1
+worker_role: persona-tester
+worker_name: persona-3
+iteration: 1
+timestamp: "2026-04-10T22:30:00Z"
+persona:
+  name: "박은주"
+  age: 41
+  role: "워킹맘 (회사원 + 육아)"
+  context: "22시 이후 극한 피로 상태에서 아이 재운 뒤 사용"
+screenshot_evidence:
+  count: 7
+  base_path: /tmp/claude/ralph-iter-1/persona-3/
+  key_screenshots:
+    - 01-home.png
+    - 02-settings.png
+    - 06-calendar.png
+    - 07-entry-edit.png
+    - 05-weekly.png
+scores:
+  first_impression: 62
+  usability: 48
+  engagement: 40
+  shareability: 25
+  retention: 45
+  overall: 46
+top_findings:
+  - severity: critical
+    description: "상세 보기 페이지 렌더링 버그 - 홈에서 '오늘의 감사 보기' 클릭 또는 캘린더 날짜 클릭 시 상세 내용 대신 캘린더가 표시됨. 접근성 트리(뒤로가기/수정/삭제 버튼)와 시각적 렌더링(캘린더)이 불일치."
+    evidence: "gstack browse로 /detail/2026-04-11 접속 시 DOM에는 detail 요소가 있으나 시각적으로 캘린더 화면이 렌더링됨. 스크린샷 03-detail.png, 04-detail-entry.png 참조."
+  - severity: high
+    description: "신규 사용자 온보딩 부재 - 첫 진입 시 데모 데이터가 바로 표시되어 내 데이터인지 예시인지 혼란. '쓰기 시작' CTA 버튼 없음."
+    evidence: "홈 화면(01-home.png)에 이미 3개의 감사 항목이 데모 데이터로 채워져 있고, 새로 쓰기 버튼이나 온보딩 안내가 없음."
+  - severity: medium
+    description: "주간 회고 가독성 부족 - 모바일에서 글씨가 매우 작고 정보 밀도가 높아 피로한 상태에서 읽기 어려움. 핵심 한 줄 요약 없음."
+    evidence: "주간 회고 스크린샷(05-weekly.png)에서 모든 텍스트가 작은 크기로 나열되어 있음."
+improvements_needed:
+  - priority: P0
+    description: "상세 보기 렌더링 버그 수정 - /detail/:date 라우트에서 실제 감사 내용이 시각적으로 표시되어야 함"
+    expected_impact: "핵심 플로우(기록 확인/수정/삭제) 복원. 현재 앱의 가장 기본적인 기능이 깨져 있어 사용 불가."
+    owner_hint: dev-frontend
+  - priority: P0
+    description: "신규 사용자 온보딩 또는 빈 상태(empty state) 추가 - 첫 진입 시 간단한 안내 + 바로 쓰기 CTA"
+    expected_impact: "첫 사용자의 첫 행동 유도. 현재는 뭘 해야 하는지 불명확."
+    owner_hint: dev-frontend
+  - priority: P1
+    description: "저장 완료 시 감정적 피드백 메시지 추가 (연속 기록 일수 포함)"
+    expected_impact: "매일 기록하는 동기 부여. 현재는 저장 후 아무 반응 없이 넘어가서 성취감이 없음."
+    owner_hint: dev-frontend
+  - priority: P1
+    description: "주간 회고 상단에 핵심 한 줄 요약 추가 + 폰트 크기 확대"
+    expected_impact: "피로한 밤에도 읽을 수 있는 주간 회고. 현재는 정보 과부하."
+    owner_hint: dev-frontend
+  - priority: P2
+    description: "입력 필드 placeholder 차별화 (각각 다른 질문으로 가이드)"
+    expected_impact: "빈 페이지 불안 감소. 뭘 적을지 고민하는 시간 단축."
+    owner_hint: dev-frontend

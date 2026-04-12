@@ -2,5 +2,5 @@
   "name": "design-team",
   "version": "1.0.0",
   "description": "Design agent team that generates production UI screens using Google Stitch MCP. Transforms user stories into actual design images, eliminating the CSS/JS design bottleneck. Works with PM and Dev teams for end-to-end app creation.",
-  "author": "wschoe"
+  "author": {"name": "wschoe"}
 }

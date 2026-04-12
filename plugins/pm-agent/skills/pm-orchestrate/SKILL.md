@@ -46,26 +46,34 @@ In a SINGLE assistant turn, dispatch two `pm-strategist` spawns in parallel:
 Dispatch a single `pm-discovery` spawn to write `persona.md`. Must consume
 Phase 1.1 and 1.2 outputs.
 
-### Phase 1.4 — PRD (USER DECISION POINT — HALT)
+### Phase 1.4 — PRD (USER DECISION POINT)
 
-**STOP. DO NOT SPAWN ANYTHING YET.**
-
-Main session MUST present the user with a concise summary of:
+Main session MUST present a concise summary of:
 
 1. Candidate target segment(s) from Phase 1.1/1.3.
 2. Candidate business model(s) from Phase 1.2.
 3. Proposed MVP scope (narrowest wedge).
 
-Main session MUST then ask the user to confirm:
+Then branch on the `CLAUDE_APP_FACTORY_AUTOCONFIRM` environment variable:
+
+**If `CLAUDE_APP_FACTORY_AUTOCONFIRM=1`** (autonomous runs, e.g. M4 dispatcher):
+write the summary plus the auto-chosen segment/model/MVP to
+`apps/{app}/docs/pm-outputs/phase-1.4-autoconfirm.md` for audit, then
+immediately proceed to dispatch `pm-executor`. The automatic choice must be the
+single best option identified in Phase 1.1–1.3 by the analyst/strategist
+workers (the narrowest wedge that still addresses the top problem signal).
+Document the reasoning in the audit file so humans can review after the run.
+
+**Otherwise**: ask the user to confirm:
 
 > "Please confirm: (1) target segment, (2) business model, (3) MVP scope.
 > I will not write the PRD until you reply."
 
-**HALT and await user input.** Do not proceed to the `pm-executor` dispatch
+HALT and await user input. Do not proceed to the `pm-executor` dispatch
 until the user responds with explicit confirmation or edits.
 
-After confirmation, dispatch `pm-executor` in **WRITER mode** to write
-`apps/{app}/docs/pm-outputs/prd.md`.
+After confirmation (human or auto), dispatch `pm-executor` in **WRITER mode**
+to write `apps/{app}/docs/pm-outputs/prd.md`.
 
 ### Phase 1.5 — User Stories + Screen Flows (parallel)
 
@@ -120,7 +128,9 @@ proceed to Error Handling.
 - **Gate content check fails** (file exists but missing header / too few
   stories): treat as a worker failure and apply the same re-spawn rule.
 - **User does not confirm in Phase 1.4**: remain halted indefinitely; do not
-  auto-proceed.
+  auto-proceed. Exception: if `CLAUDE_APP_FACTORY_AUTOCONFIRM=1` is set, the
+  skill auto-selects per the Phase 1.4 autoconfirm rule and writes the
+  decision to `phase-1.4-autoconfirm.md` instead of halting.
 
 ## Final State
 

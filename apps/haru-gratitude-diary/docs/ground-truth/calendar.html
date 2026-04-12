@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하루 감사 일기 — 캘린더</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #fefcf4;
+      font-family: 'Manrope', sans-serif;
+      color: #36392d;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 72px;
+    }
+
+    /* Header */
+    .header {
+      padding: 56px 24px 20px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #36392d;
+      text-align: left;
+    }
+
+    /* Month Navigation */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 24px 20px;
+    }
+
+    .month-nav-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      color: #636658;
+      transition: background-color 0.15s ease;
+    }
+
+    .month-nav-btn:hover {
+      background-color: #fbfaef;
+    }
+
+    .month-nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .month-label {
+      font-size: 17px;
+      font-weight: 600;
+      color: #36392d;
+    }
+
+    /* Calendar Grid */
+    .calendar {
+      padding: 0 20px;
+    }
+
+    .weekday-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 8px;
+    }
+
+    .weekday-cell {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #636658;
+      padding: 8px 0;
+    }
+
+    .weekday-cell:first-child {
+      color: #b5614f;
+    }
+
+    .weekday-cell:last-child {
+      color: #5a7fb5;
+    }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 4px;
+    }
+
+    .day-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 6px 0;
+      min-height: 48px;
+      cursor: pointer;
+    }
+
+    .day-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: #36392d;
+      border-radius: 50%;
+    }
+
+    .day-cell.empty .day-number {
+      color: transparent;
+    }
+
+    .day-cell.future .day-number {
+      color: #c4c5ba;
+    }
+
+    .day-cell.today .day-number {
+      border: 2px solid #4d644e;
+      color: #4d644e;
+      font-weight: 600;
+    }
+
+    .day-cell.sunday .day-number {
+      color: #b5614f;
+    }
+
+    .day-cell.saturday .day-number {
+      color: #5a7fb5;
+    }
+
+    .day-cell.future.sunday .day-number,
+    .day-cell.future.saturday .day-number {
+      color: #c4c5ba;
+    }
+
+    .entry-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: #4d644e;
+      margin-top: 3px;
+    }
+
+    .entry-dot.hidden {
+      visibility: hidden;
+    }
+
+    /* Summary */
+    .summary {
+      padding: 28px 24px 24px;
+      text-align: left;
+    }
+
+    .summary p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #636658;
+    }
+
+    .summary span {
+      color: #4d644e;
+      font-weight: 600;
+    }
+
+    /* Bottom Tab Bar */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 72px;
+      background-color: #fefcf4;
+      border-top: 1px solid #e8e6da;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding-bottom: 8px;
+    }
+
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px 24px;
+      background: none;
+      border: none;
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .tab-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .tab-item .tab-label {
+      font-size: 11px;
+      font-weight: 500;
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .tab-item.inactive svg {
+      color: #b0b1a4;
+    }
+
+    .tab-item.inactive .tab-label {
+      color: #b0b1a4;
+    }
+
+    .tab-item.active svg {
+      color: #4d644e;
+    }
+
+    .tab-item.active .tab-label {
+      color: #4d644e;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>캘린더</h1>
+    </div>
+
+    <!-- Month Navigation -->
+    <div class="month-nav">
+      <button class="month-nav-btn" aria-label="이전 달">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="month-label">2026년 4월</span>
+      <button class="month-nav-btn" aria-label="다음 달">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar">
+      <!-- Weekday Headers -->
+      <div class="weekday-row">
+        <div class="weekday-cell">일</div>
+        <div class="weekday-cell">월</div>
+        <div class="weekday-cell">화</div>
+        <div class="weekday-cell">수</div>
+        <div class="weekday-cell">목</div>
+        <div class="weekday-cell">금</div>
+        <div class="weekday-cell">토</div>
+      </div>
+
+      <!-- Days Grid -->
+      <!-- April 2026 starts on Wednesday -->
+      <div class="days-grid">
+        <!-- Row 1: empty, empty, empty, 1, 2, 3, 4 -->
+        <div class="day-cell empty"><span class="day-number"></span></div>
+        <div class="day-cell empty"><span class="day-number"></span></div>
+        <div class="day-cell empty"><span class="day-number"></span></div>
+        <div class="day-cell">
+          <span class="day-number">1</span>
+          <div class="entry-dot"></div>
+        </div>
+        <div class="day-cell">
+          <span class="day-number">2</span>
+          <div class="entry-dot"></div>
+        </div>
+        <div class="day-cell">
+          <span class="day-number">3</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell saturday">
+          <span class="day-number">4</span>
+          <div class="entry-dot"></div>
+        </div>
+
+        <!-- Row 2: 5-11 -->
+        <div class="day-cell sunday">
+          <span class="day-number">5</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell">
+          <span class="day-number">6</span>
+          <div class="entry-dot"></div>
+        </div>
+        <div class="day-cell">
+          <span class="day-number">7</span>
+          <div class="entry-dot"></div>
+        </div>
+        <div class="day-cell">
+          <span class="day-number">8</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell">
+          <span class="day-number">9</span>
+          <div class="entry-dot"></div>
+        </div>
+        <div class="day-cell today">
+          <span class="day-number">10</span>
+          <div class="entry-dot"></div>
+        </div>
+        <div class="day-cell future saturday">
+          <span class="day-number">11</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+
+        <!-- Row 3: 12-18 (future) -->
+        <div class="day-cell future sunday">
+          <span class="day-number">12</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">13</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">14</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">15</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">16</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">17</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future saturday">
+          <span class="day-number">18</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+
+        <!-- Row 4: 19-25 (future) -->
+        <div class="day-cell future sunday">
+          <span class="day-number">19</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">20</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">21</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">22</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">23</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">24</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future saturday">
+          <span class="day-number">25</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+
+        <!-- Row 5: 26-30 (future) -->
+        <div class="day-cell future sunday">
+          <span class="day-number">26</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">27</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">28</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">29</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+        <div class="day-cell future">
+          <span class="day-number">30</span>
+          <div class="entry-dot hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <p>이번 달 <span>7일</span> 기록</p>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-item inactive" aria-label="홈">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1m-2 0h2"/>
+        </svg>
+        <span class="tab-label">홈</span>
+      </button>
+      <button class="tab-item active" aria-label="캘린더">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span class="tab-label">캘린더</span>
+      </button>
+    </div>
+  </div>
+</body>
+</html>

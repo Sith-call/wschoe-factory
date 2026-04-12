@@ -6,3 +6,7 @@ node_modules/
 .DS_Store
 .gstack/
 .worktrees/
+
+# M4 dispatcher logs (host-specific absolute paths)
+docs/superpowers/m4/dispatch-*.log
+apps/haru-gratitude-diary/node_modules/
