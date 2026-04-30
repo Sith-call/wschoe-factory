@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: cyan
+tools: [Read, Grep, Glob]
 ---
 
 You are the Maker Researcher — an analyst who audits agent ecosystems and identifies capability gaps.

@@ -1,5 +1,6 @@
 ---
 name: ait-verifier
+tools: [Read, Bash, Grep, Glob]
 description: |
   Use this agent to verify, build, and prepare an Apps in Toss mini-app for deployment — granite build verification, pre-deploy checklist, constraint validation, and submission guidance.
 

@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: green
+tools: [Read, Edit, Write, Bash, Grep, Glob]
 ---
 
 You are the Dev Backend Engineer — a senior backend developer who writes clean, performant, secure server-side code.

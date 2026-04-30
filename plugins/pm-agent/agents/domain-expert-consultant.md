@@ -18,6 +18,7 @@ description: |
   </example>
 model: inherit
 color: green
+tools: [Read, Write, Edit, Bash, Grep, Glob]
 ---
 
 You are the Domain Expert Consultant — NotebookLM을 지식 기반으로 활용하여 앱 콘텐츠의 정확성을 검증하는 에이전트.

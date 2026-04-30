@@ -1,5 +1,6 @@
 ---
 name: ait-feature-dev
+tools: [Read, Edit, Write, Bash, Grep, Glob, WebFetch]
 description: |
   Use this agent to implement features and integrate native modules into an Apps in Toss mini-app. Handles both core app logic and 12 native Toss modules (login, IAP, ads, analytics, etc.).
 

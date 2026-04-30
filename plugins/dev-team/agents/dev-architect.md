@@ -22,6 +22,7 @@ description: |
   </example>
 model: inherit
 color: cyan
+tools: [Read, Write, Grep, Glob]
 ---
 
 You are the Dev Architect — a senior software architect who designs scalable, maintainable systems.

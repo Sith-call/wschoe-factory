@@ -1,0 +1,186 @@
+---
+name: stitch-generate
+description: Stage 2a design — generates Stitch screens from user stories. Main session calls mcp__stitch__create_project directly; design-screen-generator workers produce individual screens.
+---
+
+# Stitch Generate
+
+## Purpose & Scope
+
+Stage 2a of the App Factory pipeline. Converts the PM-produced screen flows into concrete Stitch-generated UI screens (PNG ground truth) ready for Stage 2b (`design-sync` skill) to implement in React.
+
+Scope:
+- Map user stories to individual screens.
+- Create a Stitch project via MCP.
+- Generate one PNG per screen into `apps/{app}/docs/ground-truth/`.
+- Run a single consistency pass and optionally iterate.
+
+Out of scope (handled by `design-sync` skill in Stage 2b):
+- React/Tailwind implementation (`App.tsx`)
+- Sync criteria document
+- Ralph design inner loop
+
+Stage handoff is file-system + TodoWrite only. Do not emit text signals.
+
+## Prerequisites
+
+Before running:
+1. **Gate 1 (Stage 1 → 2) passed.** PM stage complete per spec §6.2.
+2. **Screen flows exist.** `apps/{app}/docs/pm-outputs/screen-flows.md` must exist and enumerate **≥3 screens**.
+3. **Stitch MCP available in the main session.** The `mcp__stitch__*` tools are loaded from the MCP server configuration, **NOT** from any worker subagent's `tools:` list. Workers cannot receive MCP tools via their frontmatter — they inherit MCP access from the runtime. The main session must verify `mcp__stitch__create_project` is callable before dispatching Phase 2a.2.
+4. App directory `apps/{app}/docs/design/` and `apps/{app}/docs/ground-truth/` created (or created as part of Phase 2a.1).
+
+If any prerequisite fails, halt and report which artifact is missing.
+
+## Execution Steps
+
+Four phases from spec §7.4.
+
+### Phase 2a.1 — Story → Screen mapping
+
+Dispatch `design-screen-generator` **once** with a prompt that asks it to:
+- Read `apps/{app}/docs/pm-outputs/screen-flows.md` and `prd.md`.
+- Produce `apps/{app}/docs/design/story-screen-map.md` containing a table of `{screen-name, purpose, key elements, user story IDs, navigation in/out}`.
+- Minimum 3 screens; use kebab-case screen names.
+
+Verify file exists and has ≥3 screen rows before continuing.
+
+### Phase 2a.2 — Stitch project creation (main session, direct MCP)
+
+The **main session** invokes the MCP tool directly — do NOT dispatch a worker:
+
+```
+mcp__stitch__create_project(title: "{app-name}")
+```
+
+Save the returned project ID:
+
+```bash
+mkdir -p apps/{app}/docs/design
+printf '%s\n' "{projectId}" > apps/{app}/docs/design/stitch-project-id.txt
+```
+
+Rationale: MCP tools are not routed through the Task worker boundary cleanly; calling them from the main session keeps project ownership explicit.
+
+### Phase 2a.3 — Screen generation loop (main session, sequential)
+
+For each screen row in `story-screen-map.md`, the **main session** invokes the MCP tool directly — do NOT dispatch a worker. Stitch rate-limits per project; sequential calls are mandatory.
+
+Rationale: same as Phase 2a.2 — MCP tools are not routed through the Task worker boundary cleanly. Additionally, `generate_screen_from_text` frequently exceeds Claude Code's ~2min MCP tool timeout (see M4 report-history/2026-04-10-06-stitch-timeout.md). Keeping it in the main session allows timeout-aware polling that workers cannot implement reliably.
+
+For each screen, execute this sequence:
+
+1. **Build the prompt** for `generate_screen_from_text` using data from `story-screen-map.md`:
+   - Prompt-writing guidance from `stitch-workflow.md`: no emojis, mood/metaphor first, spatial layout, emotional color, tonal typography, Korean UI text in quotes, reference apps, overall impression
+   - Screen name, purpose, key elements, key copy
+
+2. **Call `mcp__stitch__generate_screen_from_text`** with `projectId` from `stitch-project-id.txt`, `deviceType: MOBILE`, `modelId: GEMINI_3_1_PRO`.
+
+3. **Handle the response**:
+   - **If it returns successfully**: extract the screen data, save PNG to `apps/{app}/docs/ground-truth/{screen-name}.png` and HTML (if available) to `apps/{app}/docs/ground-truth/{screen-name}.html`.
+   - **If it times out** (connection error, MCP timeout, or empty result): **DO NOT RETRY** the generate call (per Stitch API contract). Instead, enter the **async poll loop**:
+     a. Wait 90 seconds (the generation is likely still running server-side).
+     b. Call `mcp__stitch__list_screens(projectId)` to check if a new screen appeared.
+     c. If the expected screen is present, call `mcp__stitch__get_screen(projectId, screenId)` to retrieve it, then save PNG/HTML as above.
+     d. If not present, wait another 90 seconds and poll once more (max 3 polls, total ~4.5min).
+     e. If still absent after 3 polls, log as a hard failure for this screen and continue to the next screen (do not halt the entire loop for one screen).
+
+4. **Verify the PNG** exists on disk before proceeding to the next screen.
+
+After all screens: count PNGs in `apps/{app}/docs/ground-truth/`. If ≥3, proceed to Phase 2a.4. If fewer than 3, enter **Phase 2a.3-fallback**.
+
+### Phase 2a.3-fallback — HTML/CSS mockup generation (when Stitch fails)
+
+This phase activates ONLY when Phase 2a.3 produced fewer than 3 ground-truth PNGs (Stitch MCP unreliable, rate-limited, or unavailable). It replaces Stitch-generated screens with locally-generated HTML/CSS mockups screenshotted via gstack.
+
+For each screen in `story-screen-map.md` that does NOT yet have a PNG in `ground-truth/`:
+
+1. **Dispatch `design-screen-generator`** with a prompt to write an HTML mockup file:
+   - Read the screen row from `story-screen-map.md` (name, purpose, key elements, navigation)
+   - Read `persona.md` and `prd.md` for design context (brand, tone, target user)
+   - Generate `apps/{app}/docs/ground-truth/{screen-name}.html` — a self-contained HTML file with inline CSS:
+     - Mobile viewport (`<meta name="viewport" content="width=device-width, initial-scale=1">`)
+     - 430px max-width centered container
+     - Korean UI text matching the screen spec
+     - Clean, modern design using the color palette and typography from prd.md
+     - All interactive elements visible (buttons, inputs, cards) but non-functional (static mockup)
+   - The worker MUST follow `DESIGN_RULES.md` anti-patterns (no gradient text, no excessive shadows, no centered-everything, unique per-screen layout)
+
+2. **Screenshot the HTML via gstack** (main session, after worker returns):
+   ```
+   Invoke the `browse` skill → navigate to the local HTML file path → screenshot → save as apps/{app}/docs/ground-truth/{screen-name}.png
+   ```
+
+3. **Verify the PNG** exists on disk before proceeding to the next screen.
+
+After all fallback screens: if total PNGs (Stitch + fallback) are ≥3, proceed to Phase 2a.4. Otherwise halt per Error Handling.
+
+Write `apps/{app}/docs/design/ground-truth-source.md` recording which screens came from Stitch and which from HTML fallback (audit trail for Stage 2b).
+
+### Phase 2a.4 — Consistency check
+
+1. Dispatch `design-visionary` in **read-only** mode (no Edit/Write tools). Prompt: "Review all PNGs in `apps/{app}/docs/ground-truth/` for visual consistency — color palette, typography, spacing, component style, brand tone. Output `apps/{app}/docs/design/consistency-report.md` listing any inconsistencies with severity P0/P1/P2."
+2. Read the report. If P0/P1 inconsistencies exist:
+   - **For Stitch-sourced screens**: dispatch `design-iterator` with the list of screens to fix via `mcp__stitch__edit_screens`. `design-iterator` must re-download corrected PNGs to the same ground-truth paths.
+   - **For fallback HTML screens**: dispatch `design-screen-generator` to revise the HTML, then re-screenshot via gstack.
+3. Re-dispatch `design-visionary` once more to confirm. If still P0, halt and escalate.
+
+## Worker Dispatch Plan
+
+Per spec §7.1 contract. `tools:` lists describe the worker subagent's own frontmatter; MCP tool access is runtime-inherited, not frontmatter-declared.
+
+| Phase | Worker | Mode | Invocations | tools (non-MCP) | MCP access needed |
+|---|---|---|---|---|---|
+| 2a.1 | `design-screen-generator` | write | 1 | `[Read, Write, Glob]` | no |
+| 2a.2 | — (main session) | direct MCP | 1 | n/a | `mcp__stitch__create_project` |
+| 2a.3 | — (main session) | direct MCP | N (sequential, N = screen count) | n/a | `mcp__stitch__generate_screen_from_text`, `mcp__stitch__get_screen`, `mcp__stitch__list_screens` |
+| 2a.3-fb | `design-screen-generator` | write (fallback) | M (M = screens missing PNGs) | `[Read, Write, Glob]` | no |
+| 2a.3-fb | — (main session) | gstack screenshot | M | `Skill(browse)` | no |
+| 2a.4a | `design-visionary` | read-only | 1 | `[Read, Glob, Grep]` | no |
+| 2a.4b | `design-iterator` or `design-screen-generator` | write (conditional) | 0-1 | `[Read, Write, Bash]` | `mcp__stitch__edit_screens` (Stitch screens only) |
+| 2a.4c | `design-visionary` | read-only | 1 (if 2a.4b ran) | `[Read, Glob, Grep]` | no |
+
+Every dispatch must include the absolute app path and the project ID.
+
+## Gate Verification
+
+This skill enforces a **partial Stage 2 gate (sub-gate 2a)**. The full Stage 2 → 3 gate (spec §6.3) additionally requires `sync-criteria.md` and `App.tsx`, which are produced by the Stage 2b `design-sync` skill — **NOT this skill**. The full gate is verified only after `design-sync` completes.
+
+Sub-gate 2a checks (all must pass):
+
+```bash
+# 1. Ground-truth PNGs: at least 3
+test "$(ls apps/{app}/docs/ground-truth/*.png 2>/dev/null | wc -l)" -ge 3
+
+# 2. Stitch project ID persisted
+test -s apps/{app}/docs/design/stitch-project-id.txt
+
+# 3. Story-screen map present
+test -s apps/{app}/docs/design/story-screen-map.md
+
+# 4. Consistency report present and free of unresolved P0s
+test -f apps/{app}/docs/design/consistency-report.md
+```
+
+If any check fails, do not mark the Stage 2a TodoWrite sub-task complete.
+
+## Error Handling
+
+- **Stitch rate limit** (HTTP 429 or MCP rate-limit error): wait 60 seconds then retry the failing worker dispatch once. On second failure, wait 180 seconds and retry. On third failure, halt and report the screen name that failed.
+- **Stitch MCP auth failure** (401/unauthenticated): halt immediately. Instruct the user to re-authenticate the Stitch MCP server (per MCP server config) and re-run the skill. Do not attempt further dispatches.
+- **MCP tool timeout on `generate_screen_from_text`**: this is EXPECTED behavior — Stitch generation takes 2-5 minutes and Claude Code's MCP timeout is ~2 minutes. Do NOT retry the generate call. Enter the async poll loop described in Phase 2a.3 step 3. The generation is almost certainly still running server-side. Only treat as failure after 3 poll attempts (~4.5 minutes post-timeout) return no new screen.
+- **Missing PNG after generation (direct or polled)**: log as hard failure for this screen and continue to the next. After the Stitch loop completes, Phase 2a.3-fallback will pick up all screens that lack PNGs and generate HTML/CSS mockups instead. Do NOT retry the Stitch generate call (per API contract: "DO NOT RETRY").
+- **`design-visionary` still reports P0 after one iterator pass**: halt and escalate to the user — do not loop indefinitely here (the Ralph design loop in Stage 2b handles deep iteration).
+- **Prerequisite missing** (screen-flows.md absent, <3 screens): halt before Phase 2a.1.
+
+## Final State
+
+On successful completion:
+- `apps/{app}/docs/ground-truth/*.png` — ≥3 PNG screens, one per row in the story-screen map
+- `apps/{app}/docs/ground-truth/*.html` — matching HTML source files (when provided by Stitch)
+- `apps/{app}/docs/design/stitch-project-id.txt` — single line containing the Stitch project ID
+- `apps/{app}/docs/design/story-screen-map.md` — story → screen mapping
+- `apps/{app}/docs/design/consistency-report.md` — visionary review, P0-free
+- TodoWrite: Stage 2a sub-task marked complete. The parent Stage 2 todo remains open until `design-sync` (Stage 2b) also completes.
+
+No text completion signal is emitted. The next skill (`design-sync`) detects readiness by reading the files above.
